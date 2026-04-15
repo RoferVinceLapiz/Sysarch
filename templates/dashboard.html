@@ -133,6 +133,101 @@
         }
         .dropdown:hover .dropdown-menu { display: block; }
         .dropdown-menu a { color: #333 !important; height: auto !important; padding: 12px !important; border-bottom: 1px solid #eee; }
+
+        /* --- CCS SUCCESS MODAL STYLING --- */
+        .ccs-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; 
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85) !important;
+            backdrop-filter: blur(8px);
+            display: none; 
+            align-items: center;
+            justify-content: center;
+            z-index: 999999 !important;
+        }
+
+        .ccs-modal-card {
+            background: white !important;
+            width: 380px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            border: none !important;
+            /* Added: Card itself pops in slightly */
+            animation: modalPop 0.4s ease-out;
+        }
+
+        .ccs-modal-header {
+            background: #28a745 !important;
+            padding: 40px;
+            color: white !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* ANIMATED CHECKMARK */
+        .ccs-modal-header i {
+            font-size: 80px;
+            /* This creates the bouncy draw-in effect */
+            animation: checkBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+            display: inline-block;
+        }
+
+        .ccs-modal-body {
+            padding: 30px;
+        }
+
+        .ccs-modal-body h2 {
+            margin: 0;
+            color: #1a1a1a;
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .ccs-btn-proceed {
+            background: #4b2c80 !important;
+            color: white !important;
+            border: none !important;
+            padding: 14px;
+            width: 100%;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* --- ANIMATIONS --- */
+
+        /* The Checkmark Bounce */
+        @keyframes checkBounce {
+            0% {
+                transform: scale(0) rotate(-45deg);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.2) rotate(5deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* The Card Smooth Entrance */
+        @keyframes modalPop {
+            0% {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -151,7 +246,7 @@
         </div>
         <a href="/dashboard">Home</a>
         <a href="/edit-profile">Edit Profile</a>
-        <a href="#">History</a>
+        <a href="{{ url_for('history') }}">History</a>
         <a href="/reservation">Reservation</a>
         <a href="/logout" class="logout-btn">Log out</a>
     </div>
@@ -240,6 +335,45 @@
     </div>
 
 </div>
+
+    <div id="statusModal" class="ccs-modal-overlay">
+        <div class="ccs-modal-card">
+            <div class="ccs-modal-header">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="ccs-modal-body">
+                <h2>Operation Successful</h2>
+                <p id="modalMessage"></p>
+                <button onclick="hideModal()" class="ccs-btn-proceed">Proceed</button>
+            </div>
+        </div>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Capture flashed messages from Flask
+        const messages = {{ get_flashed_messages(with_categories=true) | tojson | safe }};
+        
+        if (messages && messages.length > 0) {
+            messages.forEach(function(item) {
+                const category = item[0];
+                const message = item[1];
+
+                if (category === 'success') {
+                    const modal = document.getElementById('statusModal');
+                    const msgContainer = document.getElementById('modalMessage');
+                    if (modal && msgContainer) {
+                        msgContainer.innerText = message;
+                        modal.style.display = 'flex';
+                    }
+                }
+            });
+        }
+    });
+
+    function hideModal() {
+        document.getElementById('statusModal').style.display = 'none';
+    }
+</script>
 
 </body>
 </html>

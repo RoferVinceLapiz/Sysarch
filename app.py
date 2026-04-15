@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 import sqlite3
 import os
+from datetime import date
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -64,10 +65,21 @@ def init_db():
             lab TEXT NOT NULL,
             login_time DATETIME DEFAULT CURRENT_TIMESTAMP,
             logout_time DATETIME
+            rating INTEGER,    
+             feedback TEXT
         )
     ''')
 
-    # ── NEW: Reservations table ──────────────────────────────────────────────
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS notifications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id_number TEXT NOT NULL,
+            message TEXT NOT NULL,
+            is_read INTEGER DEFAULT 0,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS reservations (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -89,6 +101,10 @@ def init_db():
     conn.close()
 
 
+# =============================================================
+# STUDENT ROUTES
+# =============================================================
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -97,6 +113,7 @@ def login():
 
         conn = get_db()
 
+        # 1. Check for Admin
         admin = conn.execute(
             'SELECT * FROM admins WHERE username = ? AND password = ?',
             (id_number, password)
@@ -106,8 +123,11 @@ def login():
             session['admin_id']   = admin['id']
             session['admin_user'] = admin['username']
             conn.close()
+            # Flash success for Admin Dashboard
+            flash('Welcome back, Administrator!', 'success')
             return redirect(url_for('admin_dashboard'))
 
+        # 2. Check for Student
         student = conn.execute(
             'SELECT * FROM students WHERE id_number = ? AND password = ?',
             (id_number, password)
@@ -117,6 +137,8 @@ def login():
         if student:
             session['student_id']   = student['id_number']
             session['student_name'] = student['first_name']
+            # Flash success for Student Dashboard
+            flash(f"Welcome! {student['first_name']} {student['last_name']}", 'success')
             return redirect(url_for('dashboard'))
         else:
             flash('Invalid ID number or password.', 'error')
@@ -172,8 +194,9 @@ def dashboard():
         (session['student_id'],)
     ).fetchone()
 
+    # Only count completed (logged-out) sit-ins toward session deduction
     used_sessions = conn.execute(
-        'SELECT COUNT(*) as count FROM sitin_records WHERE id_number = ?',
+        'SELECT COUNT(*) as count FROM sitin_records WHERE id_number = ? AND logout_time IS NOT NULL',
         (session['student_id'],)
     ).fetchone()['count']
 
@@ -260,7 +283,9 @@ def students():
     return render_template('students.html', students=students)
 
 
-# ── RESERVATION ROUTES ───────────────────────────────────────────────────────
+# =============================================================
+# RESERVATION ROUTES
+# =============================================================
 
 @app.route('/reservation', methods=['GET', 'POST'])
 def reservation():
@@ -275,7 +300,7 @@ def reservation():
     ).fetchone()
 
     used_sessions = conn.execute(
-        'SELECT COUNT(*) as count FROM sitin_records WHERE id_number = ?',
+        'SELECT COUNT(*) as count FROM sitin_records WHERE id_number = ? AND logout_time IS NOT NULL',
         (session['student_id'],)
     ).fetchone()['count']
 
@@ -303,7 +328,6 @@ def reservation():
         conn.close()
         return redirect(url_for('reservation'))
 
-    # Fetch this student's reservation history
     reservations = conn.execute(
         'SELECT * FROM reservations WHERE id_number = ? ORDER BY created_at DESC',
         (session['student_id'],)
@@ -316,9 +340,9 @@ def reservation():
                            reservations=reservations)
 
 
-# =========================
+# =============================================================
 # ADMIN ROUTES
-# =========================
+# =============================================================
 
 @app.route('/admin/dashboard')
 def admin_dashboard():
@@ -357,16 +381,16 @@ def admin_dashboard():
 
 @app.route('/admin/announce', methods=['POST'])
 def admin_announce():
-    if 'admin_id' not in session:
-        return redirect(url_for('login'))
-    message = request.form.get('message', '').strip()
-    if message:
-        conn = get_db()
-        conn.execute('INSERT INTO announcements (message) VALUES (?)', (message,))
-        conn.commit()
-        conn.close()
-        flash('Announcement posted!', 'success')
-    return redirect(url_for('admin_dashboard'))
+    message = request.form['message']
+
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute("INSERT INTO announcements (message, posted_at) VALUES (?, datetime('now'))", (message,))
+    conn.commit()
+    conn.close()
+
+    flash("Announcement posted!", "success")
+    return redirect('/admin/dashboard')
 
 
 @app.route('/admin/delete-announcement/<int:ann_id>', methods=['POST'])
@@ -410,8 +434,9 @@ def get_student(id_number):
         (id_number,)
     ).fetchone()
 
+    # Sessions are only deducted on logout, so count only completed sit-ins
     used_sessions = conn.execute(
-        'SELECT COUNT(*) as c FROM sitin_records WHERE id_number = ?',
+        'SELECT COUNT(*) as c FROM sitin_records WHERE id_number = ? AND logout_time IS NOT NULL',
         (id_number,)
     ).fetchone()['c']
 
@@ -440,6 +465,18 @@ def admin_sitin():
 
     if id_number and purpose and lab:
         conn = get_db()
+
+        # Check if student already has an active (not logged out) sit-in
+        existing = conn.execute(
+            'SELECT id FROM sitin_records WHERE id_number = ? AND logout_time IS NULL',
+            (id_number,)
+        ).fetchone()
+
+        if existing:
+            conn.close()
+            flash(f'Student {id_number} is already sitting in! Log them out first.', 'error')
+            return redirect(url_for('admin_sitin_records'))
+
         conn.execute('''
             INSERT INTO sitin_records (id_number, purpose, lab)
             VALUES (?, ?, ?)
@@ -450,7 +487,90 @@ def admin_sitin():
     else:
         flash('Please complete all Sit-In fields.', 'error')
 
-    return redirect(url_for('admin_dashboard'))
+    return redirect(url_for('admin_sitin_records'))
+
+
+# ── NEW: Admin Sit-in Records Page ──────────────────────────────────────────
+
+@app.route('/admin/sitin-records')
+def admin_sitin_records():
+    if 'admin_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db()
+    today = date.today().isoformat()
+
+    # Active sit-ins (not yet logged out) — join with student info
+    active_records = conn.execute('''
+        SELECT sr.id, sr.id_number, sr.purpose, sr.lab, sr.login_time,
+               s.first_name, s.last_name, s.course, s.course_level
+        FROM sitin_records sr
+        JOIN students s ON sr.id_number = s.id_number
+        WHERE sr.logout_time IS NULL
+        ORDER BY sr.login_time ASC
+    ''').fetchall()
+
+    # Total sit-ins today (all, including logged out)
+    total_sitin = conn.execute(
+        "SELECT COUNT(*) as c FROM sitin_records WHERE DATE(login_time) = ?",
+        (today,)
+    ).fetchone()['c']
+
+    # Total logged out today
+    total_logout = conn.execute(
+        "SELECT COUNT(*) as c FROM sitin_records WHERE DATE(logout_time) = ?",
+        (today,)
+    ).fetchone()['c']
+
+    conn.close()
+
+    return render_template(
+        'admin_sitin_records.html',
+        active_records=active_records,
+        total_sitin=total_sitin,
+        total_logout=total_logout,
+        admin_user=session['admin_user']
+    )
+
+
+# ── NEW: Admin logs out a student from sit-in (deducts 1 session) ────────────
+
+@app.route('/admin/sitin-logout/<int:record_id>', methods=['POST'])
+def admin_sitin_logout(record_id):
+    if 'admin_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db()
+
+    # Set logout_time — this is the moment the session gets "used"
+    conn.execute('''
+        UPDATE sitin_records
+        SET logout_time = CURRENT_TIMESTAMP
+        WHERE id = ? AND logout_time IS NULL
+    ''', (record_id,))
+    conn.commit()
+
+    # Get student info for the flash message
+    record = conn.execute(
+        '''SELECT sr.id_number, s.first_name, s.last_name
+           FROM sitin_records sr
+           JOIN students s ON sr.id_number = s.id_number
+           WHERE sr.id = ?''',
+        (record_id,)
+    ).fetchone()
+
+    conn.close()
+
+    if record:
+        flash(
+            f'{record["first_name"]} {record["last_name"]} ({record["id_number"]}) '
+            f'has been logged out. 1 session deducted.',
+            'success'
+        )
+    else:
+        flash('Record not found or already logged out.', 'error')
+
+    return redirect(url_for('admin_sitin_records'))
 
 
 # ── ADMIN: View & manage reservations ────────────────────────────────────────
@@ -478,10 +598,22 @@ def admin_reservations():
 def approve_reservation(res_id):
     if 'admin_id' not in session:
         return redirect(url_for('login'))
+
     conn = get_db()
+
+    res = conn.execute('SELECT * FROM reservations WHERE id = ?', (res_id,)).fetchone()
+
     conn.execute("UPDATE reservations SET status = 'Approved' WHERE id = ?", (res_id,))
+
+    # 🔔 NOTIFICATION
+    conn.execute('''
+        INSERT INTO notifications (id_number, message)
+        VALUES (?, ?)
+    ''', (res['id_number'], "✅ Your reservation has been APPROVED"))
+
     conn.commit()
     conn.close()
+
     flash('Reservation approved.', 'success')
     return redirect(url_for('admin_reservations'))
 
@@ -490,12 +622,230 @@ def approve_reservation(res_id):
 def reject_reservation(res_id):
     if 'admin_id' not in session:
         return redirect(url_for('login'))
+
     conn = get_db()
+
+    res = conn.execute('SELECT * FROM reservations WHERE id = ?', (res_id,)).fetchone()
+
     conn.execute("UPDATE reservations SET status = 'Rejected' WHERE id = ?", (res_id,))
+
+    # 🔔 NOTIFICATION
+    conn.execute('''
+        INSERT INTO notifications (id_number, message)
+        VALUES (?, ?)
+    ''', (res['id_number'], "❌ Your reservation has been REJECTED"))
+
     conn.commit()
     conn.close()
+
     flash('Reservation rejected.', 'success')
     return redirect(url_for('admin_reservations'))
+
+
+# ── NEW: Admin Students List ────────────────────────────────────────────────
+
+@app.route('/admin/students')
+def admin_students():
+    if 'admin_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db()
+    students = conn.execute('SELECT * FROM students ORDER BY last_name, first_name').fetchall()
+    total_students = len(students)
+    conn.close()
+
+    return render_template(
+        'admin_students.html',
+        students=students,
+        total_students=total_students,
+        admin_user=session['admin_user']
+    )
+
+
+# ── NEW: Admin Sit-in Reports ────────────────────────────────────────────────
+
+@app.route('/admin/sitin-reports')
+def admin_sitin_reports():
+    if 'admin_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db()
+    
+    # Get sit-in statistics
+    total_sitin = conn.execute('SELECT COUNT(*) as c FROM sitin_records').fetchone()['c']
+    total_completed = conn.execute(
+        'SELECT COUNT(*) as c FROM sitin_records WHERE logout_time IS NOT NULL'
+    ).fetchone()['c']
+    
+    # Get sit-in by purpose
+    purpose_stats = conn.execute('''
+        SELECT purpose, COUNT(*) as count 
+        FROM sitin_records 
+        GROUP BY purpose 
+        ORDER BY count DESC
+    ''').fetchall()
+    
+    # Get sit-in by lab
+    lab_stats = conn.execute('''
+        SELECT lab, COUNT(*) as count 
+        FROM sitin_records 
+        GROUP BY lab 
+        ORDER BY count DESC
+    ''').fetchall()
+    
+    conn.close()
+
+    return render_template(
+        'admin_sitin_reports.html',
+        total_sitin=total_sitin,
+        total_completed=total_completed,
+        purpose_stats=purpose_stats,
+        lab_stats=lab_stats,
+        admin_user=session['admin_user']
+    )
+
+
+# ── NEW: Admin Feedback Reports ────────────────────────────────────────────────
+
+@app.route('/admin/feedback-reports')
+def admin_feedback_reports():
+    if 'admin_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db()
+    
+    # Get all feedback records with student info
+    feedbacks = conn.execute('''
+        SELECT sr.id, sr.id_number, sr.purpose, sr.lab, sr.login_time,
+               sr.logout_time, sr.rating, sr.feedback,
+               s.first_name, s.last_name, s.course
+        FROM sitin_records sr
+        JOIN students s ON sr.id_number = s.id_number
+        WHERE sr.feedback IS NOT NULL
+        ORDER BY sr.login_time DESC
+    ''').fetchall()
+    
+    # Get average rating
+    avg_rating = conn.execute('''
+        SELECT AVG(rating) as avg_rating 
+        FROM sitin_records 
+        WHERE rating IS NOT NULL
+    ''').fetchone()['avg_rating']
+    
+    total_feedbacks = len(feedbacks)
+    
+    conn.close()
+
+    return render_template(
+        'admin_feedback_reports.html',
+        feedbacks=feedbacks,
+        avg_rating=avg_rating,
+        total_feedbacks=total_feedbacks,
+        admin_user=session['admin_user']
+    )
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+
+@app.route('/history')
+def history():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db()
+
+    records = conn.execute('''
+        SELECT *
+        FROM sitin_records
+        WHERE id_number = ?
+        ORDER BY login_time DESC
+    ''', (session['student_id'],)).fetchall()
+
+    conn.close()
+
+    return render_template('history.html', records=records)
+
+@app.route('/submit-feedback', methods=['POST'])
+def submit_feedback():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+
+    record_id = request.form.get('record_id')
+    rating = request.form.get('rating')
+    feedback = request.form.get('feedback', '').strip()
+
+    if not record_id or not rating or not feedback:
+        flash('Please complete the feedback form.', 'error')
+        return redirect(url_for('history'))
+
+    conn = get_db()
+
+    # Make sure the sit-in record belongs to the logged-in student
+    record = conn.execute('''
+        SELECT * FROM sitin_records
+        WHERE id = ? AND id_number = ?
+    ''', (record_id, session['student_id'])).fetchone()
+
+    if not record:
+        conn.close()
+        flash('Invalid sit-in record.', 'error')
+        return redirect(url_for('history'))
+
+    # Save feedback
+    conn.execute('''
+        UPDATE sitin_records
+        SET rating = ?, feedback = ?
+        WHERE id = ?
+    ''', (rating, feedback, record_id))
+
+    conn.commit()
+    conn.close()
+
+    flash('Feedback submitted successfully!', 'success')
+    return redirect(url_for('history'))
+
+
+@app.route('/admin/view-sitin-records')
+def view_sitin_records():
+    if 'admin_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db()
+
+    search_id = request.args.get('search_id', '')
+
+    query = '''
+        SELECT 
+            sr.id,
+            sr.id_number,
+            sr.purpose,
+            sr.lab,
+            sr.login_time,
+            sr.logout_time,
+            s.first_name,
+            s.last_name,
+            s.course
+        FROM sitin_records sr
+        JOIN students s ON sr.id_number = s.id_number
+    '''
+
+    params = []
+
+    if search_id:
+        query += " WHERE sr.id_number LIKE ?"
+        params.append(f"%{search_id}%")
+
+    query += " ORDER BY sr.login_time DESC"
+
+    records = conn.execute(query, params).fetchall()
+    conn.close()
+
+    return render_template(
+        'admin_view_sitin_records.html',
+        records=records,
+        admin_user=session['admin_user']
+    )
+    
 
 
 if __name__ == '__main__':

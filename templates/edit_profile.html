@@ -2,19 +2,28 @@
 <html>
 <head>
     <title>Edit Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
 <!-- Navbar -->
 <div class="dash-navbar">
-    <span class="dash-title">Dashboard</span>
+    <span class="dash-title">
+        <i class="fas fa-desktop" style="color: var(--uc-gold); margin-right: 8px;"></i>
+        CCS Sit-in Monitoring System
+    </span>
     <div class="dash-menu">
-        <a href="#">Notification</a>
+        <div class="dropdown">
+            <a href="#" class="dropdown-toggle">Notification <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 5px;"></i></a>
+            <div class="dropdown-menu">
+                <a href="#">No new notifications</a>
+            </div>
+        </div>
         <a href="/dashboard">Home</a>
-        <a href="/edit-profile" class="active-link">Edit Profile</a>
-        <a href="#">History</a>
-        <a href="#">Reservation</a>
+        <a href="/edit-profile">Edit Profile</a>
+        <a href="{{ url_for('history') }}">History</a>
+        <a href="/reservation">Reservation</a>
         <a href="/logout" class="logout-btn">Log out</a>
     </div>
 </div>

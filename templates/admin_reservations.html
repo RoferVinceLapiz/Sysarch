@@ -4,97 +4,169 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Reservations</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root { --uc-purple: #4b2c80; --uc-purple-dark: #2d1a4d; --uc-gold: #fdb813; }
-        body { background: #f4f4f9; font-family: 'Segoe UI', sans-serif; margin: 0; }
 
-        .navbar {
+    <style>
+        :root {
+            --uc-purple: #4b2c80;
+            --uc-purple-dark: #2d1a4d;
+            --uc-gold: #fdb813;
+        }
+
+        body {
+            background: #f4f4f9;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+        }
+
+        /* ✅ MATCHED NAVBAR (FROM DASHBOARD) */
+        .admin-navbar {
             background: linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark));
-            height: 56px; display: flex; align-items: center;
-            justify-content: space-between; padding: 0 25px;
+            height: 56px;
+            padding-left: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
-        .navbar-brand { color: white; font-weight: 700; font-size: 15px; }
-        .navbar-links { display: flex; align-items: center; height: 100%; }
-        .navbar-links a {
-            color: white; text-decoration: none; font-size: 13px;
-            padding: 0 15px; height: 56px; display: flex; align-items: center;
+
+        .admin-navbar-title {
+            color: white;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .admin-nav-links {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .admin-nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 0 12px;
+            height: 56px;
+            display: flex;
+            align-items: center;
             transition: 0.2s;
         }
-        .navbar-links a:hover { background: rgba(255,255,255,0.1); color: var(--uc-gold); }
-        .logout-btn {
-            background: var(--uc-gold) !important; color: var(--uc-purple-dark) !important;
-            font-weight: 800 !important; padding: 0 25px !important;
+
+        .admin-nav-links a:hover:not(.admin-logout-btn) {
+            background: rgba(255,255,255,0.1);
+            color: var(--uc-gold);
         }
 
-        .flash-msg {
-            max-width: 1000px; margin: 16px auto 0; padding: 12px 18px;
-            border-radius: 8px; font-size: 0.9rem; font-weight: 600;
+        .admin-logout-btn {
+            background: var(--uc-gold) !important;
+            color: var(--uc-purple-dark) !important;
+            font-weight: 800;
+            padding: 0 25px !important;
         }
-        .flash-success { background: #d1fae5; color: #065f46; border-left: 4px solid #10b981; }
-        .flash-error   { background: #fee2e2; color: #991b1b; border-left: 4px solid #ef4444; }
 
-        .page-wrapper { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
-        .page-title { font-size: 1.5rem; font-weight: 800; color: var(--uc-purple); margin-bottom: 20px; }
+        /* PAGE */
+        .page-wrapper {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--uc-purple);
+            margin-bottom: 20px;
+        }
 
         .card {
-            background: white; border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.07); overflow: hidden;
-        }
-        .card-header {
-            background: var(--uc-purple); color: white;
-            padding: 14px 20px; font-weight: 700;
-            font-size: 14px; text-transform: uppercase; letter-spacing: 1px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+            overflow: hidden;
         }
 
-        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-        th { background: var(--uc-purple); color: white; padding: 10px 14px; text-align: left; }
-        td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; color: #444; }
-        tr:hover td { background: #fafafa; }
+        .card-header {
+            background: var(--uc-purple);
+            color: white;
+            padding: 14px 20px;
+            font-weight: 700;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        th {
+            background: var(--uc-purple);
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tr:hover td {
+            background: #fafafa;
+        }
 
         .badge {
-            display: inline-block; padding: 3px 10px; border-radius: 20px;
-            font-size: 0.78rem; font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
         }
+
         .badge-pending  { background: #fef3c7; color: #92400e; }
         .badge-approved { background: #d1fae5; color: #065f46; }
         .badge-rejected { background: #fee2e2; color: #991b1b; }
 
-        .btn { border: none; padding: 6px 14px; border-radius: 6px; font-size: 0.82rem; font-weight: 700; cursor: pointer; }
+        .btn { padding: 6px 14px; border-radius: 6px; font-weight: 700; cursor: pointer; border: none; }
         .btn-approve { background: #10b981; color: white; }
-        .btn-approve:hover { background: #059669; }
         .btn-reject  { background: #ef4444; color: white; }
-        .btn-reject:hover  { background: #dc2626; }
-        .btn-group { display: flex; gap: 6px; }
+
     </style>
 </head>
 <body>
 
-<div class="navbar">
-    <span class="navbar-brand">
-        <i class="fas fa-desktop" style="color: var(--uc-gold); margin-right: 8px;"></i>
-        CCS Sit-in Monitoring — Admin
+<!-- ✅ FIXED NAVBAR -->
+<div class="admin-navbar">
+    <span class="admin-navbar-title">
+        <i class="fas fa-university" style="color: var(--uc-gold); margin-right: 8px;"></i>
+        COLLEGE OF COMPUTER STUDIES ADMIN
     </span>
-    <div class="navbar-links">
-        <a href="/admin/dashboard"><i class="fas fa-home" style="margin-right:5px;"></i> Dashboard</a>
-        <a href="/admin/reservations" style="color: var(--uc-gold);"><i class="fas fa-calendar-check" style="margin-right:5px;"></i> Reservations</a>
-        <a href="/admin/logout" class="logout-btn">Log out</a>
+
+    <div class="admin-nav-links">
+        <a href="/admin/dashboard">Home</a>
+        <a href="javascript:void(0)" onclick="openSearchModal()">Search</a>
+        <a href="/admin/students">Students</a>
+        <a href="/admin/sitin-records">Sit-in</a>
+        <a href="/admin/view-sitin-records">View Sit-in Records</a>
+        <a href="/admin/sitin-reports">Sit-in Reports</a>
+        <a href="/admin/feedback-reports">Feedback Reports</a>
+        <a href="/admin/reservations" style="color: var(--uc-gold);">Reservation</a>
+
+        <a href="/admin/logout" class="admin-logout-btn">Log out</a>
     </div>
 </div>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-        <div class="flash-msg flash-{{ category }}">{{ message }}</div>
-    {% endfor %}
-{% endwith %}
-
 <div class="page-wrapper">
-    <h2 class="page-title"><i class="fas fa-calendar-check" style="color: var(--uc-gold);"></i> Student Reservations</h2>
+    <h2 class="page-title">
+        <i class="fas fa-calendar-check" style="color: var(--uc-gold);"></i>
+        Student Reservations
+    </h2>
 
     <div class="card">
-        <div class="card-header"><i class="fas fa-list"></i> All Reservations</div>
+        <div class="card-header">All Reservations</div>
+
         {% if reservations %}
         <table>
             <thead>
@@ -110,6 +182,7 @@
                     <th>Action</th>
                 </tr>
             </thead>
+
             <tbody>
                 {% for r in reservations %}
                 <tr>
@@ -121,24 +194,20 @@
                     <td>{{ r['time_in'] }}</td>
                     <td>{{ r['date'] }}</td>
                     <td>
-                        <span class="badge badge-{{ r['status']|lower }}">{{ r['status'] }}</span>
+                        <span class="badge badge-{{ r['status']|lower }}">
+                            {{ r['status'] }}
+                        </span>
                     </td>
                     <td>
                         {% if r['status'] == 'Pending' %}
-                        <div class="btn-group">
-                            <form method="POST" action="/admin/reservation/approve/{{ r['id'] }}">
-                                <button class="btn btn-approve" type="submit">
-                                    <i class="fas fa-check"></i> Approve
-                                </button>
-                            </form>
-                            <form method="POST" action="/admin/reservation/reject/{{ r['id'] }}">
-                                <button class="btn btn-reject" type="submit">
-                                    <i class="fas fa-times"></i> Reject
-                                </button>
-                            </form>
-                        </div>
+                        <form method="POST" action="/admin/reservation/approve/{{ r['id'] }}" style="display:inline;">
+                            <button class="btn btn-approve">Approve</button>
+                        </form>
+                        <form method="POST" action="/admin/reservation/reject/{{ r['id'] }}" style="display:inline;">
+                            <button class="btn btn-reject">Reject</button>
+                        </form>
                         {% else %}
-                            <span style="color:#aaa; font-size:0.8rem;">— Done —</span>
+                        <span style="color:#aaa;">Done</span>
                         {% endif %}
                     </td>
                 </tr>
@@ -146,13 +215,18 @@
             </tbody>
         </table>
         {% else %}
-        <div style="text-align:center; padding: 50px; color: #aaa;">
-            <i class="fas fa-calendar-times" style="font-size: 2.5rem; margin-bottom: 10px;"></i>
-            <p>No reservations submitted yet.</p>
+        <div style="text-align:center;padding:40px;color:#aaa;">
+            No reservations yet.
         </div>
         {% endif %}
     </div>
 </div>
+
+<script>
+function openSearchModal() {
+    alert("Search modal from dashboard not included here.");
+}
+</script>
 
 </body>
 </html>

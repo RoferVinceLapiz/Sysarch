@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feedback Reports</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
+    <style>
+        .report-container { padding: 20px; }
+        .feedback-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
+        .feedback-table th { background: #4b2c80; color: white; padding: 12px; text-align: left; }
+        .feedback-table td { padding: 12px; border-bottom: 1px solid #ddd; }
+        .star-active { color: #fdb813; }
+    </style>
+</head>
+<body>
+    <div class="report-container">
+        <h2 style="color: #4b2c80;"><i class="fas fa-comments"></i> Student Feedback Reports</h2>
+        <table class="feedback-table">
+            <thead>
+                <tr>
+                    <th>ID Number</th>
+                    <th>Rating</th>
+                    <th>Feedback</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr>
+                    <td>{{ report.id_number }}</td>
+                    <td>
+                        {% for i in range(report.rating|int) %}
+                            <i class="fas fa-star star-active"></i>
+                        {% endfor %}
+                    </td>
+                    <td>{{ report.feedback }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <a href="{{ url_for('admin_dashboard') }}" class="login-btn" style="text-decoration: none; padding: 10px 20px; border-radius: 5px;">Back to Dashboard</a>
+    </div>
+</body>
+</html>
