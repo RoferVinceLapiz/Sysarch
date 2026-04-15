@@ -21,27 +21,33 @@
             margin: 0;
         }
 
-        /* ✅ MATCHED NAVBAR (FROM DASHBOARD) */
+        /* NAVBAR - STANDARDIZED ACROSS ALL PAGES */
         .admin-navbar {
-            background: linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark));
-            height: 56px;
-            padding-left: 20px;
+            background: linear-gradient(135deg, var(--uc-purple) 0%, var(--uc-purple-dark) 100%);
+            height: 60px;
+            padding: 0 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .admin-navbar-title {
+        .admin-navbar-title, .admin-navbar span {
             color: white;
             font-weight: 700;
-            font-size: 15px;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
         }
 
         .admin-nav-links {
             display: flex;
             align-items: center;
             height: 100%;
+            gap: 0;
         }
 
         .admin-nav-links a {
@@ -49,11 +55,12 @@
             text-decoration: none;
             font-size: 13px;
             font-weight: 500;
-            padding: 0 12px;
-            height: 56px;
+            padding: 0 14px;
+            height: 60px;
             display: flex;
             align-items: center;
-            transition: 0.2s;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
         }
 
         .admin-nav-links a:hover:not(.admin-logout-btn) {
@@ -61,11 +68,28 @@
             color: var(--uc-gold);
         }
 
+        .admin-nav-links a.active {
+            background: rgba(255,255,255,0.15);
+            color: var(--uc-gold);
+            border-bottom: 3px solid var(--uc-gold);
+        }
+
         .admin-logout-btn {
             background: var(--uc-gold) !important;
             color: var(--uc-purple-dark) !important;
-            font-weight: 800;
-            padding: 0 25px !important;
+            height: 100% !important;
+            padding: 0 20px !important;
+            margin-left: auto !important;
+            font-weight: 800 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: none !important;
+            border-bottom: 3px solid transparent !important;
+        }
+
+        .admin-logout-btn:hover {
+            background: white !important;
+            color: var(--uc-purple-dark) !important;
         }
 
         /* PAGE */
@@ -137,7 +161,7 @@
 </head>
 <body>
 
-<!-- ✅ FIXED NAVBAR -->
+<!-- NAVBAR - STANDARDIZED -->
 <div class="admin-navbar">
     <span class="admin-navbar-title">
         <i class="fas fa-university" style="color: var(--uc-gold); margin-right: 8px;"></i>
@@ -145,15 +169,14 @@
     </span>
 
     <div class="admin-nav-links">
-        <a href="/admin/dashboard">Home</a>
-        <a href="javascript:void(0)" onclick="openSearchModal()">Search</a>
-        <a href="/admin/students">Students</a>
-        <a href="/admin/sitin-records">Sit-in</a>
-        <a href="/admin/view-sitin-records">View Sit-in Records</a>
-        <a href="/admin/sitin-reports">Sit-in Reports</a>
-        <a href="/admin/feedback-reports">Feedback Reports</a>
-        <a href="/admin/reservations" style="color: var(--uc-gold);">Reservation</a>
-
+        <a href="/admin/dashboard"><i class="fas fa-home" style="margin-right:5px;"></i>Home</a>
+        <a href="javascript:void(0)" onclick="openSearchModal()"><i class="fas fa-search" style="margin-right:5px;"></i>Search</a>
+        <a href="/admin/students"><i class="fas fa-user-graduate" style="margin-right:5px;"></i>Students</a>
+        <a href="/admin/sitin-records"><i class="fas fa-desktop" style="margin-right:5px;"></i>Sit-in</a>
+        <a href="/admin/view-sitin-records"><i class="fas fa-list" style="margin-right:5px;"></i>View Sit-in Records</a>
+        <a href="/admin/sitin-reports"><i class="fas fa-chart-bar" style="margin-right:5px;"></i>Sit-in Reports</a>
+        <a href="/admin/feedback-reports"><i class="fas fa-comments" style="margin-right:5px;"></i>Feedback Reports</a>
+        <a href="/admin/reservations" class="active"><i class="fas fa-calendar-check" style="margin-right:5px;"></i>Reservation</a>
         <a href="/admin/logout" class="admin-logout-btn">Log out</a>
     </div>
 </div>
@@ -224,9 +247,108 @@
 
 <script>
 function openSearchModal() {
-    alert("Search modal from dashboard not included here.");
+    document.getElementById('searchModal').style.display = 'flex';
+    loadAllStudents();
+}
+
+function loadAllStudents() {
+    fetch('/admin/search-students?query=')
+        .then(response => response.json())
+        .then(data => {
+            displayStudents(data.students || []);
+        })
+        .catch(() => {
+            document.getElementById('studentsList').innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;">Error loading students</p>';
+        });
+}
+
+function filterStudents(event) {
+    const query = event.target.value.toLowerCase().trim();
+    if (!query) {
+        loadAllStudents();
+        return;
+    }
+
+    const filtered = window.allStudents.filter(student =>
+        student.id_number.toLowerCase().includes(query) ||
+        student.first_name.toLowerCase().includes(query) ||
+        student.last_name.toLowerCase().includes(query)
+    );
+    displayStudents(filtered);
+}
+
+function displayStudents(students) {
+    window.allStudents = students;
+    const container = document.getElementById('studentsList');
+    const noResults = document.getElementById('noResults');
+
+    if (students.length === 0) {
+        container.innerHTML = '';
+        noResults.style.display = 'block';
+        return;
+    }
+
+    noResults.style.display = 'none';
+    container.innerHTML = students.map(student => `
+        <div style="background:white;border-radius:12px;padding:16px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.1);transition:all 0.3s;cursor:pointer;border:2px solid transparent;" onmouseover="this.style.borderColor='var(--uc-purple)';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 20px rgba(0,0,0,0.15)';" onmouseout="this.style.borderColor='transparent';this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';">
+            <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--uc-purple),var(--uc-gold));display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:white;font-weight:bold;font-size:18px;overflow:hidden;">
+                ${student.profile_pic ? `<img src="/static/uploads/${student.id_number}.png" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">` : ''}
+                <span style="display:${student.profile_pic ? 'none' : 'flex'};width:100%;height:100%;align-items:center;justify-content:center;">${student.first_name.charAt(0)}${student.last_name.charAt(0)}</span>
+            </div>
+            <div style="font-size:11px;color:#666;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">${student.id_number}</div>
+            <div style="font-size:13px;font-weight:700;color:#333;margin-bottom:8px;">${student.first_name} ${student.last_name}</div>
+            <div style="font-size:11px;color:#888;margin-bottom:12px;">${student.remaining} sessions left</div>
+            <button onclick="openReservationForm('${student.id_number}', '${student.first_name} ${student.last_name}', ${student.remaining})"
+                    style="width:100%;padding:8px 12px;background:linear-gradient(135deg,var(--uc-purple),#6b3fa0);color:white;border:none;border-radius:8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;cursor:pointer;transition:0.3s;"
+                    onmouseover="this.style.background='linear-gradient(135deg,#6b3fa0,var(--uc-purple))';" onmouseout="this.style.background='linear-gradient(135deg,var(--uc-purple),#6b3fa0)';">
+                Select Student
+            </button>
+        </div>
+    `).join('');
+}
+
+function openReservationForm(idNumber, studentName, remaining) {
+    // For reservations page, redirect to search with the student ID
+    window.location.href = '/admin/reservations?search_id=' + encodeURIComponent(idNumber);
+    document.getElementById('searchModal').style.display = 'none';
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
 }
 </script>
+
+<!-- SEARCH MODAL -->
+<div id="searchModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:none;justify-content:center;align-items:center;z-index:1000;padding:20px;">
+    <div style="background:white;width:100%;max-width:700px;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+        <!-- HEADER -->
+        <div style="background:linear-gradient(135deg,var(--uc-purple) 0%,#6b3fa0 100%);color:white;padding:24px;font-weight:bold;display:flex;justify-content:space-between;align-items:center;">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <i class="fas fa-search" style="font-size:22px;"></i>
+                <span style="font-size:18px;letter-spacing:0.5px;">Quick Select Student</span>
+            </div>
+            <button onclick="closeModal('searchModal')" style="background:none;border:none;color:white;cursor:pointer;font-size:24px;transition:0.3s;">&times;</button>
+        </div>
+
+        <!-- BODY -->
+        <div style="padding:25px;">
+            <!-- SEARCH INPUT -->
+            <div style="margin-bottom:25px;">
+                <label style="font-size:12px;font-weight:800;color:var(--uc-purple);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:12px;">Search or Browse Students</label>
+                <input type="text" id="idSearchInput" style="width:100%;padding:14px 16px;border:2px solid #e5e7eb;border-radius:10px;font-size:14px;transition:all 0.3s;box-sizing:border-box;" placeholder="Type to search by ID or name..." onkeyup="filterStudents(event)">
+            </div>
+
+            <!-- STUDENTS GRID WITH PROFILE PICTURES -->
+            <div id="studentsList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:15px;max-height:450px;overflow-y:auto;padding-right:10px;"></div>
+
+            <!-- NO RESULTS MESSAGE -->
+            <div id="noResults" style="text-align:center;padding:40px 20px;color:#888;display:none;">
+                <i class="fas fa-inbox" style="font-size:40px;color:#ddd;margin-bottom:12px;display:block;"></i>
+                <p style="font-size:13px;margin:0;">No students found</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

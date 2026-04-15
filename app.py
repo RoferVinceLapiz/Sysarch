@@ -454,6 +454,66 @@ def get_student(id_number):
     return jsonify({"success": False, "message": "Student not found"})
 
 
+@app.route('/admin/search-students')
+def search_students():
+    if 'admin_id' not in session:
+        return jsonify({"success": False, "message": "Unauthorized"}), 401
+
+    query = request.args.get('q', '').strip()
+    
+    conn = get_db()
+    
+    if not query:
+        # Return all students when no query
+        students = conn.execute('''
+            SELECT 
+                s.id_number, s.first_name, s.middle_name, s.last_name, 
+                s.course, s.course_level,
+                COUNT(CASE WHEN sr.logout_time IS NOT NULL THEN 1 END) as used_sessions
+            FROM students s
+            LEFT JOIN sitin_records sr ON s.id_number = sr.id_number
+            GROUP BY s.id_number
+            ORDER BY s.last_name, s.first_name
+            LIMIT 50
+        ''').fetchall()
+    else:
+        # Search by ID number or first name or last name
+        students = conn.execute('''
+            SELECT 
+                s.id_number, s.first_name, s.middle_name, s.last_name, 
+                s.course, s.course_level,
+                COUNT(CASE WHEN sr.logout_time IS NOT NULL THEN 1 END) as used_sessions
+            FROM students s
+            LEFT JOIN sitin_records sr ON s.id_number = sr.id_number
+            WHERE s.id_number LIKE ? 
+               OR s.first_name LIKE ? 
+               OR s.last_name LIKE ?
+            GROUP BY s.id_number
+            ORDER BY s.last_name, s.first_name
+            LIMIT 20
+        ''', (f'%{query}%', f'%{query}%', f'%{query}%')).fetchall()
+    
+    results = []
+    for student in students:
+        remaining = 30 - (student['used_sessions'] or 0)
+        # Check if profile picture exists
+        profile_pic_path = os.path.join(app.root_path, 'static', 'uploads', f"{student['id_number']}.png")
+        profile_pic = os.path.exists(profile_pic_path)
+        results.append({
+            'id_number': student['id_number'],
+            'first_name': student['first_name'],
+            'middle_name': student['middle_name'],
+            'last_name': student['last_name'],
+            'course': student['course'],
+            'course_level': student['course_level'],
+            'remaining': remaining,
+            'profile_pic': profile_pic
+        })
+    
+    conn.close()
+    return jsonify({"students": results})
+
+
 @app.route('/admin/sit-in', methods=['POST'])
 def admin_sitin():
     if 'admin_id' not in session:

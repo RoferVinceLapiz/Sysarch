@@ -1,44 +1,696 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Feedback Reports</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Reports - CCS</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .report-container { padding: 20px; }
-        .feedback-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
-        .feedback-table th { background: #4b2c80; color: white; padding: 12px; text-align: left; }
-        .feedback-table td { padding: 12px; border-bottom: 1px solid #ddd; }
-        .star-active { color: #fdb813; }
+        /* High-end Purple & Gold Theme */
+        :root {
+            --uc-purple: #4b2c80;
+            --uc-purple-dark: #2d1a4d;
+            --uc-gold: #fdb813;
+            --uc-gold-hover: #e0a800;
+        }
+
+        /* NAVBAR - STANDARDIZED ACROSS ALL PAGES */
+        .admin-navbar {
+            background: linear-gradient(135deg, var(--uc-purple) 0%, var(--uc-purple-dark) 100%);
+            height: 60px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-navbar-title, .admin-navbar span {
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .admin-nav-links {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            gap: 0;
+        }
+
+        .admin-nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 0 14px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .admin-nav-links a:hover:not(.admin-logout-btn) {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--uc-gold);
+        }
+
+        .admin-nav-links a.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--uc-gold);
+            border-bottom: 3px solid var(--uc-gold);
+        }
+
+        .admin-logout-btn {
+            background: var(--uc-gold) !important;
+            color: var(--uc-purple-dark) !important;
+            height: 100% !important;
+            padding: 0 20px !important;
+            margin-left: auto !important;
+            font-weight: 800 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: none !important;
+            border-bottom: 3px solid transparent !important;
+        }
+
+        .admin-logout-btn:hover {
+            background: white !important;
+            color: var(--uc-purple-dark) !important;
+        }
+
+        /* PAGE BODY */
+        body {
+            margin: 0;
+            background: #f4f4f9;
+        }
+
+        .report-container { 
+            padding: 20px;
+            max-width: 1400px;
+            margin: 30px auto;
+        }
+
+        .feedback-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            background: white; 
+            border-radius: 8px; 
+            overflow: hidden;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .feedback-table th { 
+            background: #4b2c80; 
+            color: white; 
+            padding: 14px; 
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .feedback-table td { 
+            padding: 14px; 
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+
+        .feedback-table tbody tr:hover {
+            background: #f9fafb;
+            transition: 0.2s;
+        }
+
+        .star-active { 
+            color: #fdb813; 
+            margin-right: 2px;
+        }
+
+        /* Google Play Store Style Rating */
+        .rating-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .rating-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .reviewer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .reviewer-name {
+            font-weight: 700;
+            color: #1a1a1a;
+            font-size: 15px;
+        }
+
+        .reviewer-meta {
+            font-size: 13px;
+            color: #999;
+            display: flex;
+            gap: 12px;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 2px;
+            font-size: 18px;
+            align-items: center;
+        }
+
+        .empty-star {
+            color: #ddd;
+        }
+
+        .card-feedback {
+            color: #444;
+            line-height: 1.6;
+            font-size: 14px;
+            margin: 12px 0 0 0;
+        }
+
+        .feedback-text {
+            display: block;
+            max-height: 3.2em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: max-height 0.3s ease;
+            word-break: break-word;
+        }
+
+        .feedback-text.expanded {
+            max-height: none;
+            overflow: visible;
+        }
+
+        .see-more-btn {
+            background: linear-gradient(135deg, #4b2c80 0%, #6b3fa0 100%);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .see-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(75, 44, 128, 0.3);
+        }
+
+        .card-details {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #f0f0f0;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .detail-item {
+            display: flex;
+            gap: 4px;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #4b2c80;
+        }
+
+        .login-btn {
+            background: var(--uc-purple) !important;
+            border: none;
+            color: white;
+            transition: transform 0.2s;
+        }
+
+        .login-btn:hover {
+            background: var(--uc-purple-dark) !important;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .admin-navbar {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+                height: auto;
+                padding: 12px;
+            }
+
+            .admin-nav-links {
+                width: 100%;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .admin-nav-links a {
+                padding: 8px;
+                height: auto;
+            }
+        }
     </style>
 </head>
 <body>
+
+<div class="admin-navbar">
+    <span class="admin-navbar-title">
+        <i class="fas fa-university" style="color: var(--uc-gold); margin-right: 8px;"></i>
+        COLLEGE OF COMPUTER STUDIES ADMIN
+    </span>
+    
+    <div class="admin-nav-links">
+        <a href="/admin/dashboard"><i class="fas fa-home" style="margin-right:5px;"></i>Home</a>
+        <a href="javascript:void(0)" onclick="openSearchModal()"><i class="fas fa-search" style="margin-right:5px;"></i>Search</a>
+        <a href="/admin/students"><i class="fas fa-user-graduate" style="margin-right:5px;"></i>Students</a>
+        <a href="/admin/sitin-records"><i class="fas fa-desktop" style="margin-right:5px;"></i>Sit-in</a>
+        <a href="/admin/view-sitin-records"><i class="fas fa-list" style="margin-right:5px;"></i>View Sit-in Records</a>
+        <a href="/admin/sitin-reports"><i class="fas fa-chart-bar" style="margin-right:5px;"></i>Sit-in Reports</a>
+        <a href="/admin/feedback-reports" class="active"><i class="fas fa-comments" style="margin-right:5px;"></i>Feedback Reports</a>
+        <a href="/admin/reservations"><i class="fas fa-calendar-check" style="margin-right:5px;"></i>Reservation</a>
+        <a href="/admin/logout" class="admin-logout-btn">Log out</a>
+    </div>
+</div>
+
     <div class="report-container">
         <h2 style="color: #4b2c80;"><i class="fas fa-comments"></i> Student Feedback Reports</h2>
-        <table class="feedback-table">
-            <thead>
-                <tr>
-                    <th>ID Number</th>
-                    <th>Rating</th>
-                    <th>Feedback</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for report in reports %}
-                <tr>
-                    <td>{{ report.id_number }}</td>
-                    <td>
-                        {% for i in range(report.rating|int) %}
-                            <i class="fas fa-star star-active"></i>
-                        {% endfor %}
-                    </td>
-                    <td>{{ report.feedback }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <br>
-        <a href="{{ url_for('admin_dashboard') }}" class="login-btn" style="text-decoration: none; padding: 10px 20px; border-radius: 5px;">Back to Dashboard</a>
+        
+        <!-- Summary Stats - Enhanced Design -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px;">
+            <!-- Total Feedbacks Card -->
+            <div style="background: linear-gradient(135deg, #4b2c80 0%, #6b3fa0 100%); padding: 30px; border-radius: 16px; color: white; box-shadow: 0 8px 24px rgba(75, 44, 128, 0.2); transition: all 0.3s ease;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Total Feedbacks</p>
+                        <p style="margin: 12px 0 0; font-size: 48px; font-weight: 900;">{{ total_feedbacks }}</p>
+                    </div>
+                    <div style="font-size: 60px; opacity: 0.3;">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                </div>
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 12px; opacity: 0.8;">
+                    <i class="fas fa-check-circle"></i> Reviews from completed sit-ins
+                </div>
+            </div>
+
+            <!-- Average Rating Card -->
+            <div style="background: linear-gradient(135deg, #fdb813 0%, #f0a601 100%); padding: 30px; border-radius: 16px; color: #2d1a4d; box-shadow: 0 8px 24px rgba(253, 184, 19, 0.2); transition: all 0.3s ease;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; color: #2d1a4d;">Average Rating</p>
+                        <div style="margin: 12px 0 0; font-size: 42px; font-weight: 900; display: flex; align-items: center; gap: 8px;">
+                            {% if avg_rating %}
+                                {{ "%.1f"|format(avg_rating) }}
+                                <span style="font-size: 36px;">⭐</span>
+                            {% else %}
+                                <span>N/A</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div style="font-size: 60px; opacity: 0.2; color: #2d1a4d;">
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(45, 26, 77, 0.2); font-size: 12px; opacity: 0.7; color: #2d1a4d;">
+                    <i class="fas fa-check-circle"></i> Based on {{ total_feedbacks }} student reviews
+                </div>
+            </div>
+        </div>
+
+        <!-- Google Play Store Style Reviews - Two Column Layout -->
+        <div style="margin-top: 40px;">
+            <h3 style="color: #4b2c80; font-size: 1.3rem; margin-bottom: 20px; border-left: 5px solid var(--uc-gold); padding-left: 12px;">Recent Reviews</h3>
+            
+            {% if feedbacks %}
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px; align-items: start;">
+                    {% for feedback in feedbacks %}
+                    <div class="rating-card">
+                    <div class="card-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-name">{{ feedback.first_name }} {{ feedback.last_name }}</div>
+                            <div class="reviewer-meta">
+                                <span><strong>ID:</strong> {{ feedback.id_number }}</span>
+                                <span><strong>Course:</strong> {{ feedback.course }}</span>
+                            </div>
+                        </div>
+                        <div class="rating-stars">
+                            {% if feedback.rating %}
+                                {% for i in range(feedback.rating|int) %}
+                                    <i class="fas fa-star" style="color: #fdb813;"></i>
+                                {% endfor %}
+                                {% for i in range(5 - feedback.rating|int) %}
+                                    <i class="fas fa-star empty-star"></i>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="card-feedback">
+                        <span class="feedback-text" id="feedback-{{ feedback.id }}" data-feedback-id="{{ feedback.id }}">
+                            {{ feedback.feedback }}
+                        </span>
+                        {% if (feedback.feedback.count('.') + feedback.feedback.count('!') + feedback.feedback.count('?')) > 2 %}
+                        <br>
+                        <button class="see-more-btn" onclick="toggleFeedback({{ feedback.id }})">
+                            <i class="fas fa-chevron-down"></i> See More
+                        </button>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Purpose:</span>
+                            <span>{{ feedback.purpose }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Lab:</span>
+                            <span>
+                                {% if feedback.lab == 'Lecture' %}
+                                    Lecture Room
+                                {% else %}
+                                    Lab {{ feedback.lab }}
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Date:</span>
+                            <span>{{ feedback.login_time[:10] if feedback.login_time else '—' }}</span>
+                        </div>
+                    </div>
+                </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div style="text-align: center; padding: 50px; color: #999;">
+                    <i class="fas fa-comments" style="font-size: 64px; margin-bottom: 15px; display: block; color: #ddd;"></i>
+                    <p style="font-size: 16px;">No student feedback available yet.</p>
+                </div>
+            {% endif %}
+        </div>
     </div>
+
+    <!-- Search Modal -->
+    <div id="searchModal" class="modal-overlay" style="position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px;">
+        <div class="modal-content" style="background: white; width: 100%; max-width: 700px; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+            <!-- HEADER -->
+            <div class="modal-header" style="background: linear-gradient(135deg, var(--uc-purple) 0%, #6b3fa0 100%); color: white; padding: 24px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fas fa-search" style="font-size: 22px;"></i>
+                    <span style="font-size: 18px; letter-spacing: 0.5px;">Quick Select Student</span>
+                </div>
+                <button onclick="closeModal('searchModal')" style="background: none; border: none; color: white; cursor: pointer; font-size: 24px; transition: 0.3s;">&times;</button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body" style="padding: 25px;">
+                <!-- SEARCH INPUT -->
+                <div style="margin-bottom: 25px;">
+                    <label style="font-size: 12px; font-weight: 800; color: var(--uc-purple); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 12px;">Search or Browse Students</label>
+                    <input type="text" id="idSearchInput" style="width: 100%; padding: 14px 16px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 14px; transition: all 0.3s; box-sizing: border-box;" placeholder="Type to search by ID or name..." onkeyup="filterStudents(event)">
+                </div>
+
+                <!-- STUDENTS GRID WITH PROFILE PICTURES -->
+                <div id="studentsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; max-height: 450px; overflow-y: auto; padding-right: 10px;"></div>
+
+                <!-- NO RESULTS MESSAGE -->
+                <div id="noResults" style="text-align: center; padding: 40px 20px; color: #888; display: none;">
+                    <i class="fas fa-inbox" style="font-size: 40px; color: #ddd; margin-bottom: 12px; display: block;"></i>
+                    <p style="font-size: 13px; margin: 0;">No students found</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIT-IN FORM MODAL -->
+    <div id="sitInFormModal" class="modal-overlay" style="position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000;">
+        <div class="modal-content" style="background: white; width: 500px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            
+            <div class="modal-header" style="background: #4b2c80; color: white; padding: 18px 20px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 1.1rem; letter-spacing: 0.5px;">Sit-In Form</span>
+                <button onclick="closeModal('sitInFormModal')" style="background: none; border: none; color: white; cursor: pointer; font-size: 24px;">&times;</button>
+            </div>
+
+            <form action="/admin/sit-in" method="POST">
+                <div class="modal-body" style="padding: 25px;">
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: #4b2c80; text-transform: uppercase; margin-bottom: 5px;">ID Number:</label>
+                        <input type="text" name="id_number" id="display_id" readonly 
+                               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; background: #f8f9fa; color: #555;">
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: #4b2c80; text-transform: uppercase; margin-bottom: 5px;">Student Name:</label>
+                        <input type="text" id="display_name" readonly 
+                               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; background: #f8f9fa; color: #555;">
+                    </div>
+
+                    <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                        <div style="flex: 1;">
+                            <label style="display: block; font-size: 12px; font-weight: 700; color: #4b2c80; text-transform: uppercase; margin-bottom: 5px;">Purpose:</label>
+                            <select name="purpose" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; background: white;">
+                                <option value="C Programming">C Programming</option>
+                                <option value="Java">Java</option>
+                                <option value="PHP">PHP</option>
+                                <option value="Python">Python</option>
+                                <option value="Database">Database</option>
+                            </select>
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="display: block; font-size: 12px; font-weight: 700; color: #4b2c80; text-transform: uppercase; margin-bottom: 5px;">Lab:</label>
+                            <input type="text" name="lab" placeholder="524" required
+                                   style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 5px;">
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: #4b2c80; text-transform: uppercase; margin-bottom: 5px;">Remaining Session:</label>
+                        <input type="text" id="display_remaining" readonly 
+                               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; background: #f8f9fa; color: #16a34a; font-weight: 800; font-size: 1.1rem;">
+                    </div>
+
+                </div>
+
+                <div class="modal-footer" style="padding: 15px 25px; background: #f4f4f9; display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid #eee;">
+                    <button type="button" onclick="closeModal('sitInFormModal')" 
+                            style="padding: 10px 20px; border: none; border-radius: 6px; background: #e2e8f0; color: #475569; font-weight: 600; cursor: pointer;">
+                        Close
+                    </button>
+                    <button type="submit" 
+                            style="padding: 10px 30px; border: none; border-radius: 6px; background: #fdb813; color: #4b2c80; font-weight: 800; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        Sit In
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openSearchModal() {
+            document.getElementById('searchModal').style.display = 'flex';
+            loadAllStudents();
+            document.getElementById('idSearchInput').value = '';
+            document.getElementById('idSearchInput').focus();
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function loadAllStudents() {
+            fetch(`/admin/search-students?q=`)
+                .then(res => res.json())
+                .then(data => {
+                    displayStudents(data.students || []);
+                    window.allStudents = data.students || [];
+                })
+                .catch(err => console.error('Error:', err));
+        }
+
+        function filterStudents(event) {
+            const query = document.getElementById('idSearchInput').value.trim().toLowerCase();
+            
+            if (!window.allStudents) {
+                loadAllStudents();
+                return;
+            }
+
+            const filtered = window.allStudents.filter(student => 
+                student.id_number.toLowerCase().includes(query) ||
+                student.first_name.toLowerCase().includes(query) ||
+                student.last_name.toLowerCase().includes(query)
+            );
+
+            displayStudents(filtered);
+        }
+
+        function displayStudents(students) {
+            const studentsList = document.getElementById('studentsList');
+            
+            if (!studentsList) return;
+            
+            studentsList.innerHTML = '';
+            
+            if (!students || students.length === 0) {
+                studentsList.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: #888;">
+                        <i class="fas fa-search" style="font-size: 48px; color: #ddd; margin-bottom: 15px; display: block;"></i>
+                        <p style="font-size: 14px; margin: 0;">No students found</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            students.forEach(student => {
+                const photoPath = `/static/uploads/${student.id_number}.png`;
+                const initials = (student.first_name[0] + student.last_name[0]).toUpperCase();
+                
+                const studentCard = document.createElement('div');
+                studentCard.style.cssText = `
+                    background: white;
+                    border: 2px solid #f0f4ff;
+                    border-radius: 12px;
+                    padding: 12px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    text-align: center;
+                    transition: all 0.3s ease;
+                    cursor: pointer;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                `;
+                
+                studentCard.onmouseover = function() {
+                    this.style.borderColor = 'var(--uc-purple)';
+                    this.style.boxShadow = '0 6px 20px rgba(75, 44, 128, 0.2)';
+                    this.style.transform = 'translateY(-4px)';
+                };
+                
+                studentCard.onmouseout = function() {
+                    this.style.borderColor = '#f0f4ff';
+                    this.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+                    this.style.transform = 'translateY(0)';
+                };
+                
+                studentCard.innerHTML = `
+                    <div style="position: relative; margin-bottom: 12px; width: 80px; height: 80px; border-radius: 50%; overflow: hidden; border: 3px solid var(--uc-purple); background: linear-gradient(135deg, #4b2c80 0%, #6b3fa0 100%); display: flex; align-items: center; justify-content: center;">
+                        <img src="${photoPath}" alt="${student.first_name}" style="width: 100%; height: 100%; object-fit: cover;" data-initials="${initials}" onerror="this.nextElementSibling.style.display='flex'">
+                        <div style="display: none; align-items: center; justify-content: center; width: 100%; height: 100%; background: linear-gradient(135deg, #4b2c80 0%, #6b3fa0 100%); color: white; font-weight: 800; font-size: 28px;">
+                            ${initials}
+                        </div>
+                    </div>
+                    <div style="flex: 1; width: 100%;">
+                        <div style="font-weight: 700; color: #1a1a1a; font-size: 13px; margin-bottom: 4px; line-height: 1.2; max-height: 40px; overflow: hidden;">${student.first_name} ${student.last_name}</div>
+                        <div style="font-size: 10px; color: var(--uc-purple); font-weight: 600; background: #f0f4ff; padding: 4px 8px; border-radius: 6px;">${student.id_number}</div>
+                    </div>
+                    <div style="width: 100%; text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #e5e7eb;">
+                        <button onclick="openSitInForm('${student.id_number}', '${student.first_name} ${student.last_name}', ${student.remaining})" 
+                                style="width: 100%; padding: 8px; background: linear-gradient(135deg, var(--uc-purple) 0%, #6b3fa0 100%); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 11px; transition: all 0.3s;">
+                            <i class="fas fa-arrow-right"></i> Select
+                        </button>
+                    </div>
+                `;
+                
+                studentsList.appendChild(studentCard);
+            });
+        }
+
+        function handleSearchKeyUp(event) {
+            if (event.key === 'Enter') {
+                searchStudents();
+            }
+        }
+
+        function searchStudents() {
+            const query = document.getElementById('idSearchInput').value.trim().toLowerCase();
+            
+            if (!window.allStudents) {
+                loadAllStudents();
+                return;
+            }
+
+            const filtered = window.allStudents.filter(student => 
+                student.id_number.toLowerCase().includes(query) ||
+                student.first_name.toLowerCase().includes(query) ||
+                student.last_name.toLowerCase().includes(query)
+            );
+
+            displayStudents(filtered);
+        }
+
+        function openSitInForm(idNumber, studentName, remaining) {
+            document.getElementById('display_id').value = idNumber;
+            document.getElementById('display_name').value = studentName;
+            document.getElementById('display_remaining').value = remaining;
+            closeModal('searchModal');
+            document.getElementById('sitInFormModal').style.display = 'flex';
+        }
+
+        function lookupStudent() {
+            const idSearchInput = document.getElementById('idSearchInput');
+            const idNum = idSearchInput.value.trim();
+            
+            if (!idNum) return alert("Please enter an ID number.");
+            
+            fetch(`/admin/get-student/${idNum}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('display_id').value = data.id_number;
+                        document.getElementById('display_name').value = data.name;
+                        document.getElementById('display_remaining').value = data.remaining;
+                        closeModal('searchModal');
+                        document.getElementById('sitInFormModal').style.display = 'flex';
+                    } else {
+                        alert(data.message || "Student not found!");
+                    }
+                })
+                .catch(err => console.error("Error:", err));
+        }
+
+        function toggleFeedback(feedbackId) {
+            const feedbackElement = document.getElementById(`feedback-${feedbackId}`);
+            const button = event.target.closest('.see-more-btn');
+            
+            if (feedbackElement) {
+                feedbackElement.classList.toggle('expanded');
+                
+                if (feedbackElement.classList.contains('expanded')) {
+                    button.innerHTML = '<i class="fas fa-chevron-up"></i> See Less';
+                } else {
+                    button.innerHTML = '<i class="fas fa-chevron-down"></i> See More';
+                }
+            }
+        }
+    </script>
+
 </body>
 </html>
