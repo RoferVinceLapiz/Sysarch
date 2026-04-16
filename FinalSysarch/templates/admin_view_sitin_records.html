@@ -288,6 +288,86 @@
     </div>
 </div>
 
+    <!-- SIT-IN FORM MODAL -->
+<div id="sitInFormModal" style="position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000;">
+    
+    <div style="background: white; width: 500px; border-radius: 14px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.3);">
+
+        <!-- HEADER -->
+        <div style="background: linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark)); color: white; padding: 18px 20px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+            <span>
+                <i class="fas fa-desktop" style="margin-right:8px;"></i>
+                Sit-In Form
+            </span>
+            <button onclick="closeModal('sitInFormModal')" style="background:none;border:none;color:white;font-size:24px;">&times;</button>
+        </div>
+
+        <!-- FORM -->
+        <form action="/admin/sit-in" method="POST">
+            <div style="padding: 25px;">
+                
+                <div style="margin-bottom: 15px;">
+                    <label style="font-size:12px;font-weight:700;color:var(--uc-purple);text-transform:uppercase;">ID Number</label>
+                    <input type="text" name="id_number" id="display_id" readonly
+                           style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;background:#f8f9fa;">
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="font-size:12px;font-weight:700;color:var(--uc-purple);text-transform:uppercase;">Student Name</label>
+                    <input type="text" id="display_name" readonly
+                           style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;background:#f8f9fa;">
+                </div>
+
+                <div style="display:flex;gap:15px;margin-bottom:15px;">
+                    <div style="flex:1;">
+                        <label style="font-size:12px;font-weight:700;color:var(--uc-purple);text-transform:uppercase;">Purpose</label>
+                        <select name="purpose" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;">
+                            <option value="C Programming">C Programming</option>
+                            <option value="Java">Java</option>
+                            <option value="PHP">PHP</option>
+                            <option value="Python">Python</option>
+                            <option value="Database">Database</option>
+                        </select>
+                    </div>
+
+                    <div style="flex:1;">
+                        <label style="font-size:12px;font-weight:700;color:var(--uc-purple);text-transform:uppercase;">Lab</label>
+                        <select name="lab" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;">
+                            <option value="" disabled selected>Select lab</option>
+                            <option value="524">524</option>
+                            <option value="526">526</option>
+                            <option value="528">528</option>
+                            <option value="530">530</option>
+                            <option value="542">542</option>
+                            <option value="544">544</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label style="font-size:12px;font-weight:700;color:var(--uc-purple);text-transform:uppercase;">Remaining Session</label>
+                    <input type="text" id="display_remaining" readonly
+                           style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;background:#f8f9fa;color:#16a34a;font-weight:800;">
+                </div>
+
+            </div>
+
+            <div style="padding:15px 25px;background:#f4f4f9;display:flex;justify-content:flex-end;gap:10px;border-top:1px solid #eee;">
+                <button type="button" onclick="closeModal('sitInFormModal')"
+                        style="padding:10px 20px;border:none;border-radius:6px;background:#e2e8f0;">
+                    Close
+                </button>
+
+                <button type="submit"
+                        style="padding:10px 30px;border:none;border-radius:6px;background:var(--uc-gold);color:var(--uc-purple-dark);font-weight:800;">
+                    Sit In
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
 <script>
 // SEARCH FUNCTIONS
 function openSearchModal() {
@@ -296,7 +376,7 @@ function openSearchModal() {
 }
 
 function loadAllStudents() {
-    fetch('/admin/search-students?query=')
+    fetch('/admin/search-students?q=')
         .then(response => response.json())
         .then(data => {
             displayStudents(data.students || []);
@@ -352,9 +432,12 @@ function displayStudents(students) {
 }
 
 function openSitInForm(idNumber, studentName, remaining) {
-    // For view records page, just redirect to search with the student ID
-    window.location.href = '/admin/view-sitin-records?search_id=' + encodeURIComponent(idNumber);
-    document.getElementById('searchModal').style.display = 'none';
+    document.getElementById('display_id').value = idNumber;
+    document.getElementById('display_name').value = studentName;
+    document.getElementById('display_remaining').value = remaining;
+
+    closeModal('searchModal');
+    document.getElementById('sitInFormModal').style.display = 'flex';
 }
 
 function closeModal(modalId) {
