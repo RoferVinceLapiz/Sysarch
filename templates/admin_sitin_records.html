@@ -4,181 +4,584 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Current Sit-in Records</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
-        :root { --uc-purple: #4b2c80; --uc-purple-dark: #2d1a4d; --uc-gold: #fdb813; }
-        body { background: #f4f4f9; font-family: 'Segoe UI', sans-serif; margin: 0; }
+        :root {
+            --uc-purple: #4b2c80;
+            --uc-purple-dark: #2d1a4d;
+            --uc-purple-light: #6b3fa0;
+            --uc-gold: #fdb813;
+            --admin-bg: #f6f3fb;
+            --admin-text: #111827;
+            --admin-muted: #6b7280;
+            --admin-border: #e5e7eb;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #f59e0b;
+        }
 
-        /* NAVBAR - STANDARDIZED ACROSS ALL PAGES */
-        .admin-navbar {
-            background: linear-gradient(135deg, var(--uc-purple) 0%, var(--uc-purple-dark) 100%);
-            height: 60px; display: flex; align-items: center;
-            justify-content: space-between; padding: 0 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(253, 184, 19, 0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(75, 44, 128, 0.12), transparent 30%),
+                linear-gradient(180deg, #fbf8ff 0%, #f4f4f9 100%);
+            color: var(--admin-text);
         }
-        .admin-navbar-title { color: white; font-weight: 700; font-size: 14px; letter-spacing: 0.5px; white-space: nowrap; }
-        .admin-nav-links { display: flex; align-items: center; height: 100%; gap: 0; }
-        .admin-nav-links a {
-            color: white; text-decoration: none; font-size: 13px;
-            font-weight: 500; padding: 0 14px; height: 60px;
-            display: flex; align-items: center; transition: all 0.3s ease; border-bottom: 3px solid transparent;
-        }
-        .admin-nav-links a:hover:not(.admin-logout-btn) { background: rgba(255,255,255,0.1); color: var(--uc-gold); }
-        .admin-nav-links a.active { color: var(--uc-gold); border-bottom: 3px solid var(--uc-gold); background: rgba(255,255,255,0.15); }
-        .admin-logout-btn {
-            background: var(--uc-gold) !important; color: var(--uc-purple-dark) !important;
-            font-weight: 800 !important; padding: 0 20px !important;
-            text-transform: uppercase; letter-spacing: 0.5px; border: none !important; border-bottom: 3px solid transparent !important; margin-left: auto !important; height: 100% !important;
-        }
-        .admin-logout-btn:hover { background: white !important; color: var(--uc-purple-dark) !important; }
 
-        /* FLASH */
+        .sitin-wrapper {
+            width: min(1450px, calc(100% - 36px));
+            margin: 32px auto;
+        }
+
         .flash-msg {
-            max-width: 1100px; margin: 16px auto 0; padding: 12px 18px;
-            border-radius: 8px; font-size: 0.9rem; font-weight: 600;
+            width: min(1450px, calc(100% - 36px));
+            margin: 16px auto 0;
+            padding: 13px 18px;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            font-weight: 800;
+            box-shadow: 0 12px 28px rgba(31, 16, 70, 0.08);
         }
-        .flash-success { background: #d1fae5; color: #065f46; border-left: 4px solid #10b981; }
-        .flash-error   { background: #fee2e2; color: #991b1b; border-left: 4px solid #ef4444; }
 
-        /* PAGE */
-        .page-wrapper { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
-
-        .page-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 20px;
+        .flash-success {
+            background: #dcfce7;
+            color: #166534;
+            border-left: 5px solid #16a34a;
         }
-        .page-title { font-size: 1.5rem; font-weight: 800; color: var(--uc-purple); margin: 0; }
 
-        /* STAT BADGES */
-        .stat-row { display: flex; gap: 14px; margin-bottom: 24px; }
+        .flash-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 5px solid #dc2626;
+        }
+
+        .sitin-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .sitin-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .sitin-title-icon {
+            width: 62px;
+            height: 62px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--uc-gold), #f59e0b);
+            color: var(--uc-purple-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 14px 26px rgba(253, 184, 19, 0.25);
+        }
+
+        .sitin-title h1 {
+            margin: 0;
+            color: var(--uc-purple);
+            font-size: 34px;
+            font-weight: 950;
+            letter-spacing: -0.8px;
+        }
+
+        .sitin-title p {
+            margin: 6px 0 0;
+            color: var(--admin-muted);
+            font-size: 14px;
+        }
+
+        .stat-row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 26px;
+        }
+
         .stat-badge {
-            background: white; border-radius: 10px; padding: 14px 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07); display: flex;
-            align-items: center; gap: 12px; flex: 1;
+            position: relative;
+            overflow: hidden;
+            padding: 24px;
+            border-radius: 22px;
+            color: white;
+            background:
+                radial-gradient(circle at top right, rgba(253, 184, 19, 0.24), transparent 32%),
+                linear-gradient(135deg, var(--uc-purple), var(--uc-purple-light));
+            box-shadow: 0 18px 42px rgba(75, 44, 128, 0.22);
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
+
+        .stat-badge::after {
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            right: 18px;
+            bottom: -16px;
+            font-size: 82px;
+            color: rgba(255, 255, 255, 0.12);
+        }
+
+        .stat-badge.stat-current::after {
+            content: "\f4fc";
+        }
+
+        .stat-badge.stat-total::after {
+            content: "\f080";
+        }
+
+        .stat-badge.stat-out::after {
+            content: "\f2f5";
+        }
+
         .stat-icon {
-            width: 42px; height: 42px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 18px;
-        }
-        .stat-icon.purple { background: #f3e8ff; color: var(--uc-purple); }
-        .stat-icon.gold   { background: #fef3c7; color: #b45309; }
-        .stat-icon.green  { background: #d1fae5; color: #065f46; }
-        .stat-num { font-size: 1.6rem; font-weight: 800; color: #222; }
-        .stat-label { font-size: 0.78rem; color: #888; font-weight: 600; text-transform: uppercase; }
-
-        /* CARD */
-        .card {
-            background: white; border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.07); overflow: hidden;
-        }
-        .card-header {
-            background: var(--uc-purple); color: white;
-            padding: 14px 20px; font-weight: 700;
-            font-size: 14px; text-transform: uppercase; letter-spacing: 1px;
-            display: flex; justify-content: space-between; align-items: center;
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.16);
+            color: var(--uc-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
         }
 
-        /* SEARCH BAR */
+        .stat-num {
+            color: white;
+            font-size: 42px;
+            font-weight: 950;
+            line-height: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-label {
+            margin-top: 6px;
+            color: rgba(255, 255, 255, 0.84);
+            font-size: 12px;
+            font-weight: 850;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .records-card {
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            border-radius: 24px;
+            box-shadow: 0 18px 45px rgba(31, 16, 70, 0.10);
+            overflow: hidden;
+        }
+
+        .records-card-header {
+            background:
+                radial-gradient(circle at top right, rgba(253, 184, 19, 0.22), transparent 28%),
+                linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark));
+            color: white;
+            padding: 18px 22px;
+            font-size: 13px;
+            font-weight: 950;
+            letter-spacing: 0.9px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .records-card-header span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .records-card-header small {
+            opacity: 0.8;
+            font-weight: 700;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
         .search-bar {
-            padding: 14px 20px; border-bottom: 1px solid #f0f0f0;
-            display: flex; gap: 10px; align-items: center;
+            padding: 18px 22px;
+            border-bottom: 1px solid #eef0f4;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            background: #ffffff;
         }
+
+        .search-bar i {
+            color: var(--uc-purple);
+        }
+
         .search-bar input {
-            padding: 8px 14px; border: 1.5px solid #ddd; border-radius: 8px;
-            font-size: 13px; width: 260px; transition: border 0.2s;
+            width: min(420px, 100%);
+            padding: 12px 15px;
+            border: 1.8px solid var(--admin-border);
+            border-radius: 14px;
+            font-size: 14px;
+            outline: none;
+            color: var(--admin-text);
+            transition: all 0.22s ease;
         }
-        .search-bar input:focus { outline: none; border-color: var(--uc-purple); }
 
-        /* TABLE */
-        table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+        .search-bar input:focus {
+            border-color: var(--uc-purple);
+            box-shadow: 0 0 0 4px rgba(75, 44, 128, 0.11);
+        }
+
+        .table-wrap {
+            padding: 24px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 1050px;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 14px;
+        }
+
         thead th {
-            background: #f8f5ff; color: var(--uc-purple);
-            padding: 11px 14px; text-align: left; font-weight: 700;
-            font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px;
-            border-bottom: 2px solid #ede9fe;
+            background: var(--uc-purple);
+            color: white;
+            padding: 15px 16px;
+            text-align: left;
+            font-weight: 900;
+            letter-spacing: 0.4px;
+            border-bottom: none;
         }
-        tbody td { padding: 12px 14px; border-bottom: 1px solid #f5f5f5; color: #444; vertical-align: middle; }
-        tbody tr:hover td { background: #faf8ff; }
 
-        /* AVATAR in table */
-        .student-cell { display: flex; align-items: center; gap: 10px; }
+        thead th:first-child {
+            border-top-left-radius: 14px;
+        }
+
+        thead th:last-child {
+            border-top-right-radius: 14px;
+        }
+
+        tbody td {
+            padding: 15px 16px;
+            border-bottom: 1px solid #edf0f4;
+            color: var(--admin-text);
+            vertical-align: middle;
+        }
+
+        tbody tr:nth-child(even) td {
+            background: #fafafa;
+        }
+
+        tbody tr:hover td {
+            background: #f7f2ff;
+        }
+
+        .student-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
         .student-avatar {
-            width: 36px; height: 36px; border-radius: 50%;
-            object-fit: cover; border: 2px solid var(--uc-gold);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--uc-gold);
             flex-shrink: 0;
         }
-        .student-name { font-weight: 700; color: #222; font-size: 0.88rem; }
-        .student-id   { font-size: 0.75rem; color: #999; }
 
-        /* BADGES */
+        .student-name {
+            font-weight: 950;
+            color: var(--admin-text);
+            font-size: 0.92rem;
+        }
+
+        .student-id {
+            margin-top: 3px;
+            font-size: 0.76rem;
+            color: var(--admin-muted);
+            font-weight: 700;
+        }
+
+        .course-text {
+            font-weight: 900;
+            color: var(--admin-text);
+        }
+
+        .level-text {
+            color: var(--admin-muted);
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
         .badge {
-            display: inline-block; padding: 3px 10px; border-radius: 20px;
-            font-size: 0.75rem; font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            width: fit-content;
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 900;
         }
-        .badge-active   { background: #d1fae5; color: #065f46; }
-        .badge-lab      { background: #ede9fe; color: var(--uc-purple); }
-        .badge-purpose  { background: #fef3c7; color: #92400e; }
 
-        /* TIMER */
-        .timer { font-family: 'Courier New', monospace; font-size: 0.88rem; font-weight: 700; color: #374151; }
+        .badge-lab {
+            background: #ede9fe;
+            color: var(--uc-purple);
+        }
 
-        /* LOGOUT BUTTON */
+        .badge-purpose {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .time-cell {
+            font-size: 0.85rem;
+            color: #374151;
+            font-weight: 750;
+        }
+
+        .time-cell i {
+            color: var(--uc-gold);
+        }
+
+        .timer {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            font-weight: 950;
+            color: #374151;
+        }
+
         .btn-logout {
-            background: #ef4444; color: white;
-            border: none; padding: 7px 16px; border-radius: 7px;
-            font-size: 0.82rem; font-weight: 700; cursor: pointer;
-            transition: background 0.2s; display: flex; align-items: center; gap: 5px;
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 9px 15px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
-        .btn-logout:hover { background: #dc2626; }
 
-        /* EMPTY STATE */
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            background: #b91c1c;
+            box-shadow: 0 10px 24px rgba(220, 38, 38, 0.22);
+        }
+
         .empty-state {
-            text-align: center; padding: 60px 0; color: #bbb;
+            text-align: center;
+            padding: 75px 20px;
+            color: #9ca3af;
         }
-        .empty-state i { font-size: 3rem; margin-bottom: 12px; display: block; }
-        .empty-state p { font-size: 14px; }
 
-        /* CONFIRM MODAL */
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 16px;
+            display: block;
+            color: #d1d5db;
+        }
+
+        .empty-state p {
+            margin: 0;
+            font-size: 16px;
+        }
+
         .modal-bg {
-            display: none; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.55); z-index: 9999;
-            justify-content: center; align-items: center;
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 15, 20, 0.72);
+            backdrop-filter: blur(7px);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
         }
+
         .modal-box {
-            background: white; border-radius: 12px; width: 400px;
-            overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: white;
+            border-radius: 22px;
+            width: min(430px, 100%);
+            overflow: hidden;
+            box-shadow: 0 30px 90px rgba(0,0,0,0.35);
         }
+
         .modal-box-header {
-            background: var(--uc-purple); color: white;
-            padding: 16px 20px; font-weight: 700; font-size: 15px;
-            display: flex; justify-content: space-between; align-items: center;
+            background: linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark));
+            color: white;
+            padding: 18px 22px;
+            font-weight: 950;
+            font-size: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .modal-box-body { padding: 24px 20px; }
-        .modal-box-body p { margin: 0 0 6px; color: #444; font-size: 0.9rem; }
-        .modal-box-body .student-highlight {
-            font-weight: 800; color: var(--uc-purple); font-size: 1rem;
+
+        .modal-close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
         }
+
+        .modal-box-body {
+            padding: 24px 22px;
+        }
+
+        .modal-box-body p {
+            margin: 0 0 7px;
+            color: #374151;
+            font-size: 0.92rem;
+        }
+
+        .student-highlight {
+            font-weight: 950;
+            color: var(--uc-purple);
+            font-size: 1.05rem;
+        }
+
+        .modal-warning {
+            margin-top: 16px;
+            padding: 13px;
+            background: #fef3c7;
+            border-radius: 12px;
+            border-left: 5px solid #f59e0b;
+            color: #92400e;
+            font-size: 0.86rem;
+            font-weight: 750;
+            line-height: 1.45;
+        }
+
+        .modal-warning i {
+            color: #b45309;
+        }
+
         .modal-box-footer {
-            padding: 14px 20px; background: #f8f9fa;
-            border-top: 1px solid #eee; display: flex;
-            justify-content: flex-end; gap: 10px;
+            padding: 16px 22px;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
         }
+
         .btn-cancel {
-            padding: 9px 20px; background: #e2e8f0; color: #475569;
-            border: none; border-radius: 7px; font-weight: 600; cursor: pointer;
+            padding: 10px 20px;
+            background: #e2e8f0;
+            color: #475569;
+            border: none;
+            border-radius: 12px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.22s ease;
         }
+
         .btn-confirm-logout {
-            padding: 9px 22px; background: #ef4444; color: white;
-            border: none; border-radius: 7px; font-weight: 700; cursor: pointer;
+            padding: 10px 22px;
+            background: #dc2626;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.22s ease;
         }
-        .btn-confirm-logout:hover { background: #dc2626; }
+
+        .btn-cancel:hover,
+        .btn-confirm-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(31, 16, 70, 0.14);
+        }
+
+        @media (max-width: 900px) {
+            .sitin-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .stat-row {
+                grid-template-columns: 1fr;
+            }
+
+            .sitin-title {
+                align-items: flex-start;
+            }
+
+            .sitin-title h1 {
+                font-size: 28px;
+            }
+
+            .table-wrap {
+                padding: 18px;
+            }
+
+            .records-card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .sitin-wrapper,
+            .flash-msg {
+                width: min(100% - 24px, 1450px);
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .sitin-title-icon {
+                width: 54px;
+                height: 54px;
+                font-size: 24px;
+            }
+
+            .sitin-title h1 {
+                font-size: 24px;
+            }
+
+            .search-bar {
+                align-items: stretch;
+            }
+
+            .search-bar input {
+                width: 100%;
+            }
+
+            .modal-box-footer {
+                flex-direction: column;
+            }
+
+            .btn-cancel,
+            .btn-confirm-logout {
+                width: 100%;
+            }
+        }
     </style>
 </head>
+
 <body>
 
 <!-- NAVBAR -->
@@ -187,17 +590,15 @@
         <i class="fas fa-university" style="color: var(--uc-gold); margin-right: 8px;"></i>
         COLLEGE OF COMPUTER STUDIES ADMIN
     </span>
+
     <div class="admin-nav-links">
-        <a href="/admin/dashboard"><i class="fas fa-home" style="margin-right:5px;"></i> Home</a>
-        <a href="javascript:void(0)" onclick="openSearchModal()"><i class="fas fa-search" style="margin-right:5px;"></i> Search</a>
-        <a href="/admin/students"><i class="fas fa-user-graduate" style="margin-right:5px;"></i>Students</a>
-        <a href="/admin/sitin-records" class="active">
-            <i class="fas fa-desktop" style="margin-right:5px;"></i> Sit-in
-        </a>
-        <a href="/admin/view-sitin-records"><i class="fas fa-list" style="margin-right:5px;"></i>View Sit-in Records</a>
-        <a href="/admin/sitin-reports"><i class="fas fa-chart-bar" style="margin-right:5px;"></i>Sit-in Reports</a>
-        <a href="/admin/feedback-reports"><i class="fas fa-comments" style="margin-right:5px;"></i>Feedback Reports</a>
-        <a href="/admin/reservations"><i class="fas fa-calendar-check" style="margin-right:5px;"></i>Reservation</a>
+        <a href="/admin/dashboard"><i class="fas fa-home"></i>Home</a>
+        <a href="javascript:void(0)" onclick="openSearchModal()"><i class="fas fa-search"></i>Search</a>
+        <a href="/admin/students"><i class="fas fa-user-graduate"></i>Students</a>
+        <a href="/admin/sitin-records" class="active"><i class="fas fa-desktop"></i>Sit-in</a>
+        <a href="/admin/view-sitin-records"><i class="fas fa-list"></i>View Sit-in Records</a>
+        <a href="/admin/feedback-reports"><i class="fas fa-comments"></i>Feedback Reports</a>
+        <a href="/admin/reservations"><i class="fas fa-calendar-check"></i>Reservation</a>
         <a href="/admin/logout" class="admin-logout-btn">Log out</a>
     </div>
 </div>
@@ -212,33 +613,46 @@
     {% endfor %}
 {% endwith %}
 
-<div class="page-wrapper">
+<div class="sitin-wrapper">
 
-    <div class="page-header">
-        <h2 class="page-title">
-            <i class="fas fa-desktop" style="color: var(--uc-gold);"></i>
-            Current Sit-in Records
-        </h2>
+    <div class="sitin-header">
+        <div class="sitin-title">
+            <div class="sitin-title-icon">
+                <i class="fas fa-desktop"></i>
+            </div>
+            <div>
+                <h1>Current Sit-in Records</h1>
+                <p>Monitor students currently using the laboratory and log them out when finished.</p>
+            </div>
+        </div>
     </div>
 
     <!-- STAT BADGES -->
     <div class="stat-row">
-        <div class="stat-badge">
-            <div class="stat-icon purple"><i class="fas fa-user-check"></i></div>
+        <div class="stat-badge stat-current">
+            <div class="stat-icon">
+                <i class="fas fa-user-check"></i>
+            </div>
             <div>
                 <div class="stat-num">{{ active_records | length }}</div>
                 <div class="stat-label">Currently Sitting In</div>
             </div>
         </div>
-        <div class="stat-badge">
-            <div class="stat-icon gold"><i class="fas fa-chart-bar"></i></div>
+
+        <div class="stat-badge stat-total">
+            <div class="stat-icon">
+                <i class="fas fa-chart-bar"></i>
+            </div>
             <div>
                 <div class="stat-num">{{ total_sitin }}</div>
                 <div class="stat-label">Total Sit-ins Today</div>
             </div>
         </div>
-        <div class="stat-badge">
-            <div class="stat-icon green"><i class="fas fa-sign-out-alt"></i></div>
+
+        <div class="stat-badge stat-out">
+            <div class="stat-icon">
+                <i class="fas fa-sign-out-alt"></i>
+            </div>
             <div>
                 <div class="stat-num">{{ total_logout }}</div>
                 <div class="stat-label">Logged Out Today</div>
@@ -247,74 +661,111 @@
     </div>
 
     <!-- TABLE CARD -->
-    <div class="card">
-        <div class="card-header">
-            <span><i class="fas fa-list"></i> Active Students in Lab</span>
-            <span style="font-size: 12px; font-weight: 400; opacity: 0.8;">
-                Session is deducted only upon admin logout
+    <div class="records-card">
+        <div class="records-card-header">
+            <span>
+                <i class="fas fa-list"></i>
+                Active Students in Lab
             </span>
+            <small>Session is deducted only upon admin logout</small>
         </div>
 
         <div class="search-bar">
-            <i class="fas fa-search" style="color: #aaa;"></i>
-            <input type="text" id="searchInput" placeholder="Search by name, ID, lab, or purpose..."
-                   onkeyup="filterTable()">
+            <i class="fas fa-search"></i>
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search by name, ID, lab, or purpose..."
+                onkeyup="filterTable()"
+            >
         </div>
 
         {% if active_records %}
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Student</th>
-                    <th>Course / Level</th>
-                    <th>Lab</th>
-                    <th>Purpose</th>
-                    <th>Time In</th>
-                    <th>Duration</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="sitinTable">
-                {% for r in active_records %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>
-                        <div class="student-cell">
-                            <img class="student-avatar"
-                                 src="{{ url_for('static', filename='uploads/' + r['id_number'] + '.png') }}"
-                                 onerror="this.src='https://ui-avatars.com/api/?name={{ r['first_name'] }}+{{ r['last_name'] }}&background=4b2c80&color=fff&size=36'"
-                                 alt="avatar">
-                            <div>
-                                <div class="student-name">{{ r['first_name'] }} {{ r['last_name'] }}</div>
-                                <div class="student-id">{{ r['id_number'] }}</div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Student</th>
+                        <th>Course / Level</th>
+                        <th>Lab</th>
+                        <th>Purpose</th>
+                        <th>Time In</th>
+                        <th>Duration</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="sitinTable">
+                    {% for r in active_records %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+
+                        <td>
+                            <div class="student-cell">
+                                <img
+                                    class="student-avatar"
+                                    src="{{ url_for('static', filename='uploads/' + r['id_number'] + '.png') }}"
+                                    onerror="this.src='https://ui-avatars.com/api/?name={{ r['first_name'] }}+{{ r['last_name'] }}&background=4b2c80&color=fff&size=42'"
+                                    alt="avatar"
+                                >
+                                <div>
+                                    <div class="student-name">{{ r['first_name'] }} {{ r['last_name'] }}</div>
+                                    <div class="student-id">{{ r['id_number'] }}</div>
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                    <td>
-                        <span style="font-weight:600; color:#333;">{{ r['course'] }}</span>
-                        <span style="color:#999; font-size:0.8rem;"> – {{ r['course_level'] }}{{ 'st' if r['course_level']=='1' else ('nd' if r['course_level']=='2' else ('rd' if r['course_level']=='3' else 'th')) }} Year</span>
-                    </td>
-                    <td><span class="badge badge-lab"><i class="fas fa-door-open"></i> Lab {{ r['lab'] }}</span></td>
-                    <td><span class="badge badge-purpose">{{ r['purpose'] }}</span></td>
-                    <td style="font-size:0.82rem; color:#555;">
-                        <i class="fas fa-clock" style="color: var(--uc-gold);"></i>
-                        {{ r['login_time'][:16] }}
-                    </td>
-                    <td>
-                        <span class="timer" id="timer-{{ r['id'] }}"
-                              data-login="{{ r['login_time'] }}">--:--:--</span>
-                    </td>
-                    <td>
-                        <button class="btn-logout"
-                                onclick="confirmLogout({{ r['id'] }}, '{{ r['first_name'] }} {{ r['last_name'] }}', '{{ r['id_number'] }}')">
-                            <i class="fas fa-sign-out-alt"></i> Log Out
-                        </button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                        </td>
+
+                        <td>
+                            <span class="course-text">{{ r['course'] }}</span>
+                            <span class="level-text">
+                                – {{ r['course_level'] }}{{ 'st' if r['course_level']=='1' else ('nd' if r['course_level']=='2' else ('rd' if r['course_level']=='3' else 'th')) }} Year
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge badge-lab">
+                                <i class="fas fa-door-open"></i>
+                                Lab {{ r['lab'] }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge badge-purpose">{{ r['purpose'] }}</span>
+                        </td>
+
+                        <td class="time-cell">
+                            <i class="fas fa-clock"></i>
+                            {{ r['login_time'][:16] }}
+                        </td>
+
+                        <td>
+                            <span
+                                class="timer"
+                                id="timer-{{ r['id'] }}"
+                                data-login="{{ r['login_time'] }}"
+                            >
+                                --:--:--
+                            </span>
+                        </td>
+
+                        <td>
+                            <button
+                                type="button"
+                                class="btn-logout js-logout-btn"
+                                data-record-id="{{ r['id'] }}"
+                                data-student-name="{{ r['first_name'] }} {{ r['last_name'] }}"
+                                data-student-id="{{ r['id_number'] }}"
+                            >
+                                <i class="fas fa-sign-out-alt"></i>
+                                Log Out
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% else %}
         <div class="empty-state">
             <i class="fas fa-desktop"></i>
@@ -329,87 +780,98 @@
 <div class="modal-bg" id="logoutModal">
     <div class="modal-box">
         <div class="modal-box-header">
-            <span><i class="fas fa-sign-out-alt"></i> Confirm Student Log Out</span>
-            <button onclick="closeLogoutModal()"
-                    style="background:none;border:none;color:white;font-size:20px;cursor:pointer;">&times;</button>
+            <span>
+                <i class="fas fa-sign-out-alt"></i>
+                Confirm Student Log Out
+            </span>
+            <button type="button" class="modal-close-btn" onclick="closeLogoutModal()">&times;</button>
         </div>
+
         <div class="modal-box-body">
             <p>You are about to log out:</p>
             <p class="student-highlight" id="modalStudentName"></p>
             <p style="font-size:0.82rem; color:#888;" id="modalStudentId"></p>
-            <div style="margin-top:14px; padding:12px; background:#fef3c7; border-radius:8px; border-left:4px solid #f59e0b;">
-                <i class="fas fa-info-circle" style="color:#b45309;"></i>
-                <span style="font-size:0.85rem; color:#92400e; font-weight:600;">
-                    This will deduct <strong>1 session</strong> from the student's remaining sessions.
-                </span>
+
+            <div class="modal-warning">
+                <i class="fas fa-info-circle"></i>
+                This will deduct <strong>1 session</strong> from the student's remaining sessions.
             </div>
         </div>
+
         <div class="modal-box-footer">
-            <button class="btn-cancel" onclick="closeLogoutModal()">Cancel</button>
+            <button type="button" class="btn-cancel" onclick="closeLogoutModal()">Cancel</button>
+
             <form id="logoutForm" method="POST">
                 <button type="submit" class="btn-confirm-logout">
-                    <i class="fas fa-sign-out-alt"></i> Confirm Log Out
+                    <i class="fas fa-sign-out-alt"></i>
+                    Confirm Log Out
                 </button>
             </form>
         </div>
     </div>
 </div>
 
-<!-- SEARCH + SIT-IN MODALS (reused from admin_dashboard) -->
-<div id="searchModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:none;justify-content:center;align-items:center;z-index:1000;padding:20px;">
-    <div style="background:white;width:100%;max-width:700px;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-        <!-- HEADER -->
-        <div style="background:linear-gradient(135deg,var(--uc-purple) 0%,#6b3fa0 100%);color:white;padding:24px;font-weight:bold;display:flex;justify-content:space-between;align-items:center;">
-            <div style="display:flex;align-items:center;gap:12px;">
-                <i class="fas fa-search" style="font-size:22px;"></i>
-                <span style="font-size:18px;letter-spacing:0.5px;">Quick Select Student</span>
+<!-- SEARCH MODAL -->
+<div id="searchModal" class="admin-search-overlay">
+    <div class="admin-search-modal">
+        <div class="admin-search-header">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <i class="fas fa-search"></i>
+                <span>Quick Select Student</span>
             </div>
-            <button onclick="closeModal('searchModal')" style="background:none;border:none;color:white;cursor:pointer;font-size:24px;transition:0.3s;">&times;</button>
+            <button type="button" class="admin-search-close" onclick="closeModal('searchModal')">&times;</button>
         </div>
 
-        <!-- BODY -->
-        <div style="padding:25px;">
-            <!-- SEARCH INPUT -->
-            <div style="margin-bottom:25px;">
-                <label style="font-size:12px;font-weight:800;color:var(--uc-purple);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:12px;">Search or Browse Students</label>
-                <input type="text" id="idSearchInput" style="width:100%;padding:14px 16px;border:2px solid #e5e7eb;border-radius:10px;font-size:14px;transition:all 0.3s;box-sizing:border-box;" placeholder="Type to search by ID or name..." onkeyup="filterStudents(event)">
+        <div class="admin-search-body">
+            <div style="margin-bottom: 24px;">
+                <label class="admin-search-label">Search or Browse Students</label>
+                <input
+                    type="text"
+                    id="idSearchInput"
+                    placeholder="Type to search by ID or name..."
+                    onkeyup="filterStudents(event)"
+                >
             </div>
 
-            <!-- STUDENTS GRID WITH PROFILE PICTURES -->
-            <div id="studentsList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:15px;max-height:450px;overflow-y:auto;padding-right:10px;"></div>
+            <div id="studentsList"></div>
 
-            <!-- NO RESULTS MESSAGE -->
-            <div id="noResults" style="text-align:center;padding:40px 20px;color:#888;display:none;">
-                <i class="fas fa-inbox" style="font-size:40px;color:#ddd;margin-bottom:12px;display:block;"></i>
-                <p style="font-size:13px;margin:0;">No students found</p>
+            <div id="noResults" class="admin-no-results" style="display:none;">
+                <i class="fas fa-inbox" style="font-size:42px; color:#d1d5db; margin-bottom:12px; display:block;"></i>
+                <p style="margin:0;">No students found</p>
             </div>
         </div>
     </div>
 </div>
 
-<div id="sitInFormModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:none;justify-content:center;align-items:center;z-index:1000;">
-    <div style="background:white;width:500px;border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
-        <div style="background:var(--uc-purple);color:white;padding:18px 20px;font-weight:bold;display:flex;justify-content:space-between;align-items:center;">
-            <span style="font-size:1.1rem;">Sit-In Form</span>
-            <button onclick="document.getElementById('sitInFormModal').style.display='none'"
-                    style="background:none;border:none;color:white;cursor:pointer;font-size:24px;">&times;</button>
+<!-- SIT-IN FORM MODAL -->
+<div id="sitInFormModal" class="modal-overlay">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <span>
+                <i class="fas fa-desktop" style="margin-right:8px;"></i>
+                Sit-In Form
+            </span>
+            <button type="button" onclick="closeModal('sitInFormModal')" style="background:none;border:none;color:white;font-size:24px;cursor:pointer;">&times;</button>
         </div>
+
         <form action="/admin/sit-in" method="POST">
-            <div style="padding:25px;">
-                <div style="margin-bottom:15px;">
-                    <label style="display:block;font-size:12px;font-weight:700;color:var(--uc-purple);text-transform:uppercase;margin-bottom:5px;">ID Number:</label>
-                    <input type="text" name="id_number" id="display_id" readonly
-                           style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;background:#f8f9fa;color:#555;box-sizing:border-box;">
+            <div class="modal-body">
+
+                <div style="margin-bottom: 15px;">
+                    <label>ID Number</label>
+                    <input type="text" name="id_number" id="display_id" readonly>
                 </div>
-                <div style="margin-bottom:15px;">
-                    <label style="display:block;font-size:12px;font-weight:700;color:var(--uc-purple);text-transform:uppercase;margin-bottom:5px;">Student Name:</label>
-                    <input type="text" id="display_name" readonly
-                           style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;background:#f8f9fa;color:#555;box-sizing:border-box;">
+
+                <div style="margin-bottom: 15px;">
+                    <label>Student Name</label>
+                    <input type="text" id="display_name" readonly>
                 </div>
-                <div style="display:flex;gap:15px;margin-bottom:15px;">
+
+                <div style="display:flex; gap:15px; margin-bottom:15px;">
                     <div style="flex:1;">
-                        <label style="display:block;font-size:12px;font-weight:700;color:var(--uc-purple);text-transform:uppercase;margin-bottom:5px;">Purpose:</label>
-                        <select name="purpose" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;background:white;box-sizing:border-box;">
+                        <label>Purpose</label>
+                        <select name="purpose">
                             <option value="C Programming">C Programming</option>
                             <option value="Java">Java</option>
                             <option value="PHP">PHP</option>
@@ -417,153 +879,244 @@
                             <option value="Database">Database</option>
                         </select>
                     </div>
+
                     <div style="flex:1;">
-                        <label style="display:block;font-size:12px;font-weight:700;color:var(--uc-purple);text-transform:uppercase;margin-bottom:5px;">Lab:</label>
-                        <select name="lab" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;background:white;box-sizing:border-box;">
-                            <option value="524">Lab 524</option>
-                            <option value="526">Lab 526</option>
-                            <option value="528">Lab 528</option>
-                            <option value="530">Lab 530</option>
-                            <option value="542">Lab 542</option>
-                            <option value="544">Lab 544</option>
+                        <label>Lab</label>
+                        <select name="lab" required>
+                            <option value="" disabled selected>Select lab</option>
+                            <option value="524">524</option>
+                            <option value="526">526</option>
+                            <option value="528">528</option>
+                            <option value="530">530</option>
+                            <option value="542">542</option>
+                            <option value="544">544</option>
                         </select>
                     </div>
                 </div>
-                <div style="margin-bottom:5px;">
-                    <label style="display:block;font-size:12px;font-weight:700;color:var(--uc-purple);text-transform:uppercase;margin-bottom:5px;">Remaining Sessions:</label>
-                    <input type="text" id="display_remaining" readonly
-                           style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;background:#f8f9fa;color:#16a34a;font-weight:800;font-size:1.1rem;box-sizing:border-box;">
+
+                <div>
+                    <label>Remaining Session</label>
+                    <input type="text" id="display_remaining" readonly>
                 </div>
+
             </div>
-            <div style="padding:15px 25px;background:#f4f4f9;display:flex;justify-content:flex-end;gap:12px;border-top:1px solid #eee;">
-                <button type="button" onclick="document.getElementById('sitInFormModal').style.display='none'"
-                        style="padding:10px 20px;border:none;border-radius:6px;background:#e2e8f0;color:#475569;font-weight:600;cursor:pointer;">
+
+            <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:12px;">
+                <button type="button" class="btn btn-reset" onclick="closeModal('sitInFormModal')">
                     Close
                 </button>
-                <button type="submit"
-                        style="padding:10px 30px;border:none;border-radius:6px;background:var(--uc-gold);color:var(--uc-purple);font-weight:800;cursor:pointer;">
+
+                <button type="submit" class="btn btn-search">
                     Sit In
                 </button>
             </div>
         </form>
+
     </div>
 </div>
 
 <script>
-/* ── LIVE TIMER ── */
 function updateTimers() {
-    document.querySelectorAll('.timer').forEach(el => {
-        const loginStr = el.dataset.login;
+    document.querySelectorAll('.timer').forEach(timerElement => {
+        const loginStr = timerElement.dataset.login;
         if (!loginStr) return;
-        const login = new Date(loginStr.replace(' ', 'T'));
-        const now   = new Date();
-        const diff  = Math.floor((now - login) / 1000);
-        const h = Math.floor(diff / 3600).toString().padStart(2, '0');
-        const m = Math.floor((diff % 3600) / 60).toString().padStart(2, '0');
-        const s = (diff % 60).toString().padStart(2, '0');
-        el.textContent = `${h}:${m}:${s}`;
 
-        /* Turn red if over 3 hours */
-        if (diff > 10800) el.style.color = '#ef4444';
-        else if (diff > 7200) el.style.color = '#f59e0b';
-        else el.style.color = '#374151';
+        const login = new Date(loginStr.replace(' ', 'T'));
+        const now = new Date();
+        const diff = Math.floor((now - login) / 1000);
+
+        const hours = Math.floor(diff / 3600).toString().padStart(2, '0');
+        const minutes = Math.floor((diff % 3600) / 60).toString().padStart(2, '0');
+        const seconds = (diff % 60).toString().padStart(2, '0');
+
+        timerElement.textContent = `${hours}:${minutes}:${seconds}`;
+
+        if (diff > 10800) {
+            timerElement.style.color = '#dc2626';
+        } else if (diff > 7200) {
+            timerElement.style.color = '#f59e0b';
+        } else {
+            timerElement.style.color = '#374151';
+        }
     });
 }
+
 setInterval(updateTimers, 1000);
 updateTimers();
 
-/* ── CONFIRM LOGOUT MODAL ── */
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.js-logout-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const recordId = this.dataset.recordId;
+            const studentName = this.dataset.studentName;
+            const studentId = this.dataset.studentId;
+
+            confirmLogout(recordId, studentName, studentId);
+        });
+    });
+});
+
 function confirmLogout(recordId, studentName, studentId) {
-    document.getElementById('modalStudentName').textContent = studentName;
-    document.getElementById('modalStudentId').textContent   = 'ID: ' + studentId;
-    document.getElementById('logoutForm').action = '/admin/sitin-logout/' + recordId;
-    document.getElementById('logoutModal').style.display = 'flex';
-}
-function closeLogoutModal() {
-    document.getElementById('logoutModal').style.display = 'none';
+    const modalStudentName = document.getElementById('modalStudentName');
+    const modalStudentId = document.getElementById('modalStudentId');
+    const logoutForm = document.getElementById('logoutForm');
+    const logoutModal = document.getElementById('logoutModal');
+
+    if (modalStudentName) modalStudentName.textContent = studentName;
+    if (modalStudentId) modalStudentId.textContent = 'ID: ' + studentId;
+    if (logoutForm) logoutForm.action = '/admin/sitin-logout/' + recordId;
+    if (logoutModal) logoutModal.style.display = 'flex';
 }
 
-/* ── TABLE SEARCH ── */
+function closeLogoutModal() {
+    const logoutModal = document.getElementById('logoutModal');
+    if (logoutModal) logoutModal.style.display = 'none';
+}
+
 function filterTable() {
-    const q = document.getElementById('searchInput').value.toLowerCase();
+    const searchInput = document.getElementById('searchInput');
+    const query = searchInput ? searchInput.value.toLowerCase() : '';
+
     document.querySelectorAll('#sitinTable tr').forEach(row => {
-        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+        row.style.display = row.textContent.toLowerCase().includes(query) ? '' : 'none';
     });
 }
 
-/* ── SEARCH + SIT-IN (reused) ── */
 function openSearchModal() {
-    document.getElementById('searchModal').style.display = 'flex';
+    const modal = document.getElementById('searchModal');
+    const input = document.getElementById('idSearchInput');
+
+    if (modal) modal.style.display = 'flex';
+
     loadAllStudents();
+
+    if (input) {
+        input.value = '';
+        setTimeout(() => input.focus(), 100);
+    }
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) modal.style.display = 'none';
 }
 
 function loadAllStudents() {
-    fetch('/admin/search-students?query=')
+    fetch('/admin/search-students?q=')
         .then(response => response.json())
         .then(data => {
-            displayStudents(data.students || []);
+            window.allStudents = data.students || [];
+            displayStudents(window.allStudents);
         })
-        .catch(() => {
-            document.getElementById('studentsList').innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;">Error loading students</p>';
+        .catch(error => {
+            console.error('Error:', error);
+
+            const studentsList = document.getElementById('studentsList');
+            if (studentsList) {
+                studentsList.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;">Error loading students</p>';
+            }
         });
 }
 
 function filterStudents(event) {
-    const query = event.target.value.toLowerCase().trim();
-    if (!query) {
+    const query = event.target.value.trim().toLowerCase();
+
+    if (!window.allStudents) {
         loadAllStudents();
         return;
     }
 
     const filtered = window.allStudents.filter(student =>
-        student.id_number.toLowerCase().includes(query) ||
-        student.first_name.toLowerCase().includes(query) ||
-        student.last_name.toLowerCase().includes(query)
+        String(student.id_number || '').toLowerCase().includes(query) ||
+        String(student.first_name || '').toLowerCase().includes(query) ||
+        String(student.last_name || '').toLowerCase().includes(query)
     );
+
     displayStudents(filtered);
 }
 
 function displayStudents(students) {
-    window.allStudents = students;
-    const container = document.getElementById('studentsList');
+    const studentsList = document.getElementById('studentsList');
     const noResults = document.getElementById('noResults');
 
-    if (students.length === 0) {
-        container.innerHTML = '';
-        noResults.style.display = 'block';
+    if (!studentsList) return;
+
+    studentsList.innerHTML = '';
+
+    if (!students || students.length === 0) {
+        if (noResults) noResults.style.display = 'block';
         return;
     }
 
-    noResults.style.display = 'none';
-    container.innerHTML = students.map(student => `
-        <div style="background:white;border-radius:12px;padding:16px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.1);transition:all 0.3s;cursor:pointer;border:2px solid transparent;" onmouseover="this.style.borderColor='var(--uc-purple)';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 20px rgba(0,0,0,0.15)';" onmouseout="this.style.borderColor='transparent';this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';">
-            <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--uc-purple),var(--uc-gold));display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:white;font-weight:bold;font-size:18px;overflow:hidden;">
-                ${student.profile_pic ? `<img src="/static/uploads/${student.id_number}.png" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">` : ''}
-                <span style="display:${student.profile_pic ? 'none' : 'flex'};width:100%;height:100%;align-items:center;justify-content:center;">${student.first_name.charAt(0)}${student.last_name.charAt(0)}</span>
+    if (noResults) noResults.style.display = 'none';
+
+    students.forEach(student => {
+        const idNumber = student.id_number || '';
+        const firstName = student.first_name || '';
+        const lastName = student.last_name || '';
+        const remaining = student.remaining || 0;
+        const studentName = `${firstName} ${lastName}`.trim();
+        const photoPath = `/static/uploads/${idNumber}.png`;
+        const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+
+        const studentCard = document.createElement('div');
+        studentCard.className = 'admin-student-card';
+
+        studentCard.innerHTML = `
+            <div class="admin-student-avatar">
+                <img
+                    src="${photoPath}"
+                    alt="${studentName}"
+                    onerror="this.style.display='none'; this.parentElement.textContent='${initials}';"
+                >
             </div>
-            <div style="font-size:11px;color:#666;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">${student.id_number}</div>
-            <div style="font-size:13px;font-weight:700;color:#333;margin-bottom:8px;">${student.first_name} ${student.last_name}</div>
-            <div style="font-size:11px;color:#888;margin-bottom:12px;">${student.remaining} sessions left</div>
-            <button onclick="openSitInForm('${student.id_number}', '${student.first_name} ${student.last_name}', ${student.remaining})"
-                    style="width:100%;padding:8px 12px;background:linear-gradient(135deg,var(--uc-purple),#6b3fa0);color:white;border:none;border-radius:8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;cursor:pointer;transition:0.3s;"
-                    onmouseover="this.style.background='linear-gradient(135deg,#6b3fa0,var(--uc-purple))';" onmouseout="this.style.background='linear-gradient(135deg,var(--uc-purple),#6b3fa0)';">
+
+            <div class="admin-student-name">${studentName}</div>
+            <div class="admin-student-id">${idNumber}</div>
+            <div class="admin-student-remaining">${remaining} sessions left</div>
+
+            <button type="button" class="admin-select-student-btn">
                 Select Student
             </button>
-        </div>
-    `).join('');
+        `;
+
+        const selectButton = studentCard.querySelector('.admin-select-student-btn');
+
+        selectButton.addEventListener('click', function() {
+            openSitInForm(idNumber, studentName, remaining);
+        });
+
+        studentsList.appendChild(studentCard);
+    });
 }
 
 function openSitInForm(idNumber, studentName, remaining) {
-    document.getElementById('display_id').value = idNumber;
-    document.getElementById('display_name').value = studentName;
-    document.getElementById('display_remaining').value = remaining;
-    document.getElementById('searchModal').style.display = 'none';
-    document.getElementById('sitInFormModal').style.display = 'flex';
+    const idInput = document.getElementById('display_id');
+    const nameInput = document.getElementById('display_name');
+    const remainingInput = document.getElementById('display_remaining');
+
+    if (idInput) idInput.value = idNumber;
+    if (nameInput) nameInput.value = studentName;
+    if (remainingInput) remainingInput.value = remaining;
+
+    closeModal('searchModal');
+
+    const sitInModal = document.getElementById('sitInFormModal');
+    if (sitInModal) sitInModal.style.display = 'flex';
 }
 
-function closeModal(modalId) {
-    document.getElementById(modalId).style.display = 'none';
-}
+window.addEventListener('click', function(event) {
+    const searchModal = document.getElementById('searchModal');
+    const logoutModal = document.getElementById('logoutModal');
+
+    if (event.target === searchModal) {
+        closeModal('searchModal');
+    }
+
+    if (event.target === logoutModal) {
+        closeLogoutModal();
+    }
+});
 </script>
 
 </body>

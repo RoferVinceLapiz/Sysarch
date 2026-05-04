@@ -5,297 +5,940 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student History | CCS Sit-in Monitoring System</title>
 
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
 
     <style>
-        * {
+        :root {
+            --uc-purple: #4b2c80;
+            --uc-purple-dark: #2d1a4d;
+            --uc-purple-light: #6b3fa0;
+            --uc-gold: #fdb813;
+            --text-dark: #111827;
+            --text-muted: #64748b;
+            --border-soft: #e5e7eb;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #f59e0b;
+            --info: #2563eb;
+        }
+
+        body.student-history-page {
+            margin: 0 !important;
+            min-height: 100vh !important;
+            font-family: 'Segoe UI', Arial, sans-serif !important;
+            color: var(--text-dark) !important;
+            background:
+                radial-gradient(circle at 8% 18%, rgba(253, 184, 19, 0.18), transparent 26%),
+                radial-gradient(circle at 88% 10%, rgba(107, 63, 160, 0.14), transparent 28%),
+                linear-gradient(135deg, #fffaf0 0%, #f7f2ff 42%, #f8fafc 100%) !important;
+            overflow-x: hidden !important;
+        }
+
+        .student-history-page * {
             box-sizing: border-box;
-            font-family: 'Segoe UI', Arial, sans-serif;
         }
 
-        body {
-            margin: 0;
-            background: #f3f4f6;
-            color: #333;
-        }
+        /* ================= STUDENT NAVBAR ================= */
 
-        /* NAVBAR */
-        .navbar {
-            background: #4b2c80;
-            color: white;
-            padding: 14px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .navbar h2 {
-            margin: 0;
-            font-size: 20px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 18px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: 0.2s;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: #facc15;
-        }
-
-        /* PAGE */
-        .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        .page-title {
-            font-size: 28px;
-            color: #4b2c80;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 14px;
-            padding: 20px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-        }
-
-        /* FLASH */
-        .flash-messages {
-            margin-bottom: 20px;
-        }
-
-        .flash {
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-
-        .flash.success {
-            background: #dcfce7;
-            color: #166534;
-            border: 1px solid #86efac;
-        }
-
-        .flash.error {
-            background: #fee2e2;
-            color: #991b1b;
-            border: 1px solid #fca5a5;
-        }
-
-        /* TABLE */
-        table.dataTable {
+        .student-history-page .student-navbar {
             width: 100% !important;
-            border-collapse: collapse !important;
+            min-height: 68px !important;
+            padding: 0 22px !important;
+            background:
+                radial-gradient(circle at top left, rgba(253, 184, 19, 0.18), transparent 30%),
+                linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark)) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 18px !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 9999 !important;
+            box-shadow: 0 10px 28px rgba(31, 16, 70, 0.24) !important;
         }
 
-        table.dataTable thead th {
-            background: #4b2c80;
-            color: white;
-            padding: 12px;
-            text-align: center;
+        .student-history-page .student-navbar-title {
+            display: flex !important;
+            align-items: center !important;
+            gap: 9px !important;
+            color: #ffffff !important;
+            font-size: 14px !important;
+            font-weight: 950 !important;
+            letter-spacing: 0.4px !important;
+            white-space: nowrap !important;
         }
 
-        table.dataTable tbody td {
-            padding: 12px;
-            text-align: center;
-            vertical-align: middle;
+        .student-history-page .student-navbar-title i {
+            color: var(--uc-gold) !important;
         }
 
-        .status-active {
-            background: #dcfce7;
-            color: #166534;
-            padding: 6px 10px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: bold;
+        .student-history-page .student-nav-links {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-end !important;
+            gap: 6px !important;
+            flex-wrap: nowrap !important;
         }
 
-        .status-complete {
-            background: #dbeafe;
-            color: #1d4ed8;
-            padding: 6px 10px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: bold;
+        .student-history-page .student-nav-links a,
+        .student-history-page .dropdown-toggle {
+            min-height: 42px !important;
+            padding: 0 12px !important;
+            border-radius: 999px !important;
+            color: rgba(255, 255, 255, 0.92) !important;
+            text-decoration: none !important;
+            font-size: 13px !important;
+            font-weight: 850 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 7px !important;
+            transition: all 0.22s ease !important;
+            white-space: nowrap !important;
+            cursor: pointer !important;
         }
 
-        .btn-feedback {
-            background: #facc15;
-            color: #4b2c80;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
+        .student-history-page .student-nav-links a:hover:not(.logout-btn),
+        .student-history-page .dropdown-toggle:hover,
+        .student-history-page .student-nav-links a.active {
+            background: rgba(255, 255, 255, 0.14) !important;
+            color: var(--uc-gold) !important;
         }
 
-        .btn-feedback:hover {
-            background: #eab308;
+        .student-history-page .logout-btn {
+            background: var(--uc-gold) !important;
+            color: var(--uc-purple-dark) !important;
+            font-weight: 950 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            padding: 0 18px !important;
         }
 
-        .badge-done {
-            display: inline-block;
-            background: #dcfce7;
-            color: #166534;
-            padding: 7px 12px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: bold;
+        .student-history-page .logout-btn:hover {
+            background: #ffffff !important;
+            color: var(--uc-purple-dark) !important;
         }
 
-        /* MODAL */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 999;
-            inset: 0;
-            background: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+        .student-history-page .dropdown {
+            position: relative !important;
         }
 
-        .modal-content {
-            background: white;
-            width: 100%;
-            max-width: 520px;
-            border-radius: 16px;
-            padding: 24px;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        .student-history-page .dropdown-menu {
+            display: none !important;
+            position: absolute !important;
+            top: calc(100% + 10px) !important;
+            right: 0 !important;
+            min-width: 240px !important;
+            background: #ffffff !important;
+            border-radius: 18px !important;
+            overflow: hidden !important;
+            box-shadow: 0 20px 45px rgba(31, 16, 70, 0.18) !important;
+            border: 1px solid rgba(255, 255, 255, 0.8) !important;
+            z-index: 10000 !important;
         }
 
-        .close-btn {
+        .student-history-page .dropdown:hover .dropdown-menu {
+            display: block !important;
+        }
+
+        .student-history-page .dropdown-menu a {
+            color: var(--text-dark) !important;
+            border-radius: 0 !important;
+            padding: 14px 16px !important;
+            min-height: auto !important;
+            font-size: 13px !important;
+            border-bottom: 1px solid #eef0f4 !important;
+            background: #ffffff !important;
+        }
+
+        .student-history-page .dropdown-menu a:hover {
+            background: #f7f2ff !important;
+            color: var(--uc-purple) !important;
+        }
+
+        /* ================= PAGE LAYOUT ================= */
+
+        .student-history-page .student-page {
+            width: min(1450px, calc(100% - 32px)) !important;
+            margin: 30px auto 44px !important;
+        }
+
+        .student-history-page .page-hero {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 22px !important;
+            margin-bottom: 26px !important;
+        }
+
+        .student-history-page .hero-title {
+            display: flex !important;
+            align-items: center !important;
+            gap: 16px !important;
+        }
+
+        .student-history-page .hero-icon {
+            width: 62px !important;
+            height: 62px !important;
+            border-radius: 20px !important;
+            background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+            color: var(--uc-purple-dark) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 28px !important;
+            box-shadow: 0 14px 28px rgba(253, 184, 19, 0.28) !important;
+            flex-shrink: 0 !important;
+        }
+
+        .student-history-page .hero-title h1 {
+            margin: 0 !important;
+            color: var(--uc-purple) !important;
+            font-size: 34px !important;
+            font-weight: 950 !important;
+            letter-spacing: -0.8px !important;
+            line-height: 1.1 !important;
+        }
+
+        .student-history-page .hero-title p {
+            margin: 7px 0 0 !important;
+            color: var(--text-muted) !important;
+            font-size: 14px !important;
+            line-height: 1.5 !important;
+        }
+
+        .student-history-page .summary-card {
+            min-width: 230px !important;
+            padding: 24px 28px !important;
+            border-radius: 24px !important;
+            background:
+                radial-gradient(circle at top right, rgba(253, 184, 19, 0.28), transparent 34%),
+                linear-gradient(135deg, var(--uc-purple), var(--uc-purple-light)) !important;
+            color: #ffffff !important;
+            box-shadow: 0 18px 42px rgba(75, 44, 128, 0.24) !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+
+        .student-history-page .summary-card::after {
+            content: "\f1da";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
             position: absolute;
-            top: 12px;
-            right: 16px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #666;
+            right: 20px;
+            bottom: -16px;
+            font-size: 84px;
+            color: rgba(255, 255, 255, 0.13);
         }
 
-        .modal-title {
-            margin-top: 0;
-            color: #4b2c80;
-            margin-bottom: 18px;
+        .student-history-page .summary-card p {
+            margin: 0 !important;
+            color: rgba(255, 255, 255, 0.84) !important;
+            font-size: 12px !important;
+            font-weight: 850 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.9px !important;
         }
 
-        .feedback-info {
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            padding: 14px;
-            margin-bottom: 16px;
+        .student-history-page .summary-card strong {
+            display: block !important;
+            margin-top: 8px !important;
+            color: #ffffff !important;
+            font-size: 42px !important;
+            font-weight: 950 !important;
+            line-height: 1 !important;
+            position: relative !important;
+            z-index: 1 !important;
         }
 
-        .feedback-info p {
-            margin: 6px 0;
-            font-size: 14px;
+        /* ================= FLASH ================= */
+
+        .student-history-page .flash-messages {
+            margin-bottom: 18px !important;
         }
 
-        .star-rating {
-            display: flex;
-            gap: 10px;
-            margin: 10px 0 18px;
-            flex-wrap: wrap;
+        .student-history-page .flash {
+            padding: 13px 16px !important;
+            border-radius: 14px !important;
+            font-size: 13px !important;
+            font-weight: 850 !important;
+            margin-bottom: 10px !important;
+            box-shadow: 0 12px 24px rgba(31, 16, 70, 0.08) !important;
         }
 
-        .star-rating label {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 14px;
-            cursor: pointer;
+        .student-history-page .flash.success {
+            background: #dcfce7 !important;
+            color: #166534 !important;
+            border: 1px solid #bbf7d0 !important;
         }
 
-        textarea {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #d1d5db;
-            resize: vertical;
-            font-size: 14px;
-            margin-top: 8px;
-            margin-bottom: 18px;
+        .student-history-page .flash.error {
+            background: #fee2e2 !important;
+            color: #991b1b !important;
+            border: 1px solid #fecaca !important;
         }
 
-        .submit-btn {
-            width: 100%;
-            background: #4b2c80;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
+        /* ================= CARD / TABLE ================= */
+
+        .student-history-page .history-card {
+            width: 100% !important;
+            min-width: 0 !important;
+            background: rgba(255, 255, 255, 0.96) !important;
+            border: 1px solid rgba(255, 255, 255, 0.78) !important;
+            border-radius: 24px !important;
+            box-shadow: 0 22px 55px rgba(31, 16, 70, 0.11) !important;
+            overflow: hidden !important;
         }
 
-        .submit-btn:hover {
-            background: #3b2164;
+        .student-history-page .history-card-header {
+            background:
+                radial-gradient(circle at top right, rgba(253, 184, 19, 0.20), transparent 30%),
+                linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark)) !important;
+            color: #ffffff !important;
+            padding: 17px 20px !important;
+            font-size: 13px !important;
+            font-weight: 950 !important;
+            letter-spacing: 0.8px !important;
+            text-transform: uppercase !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 12px !important;
         }
 
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 12px;
-                align-items: flex-start;
+        .student-history-page .history-card-header span {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 9px !important;
+        }
+
+        .student-history-page .table-wrap {
+            padding: 24px !important;
+            overflow-x: auto !important;
+        }
+
+        .student-history-page table.dataTable {
+            width: 100% !important;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            font-size: 14px !important;
+        }
+
+        .student-history-page table.dataTable thead th {
+            background: var(--uc-purple) !important;
+            color: #ffffff !important;
+            padding: 15px 16px !important;
+            text-align: left !important;
+            font-weight: 900 !important;
+            border-bottom: none !important;
+            letter-spacing: 0.4px !important;
+        }
+
+        .student-history-page table.dataTable thead th:first-child {
+            border-top-left-radius: 14px !important;
+        }
+
+        .student-history-page table.dataTable thead th:last-child {
+            border-top-right-radius: 14px !important;
+        }
+
+        .student-history-page table.dataTable tbody td {
+            padding: 15px 16px !important;
+            border-bottom: 1px solid #edf0f4 !important;
+            color: var(--text-dark) !important;
+            vertical-align: middle !important;
+            text-align: left !important;
+        }
+
+        .student-history-page table.dataTable tbody tr:nth-child(even) td {
+            background: #fafafa !important;
+        }
+
+        .student-history-page table.dataTable tbody tr:hover td {
+            background: #f7f2ff !important;
+        }
+
+        .student-history-page .id-badge,
+        .student-history-page .lab-badge,
+        .student-history-page .purpose-badge,
+        .student-history-page .status-active,
+        .student-history-page .status-complete,
+        .student-history-page .badge-done,
+        .student-history-page .waiting-badge {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            width: fit-content !important;
+            border-radius: 999px !important;
+            padding: 7px 12px !important;
+            font-size: 12px !important;
+            font-weight: 950 !important;
+            white-space: nowrap !important;
+        }
+
+        .student-history-page .id-badge,
+        .student-history-page .lab-badge {
+            background: #ede9fe !important;
+            color: var(--uc-purple) !important;
+        }
+
+        .student-history-page .purpose-badge {
+            background: #fef3c7 !important;
+            color: #92400e !important;
+        }
+
+        .student-history-page .status-active {
+            background: #dcfce7 !important;
+            color: #166534 !important;
+        }
+
+        .student-history-page .status-complete {
+            background: #dbeafe !important;
+            color: #1d4ed8 !important;
+        }
+
+        .student-history-page .badge-done {
+            background: #dcfce7 !important;
+            color: #166534 !important;
+        }
+
+        .student-history-page .waiting-badge {
+            background: #f1f5f9 !important;
+            color: #64748b !important;
+        }
+
+        .student-history-page .btn-feedback {
+            border: none !important;
+            border-radius: 999px !important;
+            padding: 9px 14px !important;
+            background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+            color: var(--uc-purple-dark) !important;
+            font-size: 12px !important;
+            font-weight: 950 !important;
+            cursor: pointer !important;
+            transition: all 0.22s ease !important;
+            box-shadow: 0 10px 20px rgba(245, 158, 11, 0.16) !important;
+        }
+
+        .student-history-page .btn-feedback:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 14px 28px rgba(245, 158, 11, 0.24) !important;
+        }
+
+        /* ================= DATATABLES ================= */
+
+        .student-history-page .dataTables_wrapper {
+            color: var(--text-dark) !important;
+        }
+
+        .student-history-page .dataTables_length,
+        .student-history-page .dataTables_filter {
+            margin-bottom: 20px !important;
+            color: var(--text-dark) !important;
+            font-size: 14px !important;
+            font-weight: 800 !important;
+        }
+
+        .student-history-page .dataTables_length select {
+            padding: 8px 12px !important;
+            border: 1.8px solid var(--border-soft) !important;
+            border-radius: 12px !important;
+            margin: 0 6px !important;
+            color: var(--text-dark) !important;
+            background: #ffffff !important;
+            outline: none !important;
+        }
+
+        .student-history-page .dataTables_filter input {
+            margin-left: 10px !important;
+            min-width: 310px !important;
+            padding: 12px 15px !important;
+            border: 1.8px solid var(--border-soft) !important;
+            border-radius: 14px !important;
+            outline: none !important;
+            color: var(--text-dark) !important;
+            background: #ffffff !important;
+            transition: all 0.25s ease !important;
+        }
+
+        .student-history-page .dataTables_filter input:focus {
+            border-color: var(--uc-purple) !important;
+            box-shadow: 0 0 0 4px rgba(75, 44, 128, 0.11) !important;
+        }
+
+        .student-history-page .dataTables_info {
+            margin-top: 20px !important;
+            color: var(--text-muted) !important;
+            font-weight: 800 !important;
+            font-size: 13px !important;
+        }
+
+        .student-history-page .dataTables_paginate {
+            margin-top: 20px !important;
+            display: flex !important;
+            justify-content: flex-end !important;
+            align-items: center !important;
+            gap: 6px !important;
+            flex-wrap: wrap !important;
+        }
+
+        .student-history-page .dataTables_wrapper .dataTables_paginate .paginate_button {
+            border: none !important;
+            border-radius: 12px !important;
+            padding: 9px 13px !important;
+            margin: 0 2px !important;
+            color: var(--uc-purple) !important;
+            background: #ede9fe !important;
+            font-weight: 950 !important;
+            transition: all 0.22s ease !important;
+        }
+
+        .student-history-page .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            color: #ffffff !important;
+            background: var(--uc-purple) !important;
+            box-shadow: 0 8px 18px rgba(75, 44, 128, 0.22) !important;
+            transform: translateY(-2px) !important;
+        }
+
+        .student-history-page .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            color: var(--uc-purple-dark) !important;
+            background: var(--uc-gold) !important;
+            box-shadow: 0 8px 18px rgba(253, 184, 19, 0.28) !important;
+        }
+
+        .student-history-page .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+            opacity: 0.45 !important;
+            cursor: not-allowed !important;
+            background: #f3f4f6 !important;
+            color: #9ca3af !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        /* ================= FEEDBACK MODAL ================= */
+
+        .student-history-page .modal {
+            display: none;
+            position: fixed !important;
+            z-index: 99999 !important;
+            inset: 0 !important;
+            background: rgba(15, 15, 20, 0.72) !important;
+            backdrop-filter: blur(8px) !important;
+            justify-content: center !important;
+            align-items: center !important;
+            padding: 22px !important;
+        }
+
+        .student-history-page .modal-content {
+            background: #ffffff !important;
+            width: min(540px, 100%) !important;
+            border-radius: 24px !important;
+            overflow: hidden !important;
+            padding: 0 !important;
+            position: relative !important;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.38) !important;
+        }
+
+        .student-history-page .modal-header {
+            background:
+                radial-gradient(circle at top right, rgba(253, 184, 19, 0.20), transparent 30%),
+                linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark)) !important;
+            color: #ffffff !important;
+            padding: 20px 24px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 12px !important;
+        }
+
+        .student-history-page .modal-title {
+            margin: 0 !important;
+            color: #ffffff !important;
+            font-size: 18px !important;
+            font-weight: 950 !important;
+            letter-spacing: -0.2px !important;
+        }
+
+        .student-history-page .close-btn {
+            width: 38px !important;
+            height: 38px !important;
+            border-radius: 999px !important;
+            border: none !important;
+            background: rgba(255, 255, 255, 0.14) !important;
+            color: #ffffff !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 25px !important;
+            cursor: pointer !important;
+            line-height: 1 !important;
+        }
+
+        .student-history-page .close-btn:hover {
+            background: var(--uc-gold) !important;
+            color: var(--uc-purple-dark) !important;
+        }
+
+        .student-history-page .modal-body {
+            padding: 24px !important;
+        }
+
+        .student-history-page .feedback-info {
+            background: #f8f5ff !important;
+            border: 1px solid #ede9fe !important;
+            border-radius: 18px !important;
+            padding: 16px !important;
+            margin-bottom: 18px !important;
+        }
+
+        .student-history-page .feedback-info p {
+            margin: 7px 0 !important;
+            color: #374151 !important;
+            font-size: 14px !important;
+            line-height: 1.4 !important;
+        }
+
+        .student-history-page .feedback-info strong {
+            color: var(--uc-purple) !important;
+            font-weight: 950 !important;
+        }
+
+        .student-history-page .feedback-label {
+            display: block !important;
+            color: var(--uc-purple) !important;
+            font-size: 12px !important;
+            font-weight: 950 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.7px !important;
+            margin-bottom: 10px !important;
+        }
+
+        .student-history-page .star-rating {
+            display: grid !important;
+            grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+            gap: 8px !important;
+            margin: 0 0 18px !important;
+        }
+
+        .student-history-page .star-rating label {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 4px !important;
+            min-height: 42px !important;
+            border: 1.8px solid var(--border-soft) !important;
+            border-radius: 14px !important;
+            background: #ffffff !important;
+            color: var(--text-dark) !important;
+            font-size: 13px !important;
+            font-weight: 850 !important;
+            cursor: pointer !important;
+            transition: all 0.22s ease !important;
+        }
+
+        .student-history-page .star-rating label:hover {
+            border-color: var(--uc-gold) !important;
+            background: #fffbeb !important;
+            transform: translateY(-2px) !important;
+        }
+
+        .student-history-page .star-rating input {
+            accent-color: var(--uc-purple) !important;
+        }
+
+        .student-history-page textarea {
+            width: 100% !important;
+            min-height: 130px !important;
+            padding: 13px 14px !important;
+            border-radius: 16px !important;
+            border: 1.8px solid var(--border-soft) !important;
+            resize: vertical !important;
+            color: var(--text-dark) !important;
+            background: #ffffff !important;
+            font-size: 14px !important;
+            margin: 0 0 18px !important;
+            outline: none !important;
+            line-height: 1.6 !important;
+        }
+
+        .student-history-page textarea:focus {
+            border-color: var(--uc-purple) !important;
+            box-shadow:
+                0 0 0 4px rgba(75, 44, 128, 0.12),
+                0 12px 26px rgba(75, 44, 128, 0.08) !important;
+        }
+
+        .student-history-page .submit-btn {
+            width: 100% !important;
+            min-height: 54px !important;
+            border: none !important;
+            border-radius: 16px !important;
+            background: linear-gradient(135deg, var(--uc-purple), var(--uc-purple-light)) !important;
+            color: #ffffff !important;
+            font-size: 14px !important;
+            font-weight: 950 !important;
+            cursor: pointer !important;
+            transition: all 0.22s ease !important;
+            box-shadow: 0 14px 26px rgba(75, 44, 128, 0.22) !important;
+        }
+
+        .student-history-page .submit-btn:hover {
+            background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+            color: var(--uc-purple-dark) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 18px 32px rgba(245, 158, 11, 0.24) !important;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 950px) {
+            .student-history-page .student-navbar {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                padding: 14px 18px !important;
+                gap: 12px !important;
             }
 
-            .nav-links {
-                gap: 12px;
+            .student-history-page .student-navbar-title {
+                white-space: normal !important;
+                line-height: 1.4 !important;
+            }
+
+            .student-history-page .student-nav-links {
+                width: 100% !important;
+                flex-wrap: wrap !important;
+                justify-content: flex-start !important;
+            }
+
+            .student-history-page .student-nav-links a,
+            .student-history-page .dropdown-toggle {
+                min-height: 40px !important;
+                border-radius: 12px !important;
+                background: rgba(255, 255, 255, 0.08) !important;
+            }
+
+            .student-history-page .logout-btn {
+                border-radius: 12px !important;
+            }
+
+            .student-history-page .dropdown-menu {
+                left: 0 !important;
+                right: auto !important;
+                top: calc(100% + 8px) !important;
+            }
+
+            .student-history-page .page-hero {
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
+
+            .student-history-page .summary-card {
+                width: 100% !important;
+            }
+
+            .student-history-page .table-wrap {
+                padding: 18px !important;
+            }
+
+            .student-history-page table.dataTable {
+                min-width: 980px !important;
+            }
+
+            .student-history-page .dataTables_filter {
+                text-align: left !important;
+            }
+
+            .student-history-page .dataTables_filter input {
+                width: 100% !important;
+                min-width: 0 !important;
+                margin: 10px 0 0 !important;
+            }
+
+            .student-history-page .dataTables_paginate {
+                justify-content: center !important;
             }
         }
+
+        @media (max-width: 600px) {
+            .student-history-page .student-page {
+                width: min(100% - 22px, 1450px) !important;
+                margin: 24px auto 36px !important;
+            }
+
+            .student-history-page .hero-title {
+                align-items: flex-start !important;
+            }
+
+            .student-history-page .hero-icon {
+                width: 54px !important;
+                height: 54px !important;
+                font-size: 24px !important;
+            }
+
+            .student-history-page .hero-title h1 {
+                font-size: 25px !important;
+            }
+
+            .student-history-page .student-nav-links a,
+            .student-history-page .dropdown-toggle {
+                flex: 1 1 calc(50% - 8px) !important;
+                justify-content: center !important;
+                font-size: 12px !important;
+            }
+
+            .student-history-page .logout-btn {
+                flex: 1 1 100% !important;
+            }
+
+            .student-history-page .star-rating {
+                grid-template-columns: 1fr !important;
+            }
+
+            .student-history-page .modal-body {
+                padding: 18px !important;
+            }
+        }
+
+        .notif-count {
+    background: #ef4444 !important;
+    color: #ffffff !important;
+    min-width: 18px !important;
+    height: 18px !important;
+    padding: 0 5px !important;
+    border-radius: 999px !important;
+    font-size: 10px !important;
+    font-weight: 950 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.notif-item {
+    display: block !important;
+    white-space: normal !important;
+    line-height: 1.35 !important;
+}
+
+.notif-item span {
+    display: block !important;
+    font-weight: 850 !important;
+    color: var(--text-dark) !important;
+    margin-bottom: 5px !important;
+}
+
+.notif-item small {
+    display: block !important;
+    font-size: 11px !important;
+    color: var(--text-muted) !important;
+    font-weight: 700 !important;
+}
+
+.dropdown.open .dropdown-menu {
+    display: block !important;
+}
     </style>
 </head>
-<body>
 
-    <!-- NAVBAR -->
-    <div class="navbar">
-        <h2>CCS Sit-in Monitoring System</h2>
-        <div class="nav-links">
-            <a href="{{ url_for('dashboard') }}">Home</a>
-            <a href="{{ url_for('edit_profile') }}">Edit Profile</a>
-            <a href="{{ url_for('history') }}" class="active">History</a>
-            <a href="{{ url_for('reservation') }}">Reservation</a>
-            <a href="{{ url_for('logout') }}">Logout</a>
+<body class="student-history-page">
+
+<!-- STUDENT NAVBAR -->
+<div class="student-navbar">
+    <span class="student-navbar-title">
+        <i class="fas fa-desktop"></i>
+        CCS Sit-in Monitoring System
+    </span>
+
+    <div class="student-nav-links">
+       <div class="dropdown" id="notificationDropdown">
+    {% if notifications %}
+        <a href="#" class="dropdown-toggle" onclick="toggleNotificationDropdown(event)">
+            <i class="fas fa-bell"></i>
+            Notification
+
+            {% if notification_count and notification_count > 0 %}
+                <span class="notif-count">{{ notification_count }}</span>
+            {% endif %}
+
+            <i class="fas fa-chevron-down" style="font-size:10px;"></i>
+        </a>
+    {% else %}
+        <a href="#" class="dropdown-toggle" onclick="toggleNotificationDropdown(event)">
+            <i class="fas fa-bell"></i>
+            Notification
+            <i class="fas fa-chevron-down" style="font-size:10px;"></i>
+        </a>
+    {% endif %}
+
+    <div class="dropdown-menu">
+        {% if notifications %}
+            {% for n in notifications %}
+                <a href="{{ url_for('read_notification', notif_id=n['id']) }}" class="notif-item">
+                    <span>{{ n['message'] }}</span>
+                    <small>{{ n['created_at'] }}</small>
+                </a>
+            {% endfor %}
+        {% else %}
+            <a href="#">No sit-in notifications</a>
+        {% endif %}
+    </div>
+</div>
+
+        <a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i>Home</a>
+        <a href="{{ url_for('edit_profile') }}"><i class="fas fa-user-edit"></i>Edit Profile</a>
+        <a href="{{ url_for('history') }}" class="active"><i class="fas fa-history"></i>History</a>
+        <a href="{{ url_for('reservation') }}"><i class="fas fa-calendar-check"></i>Reservation</a>
+        <a href="{{ url_for('logout') }}" class="logout-btn">Log out</a>
+    </div>
+</div>
+
+<main class="student-page">
+
+    <section class="page-hero">
+        <div class="hero-title">
+            <div class="hero-icon">
+                <i class="fas fa-history"></i>
+            </div>
+            <div>
+                <h1>My Sit-in History</h1>
+                <p>Track your completed and active sit-in sessions, then submit feedback after logout.</p>
+            </div>
         </div>
+
+        <div class="summary-card">
+            <p>Total Records</p>
+            <strong>{{ records|length if records else 0 }}</strong>
+        </div>
+    </section>
+
+    <!-- FLASH MESSAGES -->
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">
+                        <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-circle' }}"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
     </div>
 
-    <!-- CONTENT -->
-    <div class="container">
-        <h1 class="page-title">My Sit-in History</h1>
-
-        <!-- FLASH MESSAGES -->
-        <div class="flash-messages">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="flash {{ category }}">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
+    <section class="history-card">
+        <div class="history-card-header">
+            <span>
+                <i class="fas fa-clipboard-list"></i>
+                Sit-in Record History
+            </span>
+            <small style="opacity:0.82; font-weight:750; text-transform:none; letter-spacing:0;">
+                Feedback is available after a completed session.
+            </small>
         </div>
 
-        <div class="card">
+        <div class="table-wrap">
             <table id="historyTable" class="display">
                 <thead>
                     <tr>
@@ -308,31 +951,59 @@
                         <th>Action</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     {% for r in records %}
                     <tr>
-                        <td>{{ r['id_number'] }}</td>
-                        <td>{{ r['purpose'] }}</td>
                         <td>
-                            {% if r['lab'] == 'Lecture' %}
-                                Lecture Room
-                            {% else %}
-                                Lab {{ r['lab'] }}
-                            {% endif %}
+                            <span class="id-badge">
+                                <i class="fas fa-id-card"></i>
+                                {{ r['id_number'] }}
+                            </span>
                         </td>
+
+                        <td>
+                            <span class="purpose-badge">
+                                {{ r['purpose'] }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="lab-badge">
+                                <i class="fas fa-door-open"></i>
+                                {% if r['lab'] == 'Lecture' %}
+                                    Lecture Room
+                                {% else %}
+                                    Lab {{ r['lab'] }}
+                                {% endif %}
+                            </span>
+                        </td>
+
                         <td>{{ r['login_time'] if r['login_time'] else '—' }}</td>
+
                         <td>{{ r['logout_time'] if r['logout_time'] else 'Still Active' }}</td>
+
                         <td>
                             {% if r['logout_time'] %}
-                                <span class="status-complete">Completed</span>
+                                <span class="status-complete">
+                                    <i class="fas fa-check-circle"></i>
+                                    Completed
+                                </span>
                             {% else %}
-                                <span class="status-active">Active</span>
+                                <span class="status-active">
+                                    <i class="fas fa-circle"></i>
+                                    Active
+                                </span>
                             {% endif %}
                         </td>
+
                         <td>
                             {% if r['logout_time'] %}
                                 {% if r['feedback'] %}
-                                    <span class="badge-done">Feedback Sent</span>
+                                    <span class="badge-done">
+                                        <i class="fas fa-check"></i>
+                                        Feedback Sent
+                                    </span>
                                 {% else %}
                                     <button class="btn-feedback"
                                             onclick='openFeedback(
@@ -341,11 +1012,15 @@
                                                 {{ r["purpose"]|tojson }},
                                                 {{ ("Lecture Room" if r["lab"] == "Lecture" else "Lab " ~ r["lab"])|tojson }}
                                             )'>
+                                        <i class="fas fa-comment-dots"></i>
                                         Feedback
                                     </button>
                                 {% endif %}
                             {% else %}
-                                <span style="color:#6b7280; font-size:13px;">Waiting logout</span>
+                                <span class="waiting-badge">
+                                    <i class="fas fa-clock"></i>
+                                    Waiting logout
+                                </span>
                             {% endif %}
                         </td>
                     </tr>
@@ -353,14 +1028,23 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    </section>
 
-    <!-- FEEDBACK MODAL -->
-    <div class="modal" id="feedbackModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeFeedback()">&times;</span>
-            <h2 class="modal-title">Sit-in Laboratory Feedback</h2>
+</main>
 
+<!-- FEEDBACK MODAL -->
+<div class="modal" id="feedbackModal">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h2 class="modal-title">
+                <i class="fas fa-comment-dots"></i>
+                Sit-in Laboratory Feedback
+            </h2>
+            <button type="button" class="close-btn" onclick="closeFeedback()">&times;</button>
+        </div>
+
+        <div class="modal-body">
             <form method="POST" action="{{ url_for('submit_feedback') }}" id="feedbackForm">
                 <input type="hidden" name="record_id" id="record_id">
 
@@ -370,7 +1054,7 @@
                     <p><strong>Laboratory:</strong> <span id="fb_lab"></span></p>
                 </div>
 
-                <label><strong>Rate your experience:</strong></label>
+                <label class="feedback-label">Rate your experience</label>
                 <div class="star-rating">
                     <label><input type="radio" name="rating" value="5" required> 5 ⭐</label>
                     <label><input type="radio" name="rating" value="4"> 4 ⭐</label>
@@ -379,58 +1063,99 @@
                     <label><input type="radio" name="rating" value="1"> 1 ⭐</label>
                 </div>
 
-                <label for="feedback"><strong>Feedback / Experience in the Laboratory:</strong></label>
+                <label for="feedback" class="feedback-label">Feedback / Experience in the Laboratory</label>
                 <textarea
                     name="feedback"
                     id="feedback"
                     rows="5"
                     required
-                    placeholder="Share your experience during your sit-in in the laboratory...">
-                </textarea>
+                    placeholder="Share your experience during your sit-in in the laboratory..."
+                ></textarea>
 
-                <button type="submit" class="submit-btn">Submit Feedback</button>
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    Submit Feedback
+                </button>
             </form>
         </div>
+
     </div>
+</div>
 
-    <!-- JS -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<!-- JS -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            $('#historyTable').DataTable({
-                pageLength: 10,
-                order: [[3, 'desc']]
-            });
-        });
-
-        function openFeedback(recordId, idNumber, purpose, lab) {
-            document.getElementById('record_id').value = recordId;
-            document.getElementById('fb_id_number').textContent = idNumber;
-            document.getElementById('fb_purpose').textContent = purpose;
-            document.getElementById('fb_lab').textContent = lab;
-
-            // Reset form fields
-            document.getElementById('feedback').value = '';
-            const ratings = document.querySelectorAll('input[name="rating"]');
-            ratings.forEach(r => r.checked = false);
-
-            document.getElementById('feedbackModal').style.display = 'flex';
-        }
-
-        function closeFeedback() {
-            document.getElementById('feedbackModal').style.display = 'none';
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('feedbackModal');
-            if (event.target === modal) {
-                closeFeedback();
+<script>
+$(document).ready(function () {
+    $('#historyTable').DataTable({
+        pageLength: 10,
+        order: [[3, 'desc']],
+        pagingType: 'full_numbers',
+        autoWidth: false,
+        language: {
+            search: '',
+            searchPlaceholder: 'Search by ID, purpose, lab, date, or status...',
+            lengthMenu: 'Show _MENU_ records',
+            info: 'Showing _START_ to _END_ of _TOTAL_ records',
+            infoEmpty: 'No sit-in records available',
+            infoFiltered: '(filtered from _MAX_ total records)',
+            zeroRecords: 'No matching records found',
+            paginate: {
+                first: '<i class="fas fa-angles-left"></i>',
+                previous: '<i class="fas fa-chevron-left"></i>',
+                next: '<i class="fas fa-chevron-right"></i>',
+                last: '<i class="fas fa-angles-right"></i>'
             }
         }
-    </script>
+    });
+});
+
+function openFeedback(recordId, idNumber, purpose, lab) {
+    document.getElementById('record_id').value = recordId;
+    document.getElementById('fb_id_number').textContent = idNumber;
+    document.getElementById('fb_purpose').textContent = purpose;
+    document.getElementById('fb_lab').textContent = lab;
+
+    document.getElementById('feedback').value = '';
+
+    const ratings = document.querySelectorAll('input[name="rating"]');
+    ratings.forEach(r => r.checked = false);
+
+    document.getElementById('feedbackModal').style.display = 'flex';
+}
+
+function closeFeedback() {
+    document.getElementById('feedbackModal').style.display = 'none';
+}
+
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('feedbackModal');
+
+    if (event.target === modal) {
+        closeFeedback();
+    }
+});
+
+function toggleNotificationDropdown(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const dropdown = document.getElementById('notificationDropdown');
+
+    if (dropdown) {
+        dropdown.classList.toggle('open');
+    }
+}
+
+document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('notificationDropdown');
+
+    if (dropdown && !dropdown.contains(event.target)) {
+        dropdown.classList.remove('open');
+    }
+});
+</script>
 
 </body>
 </html>

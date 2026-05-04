@@ -1,359 +1,380 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Admin - Students</title>
+    <meta charset="UTF-8">
+    <title>Admin - Students</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
 
-<style>
-/* ================= THEME ================= */
-:root {
-    --uc-purple: #4b2c80;
-    --uc-purple-dark: #2d1a4d;
-    --uc-gold: #fdb813;
-}
+    <style>
+        :root {
+            --uc-purple: #4b2c80;
+            --uc-purple-dark: #2d1a4d;
+            --uc-purple-light: #6b3fa0;
+            --uc-gold: #fdb813;
+            --admin-text: #111827;
+            --admin-muted: #6b7280;
+            --admin-border: #e5e7eb;
+        }
 
-/* ================= BODY ================= */
-body {
-    margin: 0;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: #f4f4f9;
-}
+        body.admin-students-page {
+            margin: 0 !important;
+            font-family: 'Segoe UI', Arial, sans-serif !important;
+            background:
+                radial-gradient(circle at top left, rgba(253, 184, 19, 0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(75, 44, 128, 0.12), transparent 30%),
+                linear-gradient(180deg, #fbf8ff 0%, #f4f4f9 100%) !important;
+            color: var(--admin-text) !important;
+        }
 
-/* ================= NAVBAR - STANDARDIZED ACROSS ALL PAGES ================= */
-.admin-navbar {
-    background: linear-gradient(135deg, var(--uc-purple) 0%, var(--uc-purple-dark) 100%);
-    height: 60px;
-    padding: 0 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
+        .admin-students-page .students-wrapper {
+            width: min(1450px, calc(100% - 36px)) !important;
+            max-width: 1450px !important;
+            margin: 32px auto !important;
+            padding: 0 !important;
+            display: block !important;
+        }
 
-.admin-navbar-title, .admin-navbar span {
-    color: white;
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-}
+        .admin-students-page .students-header {
+            width: 100% !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            gap: 24px !important;
+            margin: 0 0 28px 0 !important;
+        }
 
-.admin-nav-links {
-    display: flex;
-    height: 100%;
-    align-items: center;
-    gap: 0;
-}
+        .admin-students-page .students-title {
+            display: flex !important;
+            align-items: center !important;
+            gap: 16px !important;
+            flex: 1 1 auto !important;
+        }
 
-.admin-nav-links a {
-    color: white;
-    text-decoration: none;
-    padding: 0 14px;
-    display: flex;
-    align-items: center;
-    font-size: 13px;
-    font-weight: 500;
-    height: 60px;
-    transition: all 0.3s ease;
-    border-bottom: 3px solid transparent;
-}
+        .admin-students-page .students-title-icon {
+            width: 62px !important;
+            height: 62px !important;
+            border-radius: 18px !important;
+            background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+            color: var(--uc-purple-dark) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 30px !important;
+            box-shadow: 0 14px 26px rgba(253, 184, 19, 0.25) !important;
+            flex-shrink: 0 !important;
+        }
 
-.admin-nav-links a:hover:not(.admin-logout-btn) {
-    background: rgba(255,255,255,0.1);
-    color: var(--uc-gold);
-}
+        .admin-students-page .students-title h1 {
+            color: var(--uc-purple) !important;
+            font-size: 34px !important;
+            margin: 0 !important;
+            font-weight: 950 !important;
+            letter-spacing: -0.8px !important;
+            line-height: 1.1 !important;
+        }
 
-.admin-nav-links a.active {
-    background: rgba(255,255,255,0.15);
-    color: var(--uc-gold);
-    border-bottom: 3px solid var(--uc-gold);
-}
+        .admin-students-page .students-title p {
+            margin: 6px 0 0 !important;
+            color: var(--admin-muted) !important;
+            font-size: 14px !important;
+            line-height: 1.5 !important;
+        }
 
-.admin-logout-btn {
-    background: var(--uc-gold) !important;
-    color: var(--uc-purple-dark) !important;
-    font-weight: 800 !important;
-    padding: 0 20px !important;
-    margin-left: auto !important;
-    height: 100% !important;
-    border-radius: 0 !important;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border: none !important;
-    border-bottom: 3px solid transparent !important;
-}
+        .admin-students-page .stats-card {
+            min-width: 250px !important;
+            padding: 26px 30px !important;
+            border-radius: 22px !important;
+            color: #ffffff !important;
+            background:
+                radial-gradient(circle at top right, rgba(253, 184, 19, 0.28), transparent 34%),
+                linear-gradient(135deg, var(--uc-purple) 0%, var(--uc-purple-light) 100%) !important;
+            box-shadow: 0 18px 42px rgba(75, 44, 128, 0.24) !important;
+            position: relative !important;
+            overflow: hidden !important;
+            flex: 0 0 auto !important;
+        }
 
-.admin-logout-btn:hover {
-    background: white !important;
-    color: var(--uc-purple-dark) !important;
-}
+        .admin-students-page .stats-card::after {
+            content: "\f0c0";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            right: 20px;
+            bottom: -12px;
+            font-size: 86px;
+            color: rgba(255, 255, 255, 0.12);
+        }
 
-/* ================= CONTENT ================= */
-.container {
-    padding: 40px;
-    max-width: 1400px;
-    margin: 0 auto;
-}
+        .admin-students-page .stats-card p {
+            margin: 0 !important;
+            font-size: 13px !important;
+            opacity: 0.9 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1px !important;
+            font-weight: 850 !important;
+            color: #ffffff !important;
+        }
 
-/* HEADER SECTION */
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 40px;
-    gap: 20px;
-}
+        .admin-students-page .stats-card .number {
+            font-size: 48px !important;
+            font-weight: 950 !important;
+            margin-top: 8px !important;
+            line-height: 1 !important;
+            position: relative !important;
+            z-index: 1 !important;
+            color: #ffffff !important;
+        }
 
-.page-title {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
+        .admin-students-page .student-table-card {
+            width: 100% !important;
+            display: block !important;
+            margin: 0 !important;
+            padding: 28px !important;
+            border-radius: 24px !important;
+            background: rgba(255, 255, 255, 0.96) !important;
+            box-shadow: 0 18px 45px rgba(31, 16, 70, 0.10) !important;
+            border: 1px solid rgba(255, 255, 255, 0.75) !important;
+            overflow: hidden !important;
+            clear: both !important;
+        }
 
-.page-title h1 {
-    color: var(--uc-purple);
-    font-size: 32px;
-    margin: 0;
-    font-weight: 800;
-}
+        .admin-students-page .student-table-card::before {
+            content: "Student Records";
+            display: inline-flex !important;
+            align-items: center !important;
+            margin-bottom: 18px !important;
+            padding: 8px 14px !important;
+            border-radius: 999px !important;
+            background: #ede9fe !important;
+            color: var(--uc-purple) !important;
+            font-size: 12px !important;
+            font-weight: 950 !important;
+            letter-spacing: 0.8px !important;
+            text-transform: uppercase !important;
+        }
 
-.page-title i {
-    font-size: 40px;
-    color: var(--uc-gold);
-}
+        .admin-students-page table {
+            width: 100% !important;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            font-size: 14px !important;
+        }
 
-/* STATS CARD */
-.stats-card {
-    background: linear-gradient(135deg, #4b2c80 0%, #6b3fa0 100%);
-    padding: 24px;
-    border-radius: 14px;
-    color: white;
-    box-shadow: 0 8px 24px rgba(75, 44, 128, 0.2);
-    min-width: 200px;
-}
+        .admin-students-page table thead th {
+            background: var(--uc-purple) !important;
+            color: #ffffff !important;
+            padding: 16px 18px !important;
+            text-align: left !important;
+            font-weight: 900 !important;
+            letter-spacing: 0.4px !important;
+            border-bottom: none !important;
+        }
 
-.stats-card p {
-    margin: 0;
-    font-size: 14px;
-    opacity: 0.9;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 600;
-}
+        .admin-students-page table thead th:first-child {
+            border-top-left-radius: 14px !important;
+        }
 
-.stats-card .number {
-    font-size: 42px;
-    font-weight: 900;
-    margin-top: 8px;
-}
+        .admin-students-page table thead th:last-child {
+            border-top-right-radius: 14px !important;
+        }
 
-/* TABLE CARD */
-.student-table-card {
-    background: white;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    overflow: hidden;
-}
+        .admin-students-page table tbody tr:nth-child(even) td {
+            background: #fafafa !important;
+        }
 
-/* TABLE STYLING */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-}
+        .admin-students-page table tbody tr:hover td {
+            background: #f7f2ff !important;
+        }
 
-table thead {
-    background: var(--uc-purple);
-}
+        .admin-students-page table tbody td {
+            padding: 15px 18px !important;
+            vertical-align: middle !important;
+            border-bottom: 1px solid #eef0f4 !important;
+            color: #111827 !important;
+        }
 
-table th {
-    background: var(--uc-purple);
-    color: white;
-    padding: 16px;
-    text-align: left;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-}
+        .admin-students-page .id-badge {
+            background: #ede9fe !important;
+            color: var(--uc-purple) !important;
+            padding: 7px 12px !important;
+            border-radius: 999px !important;
+            font-weight: 950 !important;
+            font-size: 12px !important;
+            display: inline-block !important;
+        }
 
-table tbody tr {
-    border-bottom: 1px solid #e5e7eb;
-    transition: all 0.3s ease;
-}
+        .admin-students-page .level-badge {
+            background: #dcfce7 !important;
+            color: #166534 !important;
+            padding: 6px 12px !important;
+            border-radius: 999px !important;
+            font-size: 12px !important;
+            font-weight: 900 !important;
+            display: inline-block !important;
+        }
 
-table tbody tr:hover {
-    background: #f9fafb;
-    box-shadow: 0 2px 8px rgba(75, 44, 128, 0.1);
-}
+        .admin-students-page .student-name-cell {
+            font-weight: 900 !important;
+            color: var(--admin-text) !important;
+        }
 
-table tbody td {
-    padding: 16px;
-    vertical-align: middle;
-}
+        .admin-students-page .dataTables_wrapper {
+            width: 100% !important;
+            color: var(--admin-text) !important;
+        }
 
-table tbody td:first-child {
-    font-weight: 600;
-    color: var(--uc-purple);
-}
+        .admin-students-page .dataTables_length,
+        .admin-students-page .dataTables_filter {
+            margin-bottom: 20px !important;
+            color: var(--admin-text) !important;
+            font-size: 14px !important;
+            font-weight: 800 !important;
+        }
 
-/* ID NUMBER BADGE */
-.id-badge {
-    background: linear-gradient(135deg, #f0f4ff 0%, #e8eef9 100%);
-    color: var(--uc-purple);
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 12px;
-    display: inline-block;
-}
+        .admin-students-page .dataTables_length select {
+            padding: 8px 12px !important;
+            border: 1.8px solid var(--admin-border) !important;
+            border-radius: 12px !important;
+            outline: none !important;
+            margin: 0 6px !important;
+            color: var(--admin-text) !important;
+            background: white !important;
+        }
 
-/* ================= SEARCH MODAL ================= */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    backdrop-filter: blur(8px);
-}
+        .admin-students-page .dataTables_filter input {
+            margin-left: 10px !important;
+            min-width: 310px !important;
+            padding: 12px 15px !important;
+            border: 1.8px solid var(--admin-border) !important;
+            border-radius: 14px !important;
+            outline: none !important;
+            color: var(--admin-text) !important;
+            background: white !important;
+            transition: all 0.25s ease !important;
+        }
 
-.modal-content {
-    background: white;
-    width: 100%;
-    max-width: 420px;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-}
+        .admin-students-page .dataTables_filter input:focus {
+            border-color: var(--uc-purple) !important;
+            box-shadow: 0 0 0 4px rgba(75, 44, 128, 0.11) !important;
+        }
 
-.modal-header {
-    background: linear-gradient(135deg, var(--uc-purple) 0%, #6b3fa0 100%);
-    color: white;
-    padding: 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 700;
-    font-size: 16px;
-}
+        .admin-students-page .dataTables_info {
+            margin-top: 20px !important;
+            color: var(--admin-muted) !important;
+            font-weight: 800 !important;
+            font-size: 13px !important;
+        }
 
-.modal-header button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 28px;
-    cursor: pointer;
-    transition: 0.3s;
-}
+        .admin-students-page .dataTables_paginate {
+            margin-top: 20px !important;
+            display: flex !important;
+            justify-content: flex-end !important;
+            align-items: center !important;
+            gap: 6px !important;
+            flex-wrap: wrap !important;
+        }
 
-.modal-header button:hover {
-    transform: rotate(90deg);
-}
+        .admin-students-page .dataTables_wrapper .dataTables_paginate .paginate_button {
+            border: none !important;
+            border-radius: 12px !important;
+            padding: 9px 13px !important;
+            margin: 0 2px !important;
+            color: var(--uc-purple) !important;
+            background: #ede9fe !important;
+            font-weight: 950 !important;
+            transition: all 0.22s ease !important;
+        }
 
-.modal-body {
-    padding: 30px;
-}
+        .admin-students-page .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            color: white !important;
+            background: var(--uc-purple) !important;
+            box-shadow: 0 8px 18px rgba(75, 44, 128, 0.22) !important;
+            transform: translateY(-2px) !important;
+        }
 
-.modal-body label {
-    display: block;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--uc-purple);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 12px;
-}
+        .admin-students-page .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            color: var(--uc-purple-dark) !important;
+            background: var(--uc-gold) !important;
+            box-shadow: 0 8px 18px rgba(253, 184, 19, 0.28) !important;
+        }
 
-.modal-body input {
-    width: 100%;
-    padding: 12px 16px;
-    border: 2px solid #e5e7eb;
-    border-radius: 10px;
-    font-size: 14px;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
-}
+        .admin-students-page .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+            opacity: 0.45 !important;
+            cursor: not-allowed !important;
+            background: #f3f4f6 !important;
+            color: #9ca3af !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
 
-.modal-body input:focus {
-    outline: none;
-    border-color: var(--uc-purple);
-    box-shadow: 0 0 0 3px rgba(75, 44, 128, 0.1);
-}
+        @media (max-width: 900px) {
+            .admin-students-page .students-wrapper {
+                width: min(100% - 24px, 1450px) !important;
+                margin: 24px auto !important;
+            }
 
-.modal-body button {
-    margin-top: 20px;
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, var(--uc-purple) 0%, #6b3fa0 100%);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 13px;
-}
+            .admin-students-page .students-header {
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
 
-.modal-body button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(75, 44, 128, 0.3);
-}
+            .admin-students-page .stats-card {
+                width: 100% !important;
+                min-width: 0 !important;
+            }
 
-/* DATATOOLS */
-.dataTables_wrapper .dataTables_filter {
-    text-align: right;
-    margin-bottom: 15px;
-}
+            .admin-students-page .student-table-card {
+                padding: 18px !important;
+                overflow-x: auto !important;
+            }
 
-.dataTables_wrapper .dataTables_filter input {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-}
+            .admin-students-page .dataTables_filter {
+                text-align: left !important;
+            }
 
-.dataTables_wrapper .dataTables_paginate {
-    text-align: right;
-    margin-top: 20px;
-}
+            .admin-students-page .dataTables_filter input {
+                width: 100% !important;
+                min-width: 0 !important;
+                margin: 10px 0 0 !important;
+            }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-    .page-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+            .admin-students-page .dataTables_paginate {
+                justify-content: center !important;
+            }
 
-    .container {
-        padding: 20px;
-    }
+            .admin-students-page table {
+                min-width: 900px !important;
+            }
+        }
 
-    table {
-        font-size: 12px;
-    }
+        @media (max-width: 520px) {
+            .admin-students-page .students-title {
+                align-items: flex-start !important;
+            }
 
-    table th, table td {
-        padding: 12px 8px;
-    }
-}
-</style>
+            .admin-students-page .students-title-icon {
+                width: 54px !important;
+                height: 54px !important;
+                font-size: 24px !important;
+            }
+
+            .admin-students-page .students-title h1 {
+                font-size: 25px !important;
+            }
+
+            .admin-students-page .stats-card .number {
+                font-size: 38px !important;
+            }
+        }
+    </style>
 </head>
 
-<body>
+<body class="admin-students-page">
 
-<!-- NAVBAR - STANDARDIZED -->
 <div class="admin-navbar">
     <span class="admin-navbar-title">
         <i class="fas fa-university" style="color: var(--uc-gold); margin-right: 8px;"></i>
@@ -361,33 +382,36 @@ table tbody td:first-child {
     </span>
 
     <div class="admin-nav-links">
-        <a href="/admin/dashboard"><i class="fas fa-home" style="margin-right:5px;"></i>Home</a>
-        <a href="javascript:void(0)" onclick="openSearchModal()"><i class="fas fa-search" style="margin-right:5px;"></i>Search</a>
-        <a href="/admin/students" class="active"><i class="fas fa-user-graduate" style="margin-right:5px;"></i>Students</a>
-        <a href="/admin/sitin-records"><i class="fas fa-desktop" style="margin-right:5px;"></i>Sit-in</a>
-        <a href="/admin/view-sitin-records"><i class="fas fa-list" style="margin-right:5px;"></i>View Sit-in Records</a>
-        <a href="/admin/sitin-reports"><i class="fas fa-chart-bar" style="margin-right:5px;"></i>Sit-in Reports</a>
-        <a href="/admin/feedback-reports"><i class="fas fa-comments" style="margin-right:5px;"></i>Feedback Reports</a>
-        <a href="/admin/reservations"><i class="fas fa-calendar-check" style="margin-right:5px;"></i>Reservation</a>
+        <a href="/admin/dashboard"><i class="fas fa-home"></i>Home</a>
+        <a href="javascript:void(0)" onclick="openSearchModal()"><i class="fas fa-search"></i>Search</a>
+        <a href="/admin/students" class="active"><i class="fas fa-user-graduate"></i>Students</a>
+        <a href="/admin/sitin-records"><i class="fas fa-desktop"></i>Sit-in</a>
+        <a href="/admin/view-sitin-records"><i class="fas fa-list"></i>View Sit-in Records</a>
+        <a href="/admin/feedback-reports"><i class="fas fa-comments"></i>Feedback Reports</a>
+        <a href="/admin/reservations"><i class="fas fa-calendar-check"></i>Reservation</a>
         <a href="/admin/logout" class="admin-logout-btn">Log out</a>
     </div>
 </div>
 
-<!-- CONTENT -->
-<div class="container">
-    <!-- HEADER -->
-    <div class="page-header">
-        <div class="page-title">
-            <i class="fas fa-user-graduate"></i>
-            <h1>Students Directory</h1>
+<div class="students-wrapper">
+
+    <div class="students-header">
+        <div class="students-title">
+            <div class="students-title-icon">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <div>
+                <h1>Students Directory</h1>
+                <p>Manage and browse registered CCS sit-in monitoring students.</p>
+            </div>
         </div>
+
         <div class="stats-card">
             <p>Total Students</p>
             <div class="number">{{ total_students }}</div>
         </div>
     </div>
 
-    <!-- TABLE -->
     <div class="student-table-card">
         <table id="studentsTable" class="display">
             <thead>
@@ -400,13 +424,18 @@ table tbody td:first-child {
                     <th>Address</th>
                 </tr>
             </thead>
+
             <tbody>
                 {% for s in students %}
                 <tr>
                     <td><span class="id-badge">{{ s.id_number }}</span></td>
-                    <td><strong>{{ s.first_name }} {{ s.middle_name }} {{ s.last_name }}</strong></td>
+                    <td>
+                        <span class="student-name-cell">
+                            {{ s.first_name }} {{ s.middle_name }} {{ s.last_name }}
+                        </span>
+                    </td>
                     <td>{{ s.course }}</td>
-                    <td><span style="background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600;">{{ s.course_level }}</span></td>
+                    <td><span class="level-badge">{{ s.course_level }}</span></td>
                     <td>{{ s.email }}</td>
                     <td>{{ s.address }}</td>
                 </tr>
@@ -417,63 +446,65 @@ table tbody td:first-child {
 
 </div>
 
-<!-- SEARCH MODAL - BEAUTIFUL DESIGN -->
-<div id="searchModal" class="modal-overlay" style="position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px;">
-    <div class="modal-content" style="background: white; width: 100%; max-width: 700px; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-        <div class="modal-header" style="background: linear-gradient(135deg, var(--uc-purple) 0%, #6b3fa0 100%); color: white; padding: 24px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <i class="fas fa-search" style="font-size: 22px;"></i>
-                <span style="font-size: 18px; letter-spacing: 0.5px;">Quick Select Student</span>
+<div id="searchModal" class="admin-search-overlay">
+    <div class="admin-search-modal">
+        <div class="admin-search-header">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <i class="fas fa-search"></i>
+                <span>Quick Select Student</span>
             </div>
-            <button onclick="closeModal('searchModal')" style="background: none; border: none; color: white; cursor: pointer; font-size: 24px; transition: 0.3s;">&times;</button>
+            <button type="button" class="admin-search-close" onclick="closeModal('searchModal')">&times;</button>
         </div>
-        <div class="modal-body" style="padding: 25px;">
-            <!-- SEARCH INPUT -->
-            <div style="margin-bottom: 25px;">
-                <label style="font-size: 12px; font-weight: 800; color: var(--uc-purple); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 12px;">Search or Browse Students</label>
-                <input type="text" id="idSearchInput" style="width: 100%; padding: 14px 16px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 14px; transition: all 0.3s; box-sizing: border-box;" placeholder="Type to search by ID or name..." onkeyup="filterStudents(event)">
+
+        <div class="admin-search-body">
+            <div style="margin-bottom: 24px;">
+                <label class="admin-search-label">Search or Browse Students</label>
+                <input
+                    type="text"
+                    id="idSearchInput"
+                    placeholder="Type to search by ID or name..."
+                    onkeyup="filterStudents(event)"
+                >
             </div>
 
-            <!-- STUDENTS GRID WITH PROFILE PICTURES -->
-            <div id="studentsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; max-height: 450px; overflow-y: auto; padding-right: 10px;"></div>
+            <div id="studentsList"></div>
 
-            <!-- NO RESULTS MESSAGE -->
-            <div id="noResults" style="text-align: center; padding: 40px 20px; color: #888; display: none;">
-                <i class="fas fa-inbox" style="font-size: 40px; color: #ddd; margin-bottom: 12px; display: block;"></i>
-                <p style="font-size: 13px; margin: 0;">No students found</p>
+            <div id="noResults" class="admin-no-results" style="display:none;">
+                <i class="fas fa-inbox" style="font-size:42px; color:#d1d5db; margin-bottom:12px; display:block;"></i>
+                <p style="margin:0;">No students found</p>
             </div>
         </div>
     </div>
 </div>
 
-<!-- SIT-IN FORM MODAL -->
-<div id="sitInFormModal" class="modal-overlay" style="position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000;">
-    <div class="modal-content" style="background: white; width: 500px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-        
-        <div class="modal-header" style="background: #4b2c80; color: white; padding: 18px 20px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 1.1rem; letter-spacing: 0.5px;">Sit-In Form</span>
-            <button onclick="closeModal('sitInFormModal')" style="background: none; border: none; color: white; cursor: pointer; font-size: 24px;">&times;</button>
+<div id="sitInFormModal" class="modal-overlay">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <span>
+                <i class="fas fa-desktop" style="margin-right:8px;"></i>
+                Sit-In Form
+            </span>
+            <button type="button" onclick="closeModal('sitInFormModal')" style="background:none;border:none;color:white;font-size:24px;cursor:pointer;">&times;</button>
         </div>
 
         <form action="/admin/sit-in" method="POST">
-            <div class="modal-body" style="padding: 25px;">
-                
+            <div class="modal-body">
+
                 <div style="margin-bottom: 15px;">
-                    <label style="display: block; font-size: 12px; font-weight: 700; color: #4b2c80; text-transform: uppercase; margin-bottom: 5px;">ID Number:</label>
-                    <input type="text" name="id_number" id="display_id" readonly 
-                           style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; background: #f8f9fa; color: #555;">
+                    <label>ID Number</label>
+                    <input type="text" name="id_number" id="display_id" readonly>
                 </div>
 
                 <div style="margin-bottom: 15px;">
-                    <label style="display: block; font-size: 12px; font-weight: 700; color: #4b2c80; text-transform: uppercase; margin-bottom: 5px;">Student Name:</label>
-                    <input type="text" id="display_name" readonly 
-                           style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; background: #f8f9fa; color: #555;">
+                    <label>Student Name</label>
+                    <input type="text" id="display_name" readonly>
                 </div>
 
-                <div style="display: flex; gap: 15px; margin-bottom: 15px;">
-                    <div style="flex: 1;">
-                        <label style="display: block; font-size: 12px; font-weight: 700; color: #4b2c80; text-transform: uppercase; margin-bottom: 5px;">Purpose:</label>
-                        <select name="purpose" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; background: white;">
+                <div style="display:flex; gap:15px; margin-bottom:15px;">
+                    <div style="flex:1;">
+                        <label>Purpose</label>
+                        <select name="purpose">
                             <option value="C Programming">C Programming</option>
                             <option value="Java">Java</option>
                             <option value="PHP">PHP</option>
@@ -481,36 +512,42 @@ table tbody td:first-child {
                             <option value="Database">Database</option>
                         </select>
                     </div>
-                    <div style="flex: 1;">
-                        <label style="display: block; font-size: 12px; font-weight: 700; color: #4b2c80; text-transform: uppercase; margin-bottom: 5px;">Lab:</label>
-                        <input type="text" name="lab" placeholder="524" required
-                               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+
+                    <div style="flex:1;">
+                        <label>Lab</label>
+                        <select name="lab" required>
+                            <option value="" disabled selected>Select lab</option>
+                            <option value="524">524</option>
+                            <option value="526">526</option>
+                            <option value="528">528</option>
+                            <option value="530">530</option>
+                            <option value="542">542</option>
+                            <option value="544">544</option>
+                        </select>
                     </div>
                 </div>
 
-                <div style="margin-bottom: 5px;">
-                    <label style="display: block; font-size: 12px; font-weight: 700; color: #4b2c80; text-transform: uppercase; margin-bottom: 5px;">Remaining Session:</label>
-                    <input type="text" id="display_remaining" readonly 
-                           style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; background: #f8f9fa; color: #16a34a; font-weight: 800; font-size: 1.1rem;">
+                <div>
+                    <label>Remaining Session</label>
+                    <input type="text" id="display_remaining" readonly>
                 </div>
 
             </div>
 
-            <div class="modal-footer" style="padding: 15px 25px; background: #f4f4f9; display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid #eee;">
-                <button type="button" onclick="closeModal('sitInFormModal')" 
-                        style="padding: 10px 20px; border: none; border-radius: 6px; background: #e2e8f0; color: #475569; font-weight: 600; cursor: pointer;">
+            <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:12px;">
+                <button type="button" class="btn btn-reset" onclick="closeModal('sitInFormModal')">
                     Close
                 </button>
-                <button type="submit" 
-                        style="padding: 10px 30px; border: none; border-radius: 6px; background: #fdb813; color: #4b2c80; font-weight: 800; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+
+                <button type="submit" class="btn btn-search">
                     Sit In
                 </button>
             </div>
         </form>
+
     </div>
 </div>
 
-<!-- SCRIPT -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 
@@ -518,52 +555,80 @@ table tbody td:first-child {
 $(document).ready(function() {
     $('#studentsTable').DataTable({
         pageLength: 10,
+        lengthMenu: [
+            [5, 10, 25, 50, -1],
+            [5, 10, 25, 50, 'All']
+        ],
         order: [[0, 'asc']],
+        pagingType: 'full_numbers',
+        autoWidth: false,
+        scrollX: false,
         language: {
-            search: "Search Students:",
+            search: '',
+            searchPlaceholder: 'Search by ID, name, course, email, or address...',
+            lengthMenu: 'Show _MENU_ students',
+            info: 'Showing _START_ to _END_ of _TOTAL_ students',
+            infoEmpty: 'No students available',
+            infoFiltered: '(filtered from _MAX_ total students)',
+            zeroRecords: 'No matching students found',
             paginate: {
-                first: "«",
-                last: "»",
-                next: "›",
-                previous: "‹"
+                first: '<i class="fas fa-angles-left"></i>',
+                previous: '<i class="fas fa-chevron-left"></i>',
+                next: '<i class="fas fa-chevron-right"></i>',
+                last: '<i class="fas fa-angles-right"></i>'
             }
         }
     });
 });
 
 function openSearchModal() {
-    document.getElementById('searchModal').style.display = 'flex';
+    const modal = document.getElementById('searchModal');
+    const input = document.getElementById('idSearchInput');
+
+    if (modal) modal.style.display = 'flex';
+
     loadAllStudents();
-    document.getElementById('idSearchInput').value = '';
-    document.getElementById('idSearchInput').focus();
+
+    if (input) {
+        input.value = '';
+        setTimeout(() => input.focus(), 100);
+    }
 }
 
 function closeModal(modalId) {
-    document.getElementById(modalId).style.display = 'none';
+    const modal = document.getElementById(modalId);
+    if (modal) modal.style.display = 'none';
 }
 
 function loadAllStudents() {
-    fetch(`/admin/search-students?q=`)
-        .then(res => res.json())
+    fetch('/admin/search-students?q=')
+        .then(response => response.json())
         .then(data => {
-            displayStudents(data.students || []);
             window.allStudents = data.students || [];
+            displayStudents(window.allStudents);
         })
-        .catch(err => console.error('Error:', err));
+        .catch(error => {
+            console.error('Error:', error);
+
+            const studentsList = document.getElementById('studentsList');
+            if (studentsList) {
+                studentsList.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;">Error loading students</p>';
+            }
+        });
 }
 
 function filterStudents(event) {
-    const query = document.getElementById('idSearchInput').value.trim().toLowerCase();
-    
+    const query = event.target.value.trim().toLowerCase();
+
     if (!window.allStudents) {
         loadAllStudents();
         return;
     }
 
-    const filtered = window.allStudents.filter(student => 
-        student.id_number.toLowerCase().includes(query) ||
-        student.first_name.toLowerCase().includes(query) ||
-        student.last_name.toLowerCase().includes(query)
+    const filtered = window.allStudents.filter(student =>
+        String(student.id_number || '').toLowerCase().includes(query) ||
+        String(student.first_name || '').toLowerCase().includes(query) ||
+        String(student.last_name || '').toLowerCase().includes(query)
     );
 
     displayStudents(filtered);
@@ -571,135 +636,113 @@ function filterStudents(event) {
 
 function displayStudents(students) {
     const studentsList = document.getElementById('studentsList');
-    
+    const noResults = document.getElementById('noResults');
+
     if (!studentsList) return;
-    
+
     studentsList.innerHTML = '';
-    
+
     if (!students || students.length === 0) {
-        studentsList.innerHTML = `
-            <div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: #888;">
-                <i class="fas fa-search" style="font-size: 48px; color: #ddd; margin-bottom: 15px; display: block;"></i>
-                <p style="font-size: 14px; margin: 0;">No students found</p>
-            </div>
-        `;
+        if (noResults) noResults.style.display = 'block';
         return;
     }
-    
+
+    if (noResults) noResults.style.display = 'none';
+
     students.forEach(student => {
-        const photoPath = `/static/uploads/${student.id_number}.png`;
-        const initials = (student.first_name[0] + student.last_name[0]).toUpperCase();
-        
+        const idNumber = student.id_number || '';
+        const firstName = student.first_name || '';
+        const lastName = student.last_name || '';
+        const remaining = student.remaining || 0;
+        const studentName = `${firstName} ${lastName}`.trim();
+        const photoPath = `/static/uploads/${idNumber}.png`;
+        const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+
         const studentCard = document.createElement('div');
-        studentCard.style.cssText = `
-            background: white;
-            border: 2px solid #f0f4ff;
-            border-radius: 12px;
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        `;
-        
-        studentCard.onmouseover = function() {
-            this.style.borderColor = 'var(--uc-purple)';
-            this.style.boxShadow = '0 6px 20px rgba(75, 44, 128, 0.2)';
-            this.style.transform = 'translateY(-4px)';
-        };
-        
-        studentCard.onmouseout = function() {
-            this.style.borderColor = '#f0f4ff';
-            this.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
-            this.style.transform = 'translateY(0)';
-        };
-        
+        studentCard.className = 'admin-student-card';
+
         studentCard.innerHTML = `
-            <div style="position: relative; margin-bottom: 12px; width: 80px; height: 80px; border-radius: 50%; overflow: hidden; border: 3px solid var(--uc-purple); background: linear-gradient(135deg, #4b2c80 0%, #6b3fa0 100%); display: flex; align-items: center; justify-content: center;">
-                <img src="${photoPath}" alt="${student.first_name}" style="width: 100%; height: 100%; object-fit: cover;" data-initials="${initials}" onerror="this.nextElementSibling.style.display='flex'">
-                <div style="display: none; align-items: center; justify-content: center; width: 100%; height: 100%; background: linear-gradient(135deg, #4b2c80 0%, #6b3fa0 100%); color: white; font-weight: 800; font-size: 28px;">
-                    ${initials}
-                </div>
+            <div class="admin-student-avatar">
+                <img
+                    src="${photoPath}"
+                    alt="${studentName}"
+                    onerror="this.style.display='none'; this.parentElement.textContent='${initials}';"
+                >
             </div>
-            <div style="flex: 1; width: 100%;">
-                <div style="font-weight: 700; color: #1a1a1a; font-size: 13px; margin-bottom: 4px; line-height: 1.2; max-height: 40px; overflow: hidden;">${student.first_name} ${student.last_name}</div>
-                <div style="font-size: 10px; color: var(--uc-purple); font-weight: 600; background: #f0f4ff; padding: 4px 8px; border-radius: 6px;">${student.id_number}</div>
-            </div>
-            <div style="width: 100%; text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #e5e7eb;">
-                <button onclick="openSitInForm('${student.id_number}', '${student.first_name} ${student.last_name}', ${student.remaining})" 
-                        style="width: 100%; padding: 8px; background: linear-gradient(135deg, var(--uc-purple) 0%, #6b3fa0 100%); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 11px; transition: all 0.3s;">
-                    <i class="fas fa-arrow-right"></i> Select
-                </button>
-            </div>
+
+            <div class="admin-student-name">${studentName}</div>
+            <div class="admin-student-id">${idNumber}</div>
+            <div class="admin-student-remaining">${remaining} sessions left</div>
+
+            <button type="button" class="admin-select-student-btn">
+                Select Student
+            </button>
         `;
-        
+
+        const selectButton = studentCard.querySelector('.admin-select-student-btn');
+
+        selectButton.addEventListener('click', function() {
+            openSitInForm(idNumber, studentName, remaining);
+        });
+
         studentsList.appendChild(studentCard);
     });
 }
 
-function handleSearchKeyUp(event) {
-    if (event.key === 'Enter') {
-        searchStudents();
-    }
-}
-
-function searchStudents() {
-    const query = document.getElementById('idSearchInput').value.trim().toLowerCase();
-    
-    if (!window.allStudents) {
-        loadAllStudents();
-        return;
-    }
-
-    const filtered = window.allStudents.filter(student => 
-        student.id_number.toLowerCase().includes(query) ||
-        student.first_name.toLowerCase().includes(query) ||
-        student.last_name.toLowerCase().includes(query)
-    );
-
-    displayStudents(filtered);
-}
-
 function openSitInForm(idNumber, studentName, remaining) {
-    document.getElementById('display_id').value = idNumber;
-    document.getElementById('display_name').value = studentName;
-    document.getElementById('display_remaining').value = remaining;
-    closeModal();
-    document.getElementById('sitInFormModal').style.display = 'flex';
+    const idInput = document.getElementById('display_id');
+    const nameInput = document.getElementById('display_name');
+    const remainingInput = document.getElementById('display_remaining');
+
+    if (idInput) idInput.value = idNumber;
+    if (nameInput) nameInput.value = studentName;
+    if (remainingInput) remainingInput.value = remaining;
+
+    closeModal('searchModal');
+
+    const sitInModal = document.getElementById('sitInFormModal');
+    if (sitInModal) sitInModal.style.display = 'flex';
 }
 
 function lookupStudent() {
     const idSearchInput = document.getElementById('idSearchInput');
     const idNum = idSearchInput.value.trim();
-    
-    if (!idNum) return alert("Please enter an ID number.");
-    
+
+    if (!idNum) {
+        alert('Please enter an ID number.');
+        return;
+    }
+
     fetch(`/admin/get-student/${idNum}`)
-        .then(res => res.json())
+        .then(response => response.json())
         .then(data => {
             if (data.success) {
-                document.getElementById('display_id').value = data.id_number;
-                document.getElementById('display_name').value = data.name;
-                document.getElementById('display_remaining').value = data.remaining;
-                closeModal();
-                document.getElementById('sitInFormModal').style.display = 'flex';
+                const idInput = document.getElementById('display_id');
+                const nameInput = document.getElementById('display_name');
+                const remainingInput = document.getElementById('display_remaining');
+
+                if (idInput) idInput.value = data.id_number;
+                if (nameInput) nameInput.value = data.name;
+                if (remainingInput) remainingInput.value = data.remaining;
+
+                closeModal('searchModal');
+
+                const sitInModal = document.getElementById('sitInFormModal');
+                if (sitInModal) sitInModal.style.display = 'flex';
             } else {
-                alert(data.message || "Student not found!");
+                alert(data.message || 'Student not found!');
             }
         })
-        .catch(err => console.error("Error:", err));
+        .catch(error => console.error('Error:', error));
 }
 
-// Close modal when clicking outside
-window.onclick = function(event) {
-    const modal = document.getElementById('searchModal');
-    if (event.target === modal) {
-        closeModal();
+window.addEventListener('click', function(event) {
+    const searchModal = document.getElementById('searchModal');
+
+    if (event.target === searchModal) {
+        closeModal('searchModal');
     }
-}
+});
 </script>
 
 </body>

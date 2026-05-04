@@ -12,156 +12,366 @@
         :root {
             --uc-purple: #4b2c80;
             --uc-purple-dark: #2d1a4d;
+            --uc-purple-light: #6b3fa0;
             --uc-gold: #fdb813;
+            --uc-gold-hover: #e0a800;
+            --admin-bg: #f6f3fb;
+            --admin-text: #111827;
+            --admin-muted: #6b7280;
+            --admin-border: #e5e7eb;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #f59e0b;
         }
 
         body {
-            background: #f4f4f9;
-            font-family: 'Segoe UI', sans-serif;
             margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(253, 184, 19, 0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(75, 44, 128, 0.12), transparent 30%),
+                linear-gradient(180deg, #fbf8ff 0%, #f4f4f9 100%);
+            color: var(--admin-text);
         }
 
-        /* NAVBAR - STANDARDIZED ACROSS ALL PAGES */
-        .admin-navbar {
-            background: linear-gradient(135deg, var(--uc-purple) 0%, var(--uc-purple-dark) 100%);
-            height: 60px;
-            padding: 0 20px;
+        .reservation-wrapper {
+            width: min(1450px, calc(100% - 36px));
+            margin: 32px auto;
+        }
+
+        .reservation-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            gap: 20px;
+            margin-bottom: 28px;
         }
 
-        .admin-navbar-title, .admin-navbar span {
-            color: white;
-            font-weight: 700;
-            font-size: 14px;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
-
-        .admin-nav-links {
+        .reservation-title {
             display: flex;
             align-items: center;
-            height: 100%;
-            gap: 0;
+            gap: 16px;
         }
 
-        .admin-nav-links a {
-            color: white;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            padding: 0 14px;
-            height: 60px;
+        .reservation-title-icon {
+            width: 62px;
+            height: 62px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--uc-gold), #f59e0b);
+            color: var(--uc-purple-dark);
             display: flex;
             align-items: center;
-            transition: all 0.3s ease;
-            border-bottom: 3px solid transparent;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 14px 26px rgba(253, 184, 19, 0.25);
         }
 
-        .admin-nav-links a:hover:not(.admin-logout-btn) {
-            background: rgba(255,255,255,0.1);
-            color: var(--uc-gold);
-        }
-
-        .admin-nav-links a.active {
-            background: rgba(255,255,255,0.15);
-            color: var(--uc-gold);
-            border-bottom: 3px solid var(--uc-gold);
-        }
-
-        .admin-logout-btn {
-            background: var(--uc-gold) !important;
-            color: var(--uc-purple-dark) !important;
-            height: 100% !important;
-            padding: 0 20px !important;
-            margin-left: auto !important;
-            font-weight: 800 !important;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border: none !important;
-            border-bottom: 3px solid transparent !important;
-        }
-
-        .admin-logout-btn:hover {
-            background: white !important;
-            color: var(--uc-purple-dark) !important;
-        }
-
-        /* PAGE */
-        .page-wrapper {
-            max-width: 1100px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        .page-title {
-            font-size: 1.5rem;
-            font-weight: 800;
+        .reservation-title h1 {
+            margin: 0;
             color: var(--uc-purple);
-            margin-bottom: 20px;
+            font-size: 34px;
+            font-weight: 950;
+            letter-spacing: -0.8px;
         }
 
-        .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        .reservation-title p {
+            margin: 6px 0 0;
+            color: var(--admin-muted);
+            font-size: 14px;
+        }
+
+        .summary-card {
+            min-width: 230px;
+            padding: 24px 28px;
+            border-radius: 22px;
+            color: white;
+            background:
+                radial-gradient(circle at top right, rgba(253, 184, 19, 0.24), transparent 32%),
+                linear-gradient(135deg, var(--uc-purple), var(--uc-purple-light));
+            box-shadow: 0 18px 42px rgba(75, 44, 128, 0.22);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .summary-card::after {
+            content: "\f274";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            right: 18px;
+            bottom: -14px;
+            font-size: 82px;
+            color: rgba(255, 255, 255, 0.12);
+        }
+
+        .summary-card p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.84);
+            font-size: 12px;
+            font-weight: 850;
+            text-transform: uppercase;
+            letter-spacing: 0.9px;
+        }
+
+        .summary-card .number {
+            margin-top: 8px;
+            font-size: 42px;
+            font-weight: 950;
+            line-height: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .reservation-card {
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            border-radius: 24px;
+            box-shadow: 0 18px 45px rgba(31, 16, 70, 0.10);
             overflow: hidden;
         }
 
-        .card-header {
-            background: var(--uc-purple);
-            color: white;
-            padding: 14px 20px;
-            font-weight: 700;
+        .reservation-card-header {
+            background:
+                radial-gradient(circle at top right, rgba(253, 184, 19, 0.22), transparent 28%),
+                linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark));
+            color: #ffffff;
+            padding: 18px 22px;
+            font-size: 13px;
+            font-weight: 950;
+            letter-spacing: 0.9px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .reservation-card-header span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .table-wrap {
+            padding: 24px;
+            overflow-x: auto;
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
-            font-size: 0.88rem;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 14px;
+            min-width: 980px;
         }
 
-        th {
+        thead th {
             background: var(--uc-purple);
             color: white;
-            padding: 10px 14px;
+            padding: 15px 16px;
             text-align: left;
+            font-weight: 900;
+            letter-spacing: 0.4px;
+            border-bottom: none;
         }
 
-        td {
-            padding: 10px 14px;
-            border-bottom: 1px solid #f0f0f0;
+        thead th:first-child {
+            border-top-left-radius: 14px;
         }
 
-        tr:hover td {
+        thead th:last-child {
+            border-top-right-radius: 14px;
+        }
+
+        tbody td {
+            padding: 15px 16px;
+            border-bottom: 1px solid #edf0f4;
+            color: var(--admin-text);
+            vertical-align: middle;
+        }
+
+        tbody tr:nth-child(even) td {
             background: #fafafa;
         }
 
-        .badge {
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.78rem;
-            font-weight: 700;
+        tbody tr:hover td {
+            background: #f7f2ff;
         }
 
-        .badge-pending  { background: #fef3c7; color: #92400e; }
-        .badge-approved { background: #d1fae5; color: #065f46; }
-        .badge-rejected { background: #fee2e2; color: #991b1b; }
+        .id-badge {
+            display: inline-flex;
+            align-items: center;
+            width: fit-content;
+            border-radius: 999px;
+            padding: 6px 12px;
+            background: #ede9fe;
+            color: var(--uc-purple);
+            font-size: 12px;
+            font-weight: 900;
+        }
 
-        .btn { padding: 6px 14px; border-radius: 6px; font-weight: 700; cursor: pointer; border: none; }
-        .btn-approve { background: #10b981; color: white; }
-        .btn-reject  { background: #ef4444; color: white; }
+        .student-name {
+            font-weight: 900;
+            color: var(--admin-text);
+        }
 
+        .lab-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border-radius: 999px;
+            padding: 6px 12px;
+            background: #ede9fe;
+            color: var(--uc-purple);
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .purpose-badge {
+            display: inline-flex;
+            align-items: center;
+            width: fit-content;
+            border-radius: 999px;
+            padding: 6px 12px;
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            width: fit-content;
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .badge-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-approved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .action-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 12px;
+            padding: 9px 14px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            font-size: 12px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(31, 16, 70, 0.16);
+        }
+
+        .btn-approve {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-reject {
+            background: #dc2626;
+            color: white;
+        }
+
+        .done-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #9ca3af;
+            font-size: 12px;
+            font-weight: 850;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 70px 20px;
+            color: #9ca3af;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 16px;
+            display: block;
+            color: #d1d5db;
+        }
+
+        .empty-state p {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        @media (max-width: 900px) {
+            .reservation-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .summary-card {
+                width: 100%;
+            }
+
+            .reservation-title {
+                align-items: flex-start;
+            }
+
+            .reservation-title h1 {
+                font-size: 28px;
+            }
+
+            .table-wrap {
+                padding: 18px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .reservation-wrapper {
+                width: min(100% - 24px, 1450px);
+                margin: 24px auto;
+            }
+
+            .reservation-title-icon {
+                width: 54px;
+                height: 54px;
+                font-size: 24px;
+            }
+
+            .reservation-title h1 {
+                font-size: 24px;
+            }
+
+            .summary-card .number {
+                font-size: 34px;
+            }
+        }
     </style>
 </head>
+
 <body>
 
-<!-- NAVBAR - STANDARDIZED -->
+<!-- NAVBAR -->
 <div class="admin-navbar">
     <span class="admin-navbar-title">
         <i class="fas fa-university" style="color: var(--uc-gold); margin-right: 8px;"></i>
@@ -169,186 +379,357 @@
     </span>
 
     <div class="admin-nav-links">
-        <a href="/admin/dashboard"><i class="fas fa-home" style="margin-right:5px;"></i>Home</a>
-        <a href="javascript:void(0)" onclick="openSearchModal()"><i class="fas fa-search" style="margin-right:5px;"></i>Search</a>
-        <a href="/admin/students"><i class="fas fa-user-graduate" style="margin-right:5px;"></i>Students</a>
-        <a href="/admin/sitin-records"><i class="fas fa-desktop" style="margin-right:5px;"></i>Sit-in</a>
-        <a href="/admin/view-sitin-records"><i class="fas fa-list" style="margin-right:5px;"></i>View Sit-in Records</a>
-        <a href="/admin/sitin-reports"><i class="fas fa-chart-bar" style="margin-right:5px;"></i>Sit-in Reports</a>
-        <a href="/admin/feedback-reports"><i class="fas fa-comments" style="margin-right:5px;"></i>Feedback Reports</a>
-        <a href="/admin/reservations" class="active"><i class="fas fa-calendar-check" style="margin-right:5px;"></i>Reservation</a>
+        <a href="/admin/dashboard"><i class="fas fa-home"></i>Home</a>
+        <a href="javascript:void(0)" onclick="openSearchModal()"><i class="fas fa-search"></i>Search</a>
+        <a href="/admin/students"><i class="fas fa-user-graduate"></i>Students</a>
+        <a href="/admin/sitin-records"><i class="fas fa-desktop"></i>Sit-in</a>
+        <a href="/admin/view-sitin-records"><i class="fas fa-list"></i>View Sit-in Records</a>
+        <a href="/admin/feedback-reports"><i class="fas fa-comments"></i>Feedback Reports</a>
+        <a href="/admin/reservations" class="active"><i class="fas fa-calendar-check"></i>Reservation</a>
         <a href="/admin/logout" class="admin-logout-btn">Log out</a>
     </div>
 </div>
 
-<div class="page-wrapper">
-    <h2 class="page-title">
-        <i class="fas fa-calendar-check" style="color: var(--uc-gold);"></i>
-        Student Reservations
-    </h2>
+<div class="reservation-wrapper">
 
-    <div class="card">
-        <div class="card-header">All Reservations</div>
+    <div class="reservation-header">
+        <div class="reservation-title">
+            <div class="reservation-title-icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <div>
+                <h1>Student Reservations</h1>
+                <p>Review, approve, or reject student laboratory reservation requests.</p>
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <p>Total Reservations</p>
+            <div class="number">{{ reservations|length if reservations else 0 }}</div>
+        </div>
+    </div>
+
+    <div class="reservation-card">
+        <div class="reservation-card-header">
+            <span>
+                <i class="fas fa-list-check"></i>
+                All Reservations
+            </span>
+            <small style="opacity:0.8; font-weight:700;">Pending requests need admin action</small>
+        </div>
 
         {% if reservations %}
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>ID Number</th>
-                    <th>Student Name</th>
-                    <th>Purpose</th>
-                    <th>Lab</th>
-                    <th>Time In</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>ID Number</th>
+                        <th>Student Name</th>
+                        <th>Purpose</th>
+                        <th>Lab</th>
+                        <th>Time In</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                {% for r in reservations %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>{{ r['id_number'] }}</td>
-                    <td>{{ r['first_name'] }} {{ r['last_name'] }}</td>
-                    <td>{{ r['purpose'] }}</td>
-                    <td>Lab {{ r['lab'] }}</td>
-                    <td>{{ r['time_in'] }}</td>
-                    <td>{{ r['date'] }}</td>
-                    <td>
-                        <span class="badge badge-{{ r['status']|lower }}">
-                            {{ r['status'] }}
-                        </span>
-                    </td>
-                    <td>
-                        {% if r['status'] == 'Pending' %}
-                        <form method="POST" action="/admin/reservation/approve/{{ r['id'] }}" style="display:inline;">
-                            <button class="btn btn-approve">Approve</button>
-                        </form>
-                        <form method="POST" action="/admin/reservation/reject/{{ r['id'] }}" style="display:inline;">
-                            <button class="btn btn-reject">Reject</button>
-                        </form>
-                        {% else %}
-                        <span style="color:#aaa;">Done</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                <tbody>
+                    {% for r in reservations %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td><span class="id-badge">{{ r['id_number'] }}</span></td>
+                        <td><span class="student-name">{{ r['first_name'] }} {{ r['last_name'] }}</span></td>
+                        <td><span class="purpose-badge">{{ r['purpose'] }}</span></td>
+                        <td>
+                            <span class="lab-badge">
+                                <i class="fas fa-door-open"></i>
+                                Lab {{ r['lab'] }}
+                            </span>
+                        </td>
+                        <td>{{ r['time_in'] }}</td>
+                        <td>{{ r['date'] }}</td>
+                        <td>
+                            <span class="badge badge-{{ r['status']|lower }}">
+                                {{ r['status'] }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if r['status'] == 'Pending' %}
+                            <div class="action-group">
+                                <form method="POST" action="/admin/reservation/approve/{{ r['id'] }}" style="display:inline;">
+                                    <button type="submit" class="btn btn-approve">
+                                        <i class="fas fa-check"></i>
+                                        Approve
+                                    </button>
+                                </form>
+
+                                <form method="POST" action="/admin/reservation/reject/{{ r['id'] }}" style="display:inline;">
+                                    <button type="submit" class="btn btn-reject">
+                                        <i class="fas fa-xmark"></i>
+                                        Reject
+                                    </button>
+                                </form>
+                            </div>
+                            {% else %}
+                            <span class="done-label">
+                                <i class="fas fa-check-circle"></i>
+                                Done
+                            </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% else %}
-        <div style="text-align:center;padding:40px;color:#aaa;">
-            No reservations yet.
+        <div class="empty-state">
+            <i class="fas fa-calendar-xmark"></i>
+            <p>No reservations yet.</p>
         </div>
         {% endif %}
+    </div>
+
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="searchModal" class="admin-search-overlay">
+    <div class="admin-search-modal">
+        <div class="admin-search-header">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <i class="fas fa-search"></i>
+                <span>Quick Select Student</span>
+            </div>
+            <button type="button" class="admin-search-close" onclick="closeModal('searchModal')">&times;</button>
+        </div>
+
+        <div class="admin-search-body">
+            <div style="margin-bottom: 24px;">
+                <label class="admin-search-label">Search or Browse Students</label>
+                <input
+                    type="text"
+                    id="idSearchInput"
+                    placeholder="Type to search by ID or name..."
+                    onkeyup="filterStudents(event)"
+                >
+            </div>
+
+            <div id="studentsList"></div>
+
+            <div id="noResults" class="admin-no-results" style="display:none;">
+                <i class="fas fa-inbox" style="font-size:42px; color:#d1d5db; margin-bottom:12px; display:block;"></i>
+                <p style="margin:0;">No students found</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SIT-IN FORM MODAL -->
+<div id="sitInFormModal" class="modal-overlay">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <span>
+                <i class="fas fa-desktop" style="margin-right:8px;"></i>
+                Sit-In Form
+            </span>
+            <button type="button" onclick="closeModal('sitInFormModal')" style="background:none;border:none;color:white;font-size:24px;cursor:pointer;">&times;</button>
+        </div>
+
+        <form action="/admin/sit-in" method="POST">
+            <div class="modal-body">
+
+                <div style="margin-bottom: 15px;">
+                    <label>ID Number</label>
+                    <input type="text" name="id_number" id="display_id" readonly>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label>Student Name</label>
+                    <input type="text" id="display_name" readonly>
+                </div>
+
+                <div style="display:flex; gap:15px; margin-bottom:15px;">
+                    <div style="flex:1;">
+                        <label>Purpose</label>
+                        <select name="purpose">
+                            <option value="C Programming">C Programming</option>
+                            <option value="Java">Java</option>
+                            <option value="PHP">PHP</option>
+                            <option value="Python">Python</option>
+                            <option value="Database">Database</option>
+                        </select>
+                    </div>
+
+                    <div style="flex:1;">
+                        <label>Lab</label>
+                        <select name="lab" required>
+                            <option value="" disabled selected>Select lab</option>
+                            <option value="524">524</option>
+                            <option value="526">526</option>
+                            <option value="528">528</option>
+                            <option value="530">530</option>
+                            <option value="542">542</option>
+                            <option value="544">544</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label>Remaining Session</label>
+                    <input type="text" id="display_remaining" readonly>
+                </div>
+
+            </div>
+
+            <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:12px;">
+                <button type="button" class="btn btn-reset" onclick="closeModal('sitInFormModal')">
+                    Close
+                </button>
+
+                <button type="submit" class="btn btn-search">
+                    Sit In
+                </button>
+            </div>
+        </form>
+
     </div>
 </div>
 
 <script>
 function openSearchModal() {
-    document.getElementById('searchModal').style.display = 'flex';
+    const modal = document.getElementById('searchModal');
+    const input = document.getElementById('idSearchInput');
+
+    if (modal) modal.style.display = 'flex';
+
     loadAllStudents();
+
+    if (input) {
+        input.value = '';
+        setTimeout(() => input.focus(), 100);
+    }
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) modal.style.display = 'none';
 }
 
 function loadAllStudents() {
-    fetch('/admin/search-students?query=')
+    fetch('/admin/search-students?q=')
         .then(response => response.json())
         .then(data => {
-            displayStudents(data.students || []);
+            window.allStudents = data.students || [];
+            displayStudents(window.allStudents);
         })
-        .catch(() => {
-            document.getElementById('studentsList').innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;">Error loading students</p>';
+        .catch(error => {
+            console.error('Error:', error);
+
+            const studentsList = document.getElementById('studentsList');
+            if (studentsList) {
+                studentsList.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;">Error loading students</p>';
+            }
         });
 }
 
 function filterStudents(event) {
-    const query = event.target.value.toLowerCase().trim();
-    if (!query) {
+    const query = event.target.value.trim().toLowerCase();
+
+    if (!window.allStudents) {
         loadAllStudents();
         return;
     }
 
     const filtered = window.allStudents.filter(student =>
-        student.id_number.toLowerCase().includes(query) ||
-        student.first_name.toLowerCase().includes(query) ||
-        student.last_name.toLowerCase().includes(query)
+        String(student.id_number || '').toLowerCase().includes(query) ||
+        String(student.first_name || '').toLowerCase().includes(query) ||
+        String(student.last_name || '').toLowerCase().includes(query)
     );
+
     displayStudents(filtered);
 }
 
 function displayStudents(students) {
-    window.allStudents = students;
-    const container = document.getElementById('studentsList');
+    const studentsList = document.getElementById('studentsList');
     const noResults = document.getElementById('noResults');
 
-    if (students.length === 0) {
-        container.innerHTML = '';
-        noResults.style.display = 'block';
+    if (!studentsList) return;
+
+    studentsList.innerHTML = '';
+
+    if (!students || students.length === 0) {
+        if (noResults) noResults.style.display = 'block';
         return;
     }
 
-    noResults.style.display = 'none';
-    container.innerHTML = students.map(student => `
-        <div style="background:white;border-radius:12px;padding:16px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.1);transition:all 0.3s;cursor:pointer;border:2px solid transparent;" onmouseover="this.style.borderColor='var(--uc-purple)';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 20px rgba(0,0,0,0.15)';" onmouseout="this.style.borderColor='transparent';this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';">
-            <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--uc-purple),var(--uc-gold));display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:white;font-weight:bold;font-size:18px;overflow:hidden;">
-                ${student.profile_pic ? `<img src="/static/uploads/${student.id_number}.png" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">` : ''}
-                <span style="display:${student.profile_pic ? 'none' : 'flex'};width:100%;height:100%;align-items:center;justify-content:center;">${student.first_name.charAt(0)}${student.last_name.charAt(0)}</span>
+    if (noResults) noResults.style.display = 'none';
+
+    students.forEach(student => {
+        const idNumber = student.id_number || '';
+        const firstName = student.first_name || '';
+        const lastName = student.last_name || '';
+        const remaining = student.remaining || 0;
+        const studentName = `${firstName} ${lastName}`.trim();
+        const photoPath = `/static/uploads/${idNumber}.png`;
+        const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+
+        const studentCard = document.createElement('div');
+        studentCard.className = 'admin-student-card';
+
+        studentCard.innerHTML = `
+            <div class="admin-student-avatar">
+                <img
+                    src="${photoPath}"
+                    alt="${studentName}"
+                    onerror="this.style.display='none'; this.parentElement.textContent='${initials}';"
+                >
             </div>
-            <div style="font-size:11px;color:#666;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">${student.id_number}</div>
-            <div style="font-size:13px;font-weight:700;color:#333;margin-bottom:8px;">${student.first_name} ${student.last_name}</div>
-            <div style="font-size:11px;color:#888;margin-bottom:12px;">${student.remaining} sessions left</div>
-            <button onclick="openReservationForm('${student.id_number}', '${student.first_name} ${student.last_name}', ${student.remaining})"
-                    style="width:100%;padding:8px 12px;background:linear-gradient(135deg,var(--uc-purple),#6b3fa0);color:white;border:none;border-radius:8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;cursor:pointer;transition:0.3s;"
-                    onmouseover="this.style.background='linear-gradient(135deg,#6b3fa0,var(--uc-purple))';" onmouseout="this.style.background='linear-gradient(135deg,var(--uc-purple),#6b3fa0)';">
+
+            <div class="admin-student-name">${studentName}</div>
+            <div class="admin-student-id">${idNumber}</div>
+            <div class="admin-student-remaining">${remaining} sessions left</div>
+
+            <button type="button" class="admin-select-student-btn">
                 Select Student
             </button>
-        </div>
-    `).join('');
+        `;
+
+        const selectButton = studentCard.querySelector('.admin-select-student-btn');
+
+        selectButton.addEventListener('click', function() {
+            openSitInForm(idNumber, studentName, remaining);
+        });
+
+        studentsList.appendChild(studentCard);
+    });
 }
 
-function openReservationForm(idNumber, studentName, remaining) {
-    // For reservations page, redirect to search with the student ID
-    window.location.href = '/admin/reservations?search_id=' + encodeURIComponent(idNumber);
-    document.getElementById('searchModal').style.display = 'none';
+function openSitInForm(idNumber, studentName, remaining) {
+    const idInput = document.getElementById('display_id');
+    const nameInput = document.getElementById('display_name');
+    const remainingInput = document.getElementById('display_remaining');
+
+    if (idInput) idInput.value = idNumber;
+    if (nameInput) nameInput.value = studentName;
+    if (remainingInput) remainingInput.value = remaining;
+
+    closeModal('searchModal');
+
+    const sitInModal = document.getElementById('sitInFormModal');
+    if (sitInModal) sitInModal.style.display = 'flex';
 }
 
-function closeModal(modalId) {
-    document.getElementById(modalId).style.display = 'none';
-}
+window.addEventListener('click', function(event) {
+    const searchModal = document.getElementById('searchModal');
+
+    if (event.target === searchModal) {
+        closeModal('searchModal');
+    }
+});
 </script>
-
-<!-- SEARCH MODAL -->
-<div id="searchModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:none;justify-content:center;align-items:center;z-index:1000;padding:20px;">
-    <div style="background:white;width:100%;max-width:700px;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-        <!-- HEADER -->
-        <div style="background:linear-gradient(135deg,var(--uc-purple) 0%,#6b3fa0 100%);color:white;padding:24px;font-weight:bold;display:flex;justify-content:space-between;align-items:center;">
-            <div style="display:flex;align-items:center;gap:12px;">
-                <i class="fas fa-search" style="font-size:22px;"></i>
-                <span style="font-size:18px;letter-spacing:0.5px;">Quick Select Student</span>
-            </div>
-            <button onclick="closeModal('searchModal')" style="background:none;border:none;color:white;cursor:pointer;font-size:24px;transition:0.3s;">&times;</button>
-        </div>
-
-        <!-- BODY -->
-        <div style="padding:25px;">
-            <!-- SEARCH INPUT -->
-            <div style="margin-bottom:25px;">
-                <label style="font-size:12px;font-weight:800;color:var(--uc-purple);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:12px;">Search or Browse Students</label>
-                <input type="text" id="idSearchInput" style="width:100%;padding:14px 16px;border:2px solid #e5e7eb;border-radius:10px;font-size:14px;transition:all 0.3s;box-sizing:border-box;" placeholder="Type to search by ID or name..." onkeyup="filterStudents(event)">
-            </div>
-
-            <!-- STUDENTS GRID WITH PROFILE PICTURES -->
-            <div id="studentsList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:15px;max-height:450px;overflow-y:auto;padding-right:10px;"></div>
-
-            <!-- NO RESULTS MESSAGE -->
-            <div id="noResults" style="text-align:center;padding:40px 20px;color:#888;display:none;">
-                <i class="fas fa-inbox" style="font-size:40px;color:#ddd;margin-bottom:12px;display:block;"></i>
-                <p style="font-size:13px;margin:0;">No students found</p>
-            </div>
-        </div>
-    </div>
-</div>
 
 </body>
 </html>

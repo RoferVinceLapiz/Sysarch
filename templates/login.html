@@ -1,72 +1,536 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>CCS Sit-in Monitoring System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        :root {
+            --uc-purple: #4b2c80;
+            --uc-purple-dark: #2d1a4d;
+            --uc-purple-light: #6b3fa0;
+            --uc-gold: #fdb813;
+            --text-dark: #111827;
+            --text-muted: #64748b;
+            --border-soft: #e5e7eb;
+            --danger: #dc2626;
+        }
+
+        body.login-page {
+            margin: 0 !important;
+            min-height: 100vh !important;
+            font-family: 'Segoe UI', Arial, sans-serif !important;
+            color: var(--text-dark) !important;
+            background:
+                radial-gradient(circle at 8% 18%, rgba(253, 184, 19, 0.22), transparent 26%),
+                radial-gradient(circle at 88% 10%, rgba(107, 63, 160, 0.16), transparent 28%),
+                linear-gradient(135deg, #fffaf0 0%, #f7f2ff 42%, #f8fafc 100%) !important;
+            overflow-x: hidden;
+        }
+
+        .login-page * {
+            box-sizing: border-box;
+        }
+
+        .login-navbar {
+            width: 100%;
+            min-height: 68px;
+            padding: 0 32px;
+            background:
+                radial-gradient(circle at top left, rgba(253, 184, 19, 0.18), transparent 30%),
+                linear-gradient(135deg, var(--uc-purple) 0%, var(--uc-purple-dark) 100%) !important;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            box-shadow: 0 10px 28px rgba(31, 16, 70, 0.22);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .login-navbar span {
+            color: #ffffff !important;
+            font-size: 16px;
+            font-weight: 950;
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+        }
+
+        .login-navbar .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .login-navbar .nav-menu a {
+            color: rgba(255, 255, 255, 0.92) !important;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 800;
+            padding: 10px 12px;
+            border-radius: 999px;
+            transition: all 0.22s ease;
+        }
+
+        .login-navbar .nav-menu a:hover,
+        .login-navbar .nav-menu a.active-link {
+            background: rgba(255, 255, 255, 0.14);
+            color: var(--uc-gold) !important;
+        }
+
+        .login-layout {
+            width: min(1180px, calc(100% - 32px));
+            min-height: calc(100vh - 68px);
+            margin: 0 auto;
+            padding: 54px 0;
+            display: grid;
+            grid-template-columns: minmax(300px, 420px) minmax(380px, 1fr);
+            align-items: center;
+            gap: 70px;
+        }
+
+        .login-brand-card {
+            padding: 34px;
+            border-radius: 30px;
+            background:
+                radial-gradient(circle at top left, rgba(253, 184, 19, 0.20), transparent 32%),
+                rgba(255, 255, 255, 0.46);
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            box-shadow: 0 26px 70px rgba(31, 16, 70, 0.10);
+            backdrop-filter: blur(14px);
+            color: var(--text-dark);
+        }
+
+        .login-logo-img {
+            width: 170px;
+            height: auto;
+            display: block;
+            margin-bottom: 18px;
+            filter: drop-shadow(0 14px 18px rgba(75, 44, 128, 0.16));
+        }
+
+        .system-badge {
+            display: inline-flex;
+            width: fit-content;
+            margin-bottom: 18px;
+            padding: 8px 13px;
+            border-radius: 999px;
+            background: rgba(253, 184, 19, 0.22);
+            color: #b45309 !important;
+            font-size: 11px;
+            font-weight: 950;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .login-brand-card h1 {
+            margin: 0 0 12px;
+            color: var(--text-dark) !important;
+            font-size: 34px;
+            line-height: 1.1;
+            font-weight: 950;
+            letter-spacing: -0.8px;
+        }
+
+        .login-brand-card p {
+            margin: 0;
+            color: #475569 !important;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        .login-benefits {
+            margin-top: 24px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .login-benefits span {
+            display: flex;
+            align-items: center;
+            padding: 12px 14px;
+            border-radius: 999px;
+            background: #ffffff;
+            color: var(--text-dark) !important;
+            border: 1px solid #eef0f4;
+            font-size: 13px;
+            font-weight: 850;
+            box-shadow: 0 10px 22px rgba(31, 16, 70, 0.05);
+        }
+
+        .login-form-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 520px;
+            padding: 42px 38px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.94);
+            border: 1px solid rgba(255, 255, 255, 0.82);
+            box-shadow: 0 34px 90px rgba(31, 16, 70, 0.16);
+            backdrop-filter: blur(18px);
+        }
+
+        .login-title {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        /* IMPORTANT: prevents duplicate icon from old style.css */
+        .login-page .login-title::before,
+        .login-page .login-title::after {
+            content: none !important;
+            display: none !important;
+        }
+
+        .login-icon {
+            width: 54px;
+            height: 54px;
+            margin: 0 auto 12px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(253, 184, 19, 0.24), rgba(75, 44, 128, 0.12));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 31px;
+            box-shadow: 0 14px 28px rgba(31, 16, 70, 0.08);
+        }
+
+        .login-title h2 {
+            margin: 0;
+            color: var(--uc-purple) !important;
+            font-size: 30px;
+            font-weight: 950;
+            letter-spacing: -0.6px;
+        }
+
+        .login-title p {
+            margin: 8px 0 0;
+            color: var(--text-muted) !important;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .flash {
+            padding: 12px 14px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+        .flash.success {
+            background: #dcfce7;
+            color: #166534 !important;
+            border: 1px solid #bbf7d0;
+        }
+
+        .flash.error {
+            background: #fee2e2;
+            color: #991b1b !important;
+            border: 1px solid #fecaca;
+        }
+
+        .input-group-login {
+            position: relative;
+            min-height: 76px;
+            margin-bottom: 10px;
+        }
+
+        .input-group-login input {
+            width: 100%;
+            height: 56px;
+            border: 1.8px solid var(--border-soft);
+            border-radius: 16px;
+            background: #ffffff;
+            color: var(--text-dark) !important;
+            font-size: 15px;
+            font-weight: 650;
+            padding: 20px 15px 7px;
+            outline: none;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+            transition: all 0.22s ease;
+        }
+
+        .input-group-login input:focus {
+            border-color: var(--uc-purple);
+            box-shadow:
+                0 0 0 4px rgba(75, 44, 128, 0.12),
+                0 12px 26px rgba(75, 44, 128, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .input-group-login label {
+            position: absolute;
+            top: 25px;
+            left: 15px;
+            color: var(--text-muted) !important;
+            font-size: 14px;
+            font-weight: 800;
+            pointer-events: none;
+            transition: all 0.18s ease;
+        }
+
+        .input-group-login input:focus + label,
+        .input-group-login input:not(:placeholder-shown) + label {
+            top: 9px;
+            color: var(--uc-purple) !important;
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 0.6px;
+            font-weight: 950;
+        }
+
+        .error-msg {
+            display: block;
+            min-height: 14px;
+            margin: 0 0 4px 4px;
+            color: var(--danger) !important;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .input-error {
+            border-color: var(--danger) !important;
+            background: #fff7f7 !important;
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.10) !important;
+        }
+
+        .remember-me-container {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin: 8px 0 22px;
+            color: var(--text-muted) !important;
+            font-size: 13px;
+            font-weight: 750;
+        }
+
+        .remember-me-container input {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--uc-purple);
+        }
+
+        .remember-me-container label {
+            color: var(--text-muted) !important;
+            cursor: pointer;
+        }
+
+        .login-btn {
+            width: 100%;
+            min-height: 58px;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--uc-purple), var(--uc-purple-light)) !important;
+            color: #ffffff !important;
+            font-size: 15px;
+            font-weight: 950;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            box-shadow: 0 16px 30px rgba(75, 44, 128, 0.26);
+            transition: all 0.25s ease;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+            color: var(--uc-purple-dark) !important;
+            transform: translateY(-3px);
+            box-shadow: 0 20px 36px rgba(245, 158, 11, 0.28);
+        }
+
+        .register {
+            margin: 22px 0 0;
+            padding-top: 18px;
+            border-top: 1px solid #eef0f4;
+            color: var(--text-muted) !important;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .register a {
+            color: var(--uc-purple) !important;
+            text-decoration: none;
+            font-weight: 950;
+        }
+
+        .register a span {
+            color: var(--uc-purple) !important;
+        }
+
+        .register a:hover,
+        .register a:hover span {
+            color: #b45309 !important;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 980px) {
+            .login-navbar {
+                align-items: flex-start;
+                flex-direction: column;
+                padding: 16px 20px;
+            }
+
+            .login-navbar span {
+                white-space: normal;
+                line-height: 1.4;
+            }
+
+            .login-navbar .nav-menu {
+                flex-wrap: wrap;
+            }
+
+            .login-layout {
+                grid-template-columns: 1fr;
+                gap: 24px;
+                align-items: stretch;
+                min-height: auto;
+                padding: 32px 0 54px;
+            }
+
+            .login-brand-card {
+                text-align: center;
+            }
+
+            .login-logo-img,
+            .system-badge {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .login-benefits {
+                max-width: 440px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        @media (max-width: 620px) {
+            .login-layout {
+                width: min(100% - 22px, 1180px);
+            }
+
+            .login-box {
+                padding: 26px 18px;
+                border-radius: 24px;
+            }
+
+            .login-brand-card {
+                padding: 24px 18px;
+                border-radius: 24px;
+            }
+
+            .login-brand-card h1 {
+                font-size: 27px;
+            }
+
+            .login-title h2 {
+                font-size: 25px;
+            }
+
+            .login-navbar .nav-menu a {
+                font-size: 13px;
+                padding: 8px 10px;
+            }
+        }
+    </style>
 </head>
 
-<body>
+<body class="login-page">
 
-<div class="navbar">
+<div class="navbar login-navbar">
     <span>College of Computer Studies Sit-in Monitoring System</span>
+
     <div class="nav-menu">
-        <a href="#">Home</a> 
-        <a href="#">Community</a> 
-        <a href="#">About</a> 
-        <a href="/">Login</a> 
+        <a href="#">Home</a>
+        <a href="#">Community</a>
+        <a href="#">About</a>
+        <a href="/" class="active-link">Login</a>
         <a href="/register">Register</a>
     </div>
 </div>
 
-<div class="container">
+<main class="login-layout">
 
-    <div class="logo">
-        <img src="{{ url_for('static', filename='ccs logo.png') }}">
-    </div>
+    <section class="login-brand-card">
+        <img class="login-logo-img" src="{{ url_for('static', filename='ccs logo.png') }}" alt="CCS Logo">
 
-    <div class="login-box">
+        <div class="system-badge">Lab Monitoring System</div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="flash {{ category }}">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+        <h1>Student Sit-in Monitoring</h1>
 
-        <form method="POST" action="/" id="loginForm" novalidate>
+        <p>
+            Access your student account to reserve sit-in sessions, monitor remaining sessions,
+            view announcements, and manage your laboratory activity.
+        </p>
 
-            <div class="input-group-login">
-                <label>ID Number</label>
-                <input type="text" name="id_number" id="id_number" placeholder="Enter a valid id number">
-                <span class="error-msg" id="id_number_error"></span>
+        <div class="login-benefits">
+            <span>✓ Reserve lab sessions</span>
+            <span>✓ Track sit-in records</span>
+            <span>✓ View CCS announcements</span>
+        </div>
+    </section>
+
+    <section class="login-form-section">
+        <div class="login-box">
+
+            <div class="login-title">
+                <h2>Welcome Back</h2>
+                <p>Log in to continue to the CCS Sit-in Monitoring System.</p>
             </div>
 
-            <div class="input-group-login">
-                <label>Password</label>
-                <input type="password" name="password" id="password" placeholder="Enter password">
-                <span class="error-msg" id="password_error"></span>
-            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
 
-            <div class="remember-me-container">
-                <input type="checkbox" id="remember">
-                <label for="remember">Remember me</label>
-            </div>
-            <br>
+            <form method="POST" action="/" id="loginForm" novalidate>
 
-            <button type="submit" class="login-btn" onclick="return validateLogin()">Login</button>
+                <div class="input-group-login">
+                    <span class="error-msg" id="id_number_error"></span>
+                    <input type="text" name="id_number" id="id_number" placeholder=" ">
+                    <label for="id_number">ID Number</label>
+                </div>
 
-            <p class="register">
-                Don't have an account? 
-                <a href="/register"><span>Register</span></a>
-            </p>
+                <div class="input-group-login">
+                    <span class="error-msg" id="password_error"></span>
+                    <input type="password" name="password" id="password" placeholder=" ">
+                    <label for="password">Password</label>
+                </div>
 
-        </form>
+                <div class="remember-me-container">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Remember me</label>
+                </div>
 
-    </div>
+                <button type="submit" class="login-btn" onclick="return validateLogin()">
+                    Login to Dashboard
+                </button>
 
-</div>
+                <p class="register">
+                    Don't have an account?
+                    <a href="/register"><span>Create student account</span></a>
+                </p>
+
+            </form>
+
+        </div>
+    </section>
+
+</main>
 
 <script>
 function validateLogin() {
@@ -77,7 +541,6 @@ function validateLogin() {
     const idError = document.getElementById('id_number_error');
     const passError = document.getElementById('password_error');
 
-    // Reset errors
     idError.textContent = '';
     passError.textContent = '';
     idNumber.classList.remove('input-error');

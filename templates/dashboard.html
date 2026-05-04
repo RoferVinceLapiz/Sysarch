@@ -4,205 +4,603 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard - CCS</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
         :root {
             --uc-purple: #4b2c80;
             --uc-purple-dark: #2d1a4d;
+            --uc-purple-light: #6b3fa0;
             --uc-gold: #fdb813;
+            --student-bg: #f7f3ff;
+            --student-card: #ffffff;
+            --text-dark: #111827;
+            --text-muted: #64748b;
+            --border-soft: #e5e7eb;
+            --success: #16a34a;
         }
 
-        body { background: #f4f4f9; font-family: 'Segoe UI', sans-serif; margin: 0; }
-
-        /* NAVBAR - Matches Admin Exactly */
-        .dash-navbar {
-            background: linear-gradient(135deg, var(--uc-purple) 0%, var(--uc-purple-dark) 100%);
-            height: 56px;
-            padding: 0 0 0 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        body.student-dashboard-page {
+            margin: 0 !important;
+            min-height: 100vh !important;
+            font-family: 'Segoe UI', Arial, sans-serif !important;
+            color: var(--text-dark) !important;
+            background:
+                radial-gradient(circle at 8% 18%, rgba(253, 184, 19, 0.18), transparent 26%),
+                radial-gradient(circle at 88% 10%, rgba(107, 63, 160, 0.14), transparent 28%),
+                linear-gradient(135deg, #fffaf0 0%, #f7f2ff 42%, #f8fafc 100%) !important;
+            overflow-x: hidden !important;
         }
 
-        .dash-title { color: white; font-weight: 700; font-size: 15px; letter-spacing: 0.5px; }
-
-        .dash-menu { display: flex; align-items: center; height: 100%; }
-
-        .dash-menu a, .dropdown-toggle {
-            color: white;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            padding: 0 15px;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            transition: all 0.3s ease;
+        .student-dashboard-page * {
+            box-sizing: border-box;
         }
 
-        .dash-menu a:hover:not(.logout-btn) {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--uc-gold);
+        /* ================= STUDENT NAVBAR ================= */
+
+        .student-dashboard-page .student-navbar {
+            width: 100% !important;
+            min-height: 68px !important;
+            padding: 0 22px !important;
+            background:
+                radial-gradient(circle at top left, rgba(253, 184, 19, 0.18), transparent 30%),
+                linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark)) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 18px !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 9999 !important;
+            box-shadow: 0 10px 28px rgba(31, 16, 70, 0.24) !important;
         }
 
-        /* The Gold Logout Button */
-        .logout-btn {
+        .student-dashboard-page .student-navbar-title {
+            display: flex !important;
+            align-items: center !important;
+            gap: 9px !important;
+            color: #ffffff !important;
+            font-size: 14px !important;
+            font-weight: 950 !important;
+            letter-spacing: 0.4px !important;
+            white-space: nowrap !important;
+        }
+
+        .student-dashboard-page .student-navbar-title i {
+            color: var(--uc-gold) !important;
+        }
+
+        .student-dashboard-page .student-nav-links {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-end !important;
+            gap: 6px !important;
+            flex-wrap: nowrap !important;
+        }
+
+        .student-dashboard-page .student-nav-links a,
+        .student-dashboard-page .dropdown-toggle {
+            min-height: 42px !important;
+            padding: 0 12px !important;
+            border-radius: 999px !important;
+            color: rgba(255, 255, 255, 0.92) !important;
+            text-decoration: none !important;
+            font-size: 13px !important;
+            font-weight: 850 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 7px !important;
+            transition: all 0.22s ease !important;
+            white-space: nowrap !important;
+            cursor: pointer !important;
+        }
+
+        .student-dashboard-page .student-nav-links a:hover:not(.logout-btn),
+        .student-dashboard-page .dropdown-toggle:hover,
+        .student-dashboard-page .student-nav-links a.active {
+            background: rgba(255, 255, 255, 0.14) !important;
+            color: var(--uc-gold) !important;
+        }
+
+        .student-dashboard-page .logout-btn {
             background: var(--uc-gold) !important;
             color: var(--uc-purple-dark) !important;
-            height: 100% !important;
-            padding: 0 25px !important;
-            font-weight: 800 !important;
-            text-transform: uppercase;
+            font-weight: 950 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            padding: 0 18px !important;
+        }
+
+        .student-dashboard-page .logout-btn:hover {
+            background: #ffffff !important;
+            color: var(--uc-purple-dark) !important;
+        }
+
+        .student-dashboard-page .dropdown {
+            position: relative !important;
+        }
+
+        .student-dashboard-page .dropdown-menu {
+            display: none !important;
+            position: absolute !important;
+            top: calc(100% + 10px) !important;
+            right: 0 !important;
+            min-width: 240px !important;
+            background: #ffffff !important;
+            border-radius: 18px !important;
+            overflow: hidden !important;
+            box-shadow: 0 20px 45px rgba(31, 16, 70, 0.18) !important;
+            border: 1px solid rgba(255, 255, 255, 0.8) !important;
+            z-index: 10000 !important;
+        }
+        .dropdown.open .dropdown-menu {
+    display: block !important;
+}
+
+        .student-dashboard-page .dropdown-menu a {
+            color: var(--text-dark) !important;
             border-radius: 0 !important;
+            padding: 14px 16px !important;
+            min-height: auto !important;
+            font-size: 13px !important;
+            border-bottom: 1px solid #eef0f4 !important;
+            background: #ffffff !important;
         }
 
-        /* DASHBOARD CONTENT */
-        .dash-body { display: flex; gap: 20px; padding: 25px; align-items: flex-start; }
-
-        .dash-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
+        .student-dashboard-page .dropdown-menu a:hover {
+            background: #f7f2ff !important;
+            color: var(--uc-purple) !important;
         }
 
-        .dash-card-header {
-            background: var(--uc-purple);
-            color: white;
-            padding: 15px;
-            font-weight: 700;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .student-dashboard-page .notif-count {
+            background: #ef4444 !important;
+            color: #ffffff !important;
+            min-width: 18px !important;
+            height: 18px !important;
+            padding: 0 5px !important;
+            border-radius: 999px !important;
+            font-size: 10px !important;
+            font-weight: 950 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
         }
 
-        .dash-card-body { padding: 20px; }
-
-        /* Student Info Styling */
-        .dash-avatar { text-align: center; margin-bottom: 20px; }
-        .dash-avatar img {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            border: 4px solid var(--uc-gold);
-            object-fit: cover;
+        .student-dashboard-page .notif-item {
+            display: block !important;
+            white-space: normal !important;
+            line-height: 1.35 !important;
         }
 
-        .dash-info-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
-            color: #444;
+        .student-dashboard-page .notif-item span {
+            display: block !important;
+            font-weight: 850 !important;
+            color: var(--text-dark) !important;
+            margin-bottom: 5px !important;
         }
 
-        .dash-info-icon { color: var(--uc-purple); width: 20px; text-align: center; }
-
-        /* Announcement Items */
-        .announcement-item {
-            border-left: 4px solid var(--uc-gold);
-            background: #fcfcfc;
-            padding: 12px 15px;
-            margin-bottom: 15px;
-            border-radius: 0 8px 8px 0;
+        .student-dashboard-page .notif-item small {
+            display: block !important;
+            font-size: 11px !important;
+            color: var(--text-muted) !important;
+            font-weight: 700 !important;
         }
-        .announcement-meta { font-weight: 700; color: var(--uc-purple); font-size: 0.8rem; margin: 0; }
-        .announcement-text { margin: 8px 0 0; font-size: 0.95rem; color: #555; line-height: 1.5; }
 
-        /* Rules Text */
-        .rules-university { color: var(--uc-purple); font-weight: 800; margin-bottom: 2px; }
-        .rules-college { color: #666; font-size: 0.8rem; font-weight: 600; margin-bottom: 15px; }
-        .dash-rules p { font-size: 0.85rem; color: #444; margin-bottom: 8px; line-height: 1.4; }
+        /* ================= PAGE HERO ================= */
 
-        /* Dropdown Simple Style */
-        .dropdown { position: relative; }
-        .dropdown-menu {
-            display: none;
+        .student-dashboard-page .student-page {
+            width: min(1500px, calc(100% - 32px)) !important;
+            margin: 30px auto 44px !important;
+        }
+
+        .student-dashboard-page .dashboard-hero {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            gap: 22px !important;
+            margin-bottom: 26px !important;
+        }
+
+        .student-dashboard-page .hero-title {
+            display: flex !important;
+            align-items: center !important;
+            gap: 16px !important;
+        }
+
+        .student-dashboard-page .hero-icon {
+            width: 62px !important;
+            height: 62px !important;
+            border-radius: 20px !important;
+            background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+            color: var(--uc-purple-dark) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 28px !important;
+            box-shadow: 0 14px 28px rgba(253, 184, 19, 0.28) !important;
+            flex-shrink: 0 !important;
+        }
+
+        .student-dashboard-page .hero-title h1 {
+            margin: 0 !important;
+            color: var(--uc-purple) !important;
+            font-size: 34px !important;
+            font-weight: 950 !important;
+            letter-spacing: -0.8px !important;
+            line-height: 1.1 !important;
+        }
+
+        .student-dashboard-page .hero-title p {
+            margin: 7px 0 0 !important;
+            color: var(--text-muted) !important;
+            font-size: 14px !important;
+            line-height: 1.5 !important;
+        }
+
+        .student-dashboard-page .session-summary {
+            min-width: 250px !important;
+            padding: 24px 28px !important;
+            border-radius: 24px !important;
+            background:
+                radial-gradient(circle at top right, rgba(253, 184, 19, 0.28), transparent 34%),
+                linear-gradient(135deg, var(--uc-purple), var(--uc-purple-light)) !important;
+            color: #ffffff !important;
+            box-shadow: 0 18px 42px rgba(75, 44, 128, 0.24) !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+
+        .student-dashboard-page .session-summary::after {
+            content: "\f017";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
             position: absolute;
-            top: 56px;
-            right: 0;
-            background: white;
-            min-width: 200px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            z-index: 100;
+            right: 20px;
+            bottom: -16px;
+            font-size: 84px;
+            color: rgba(255, 255, 255, 0.13);
         }
-        .dropdown:hover .dropdown-menu { display: block; }
-        .dropdown-menu a { color: #333 !important; height: auto !important; padding: 12px !important; border-bottom: 1px solid #eee; }
 
-        /* --- CCS SUCCESS MODAL STYLING --- */
-        .ccs-modal-overlay {
-            position: fixed;
-            top: 0; left: 0; 
-            width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85) !important;
-            backdrop-filter: blur(8px);
-            display: none; 
-            align-items: center;
-            justify-content: center;
+        .student-dashboard-page .session-summary p {
+            margin: 0 !important;
+            color: rgba(255, 255, 255, 0.84) !important;
+            font-size: 12px !important;
+            font-weight: 850 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.9px !important;
+        }
+
+        .student-dashboard-page .session-summary strong {
+            display: block !important;
+            margin-top: 8px !important;
+            color: #ffffff !important;
+            font-size: 44px !important;
+            font-weight: 950 !important;
+            line-height: 1 !important;
+            position: relative !important;
+            z-index: 1 !important;
+        }
+
+        /* ================= 3-COLUMN DASHBOARD ================= */
+
+        .student-dashboard-page .student-dashboard-grid {
+            width: 100% !important;
+            display: grid !important;
+            grid-template-columns: minmax(260px, 310px) minmax(360px, 1fr) minmax(300px, 380px) !important;
+            gap: 22px !important;
+            align-items: start !important;
+        }
+
+        .student-dashboard-page .student-card {
+            min-width: 0 !important;
+            width: 100% !important;
+            background: rgba(255, 255, 255, 0.96) !important;
+            border: 1px solid rgba(255, 255, 255, 0.78) !important;
+            border-radius: 24px !important;
+            box-shadow: 0 22px 55px rgba(31, 16, 70, 0.11) !important;
+            overflow: hidden !important;
+        }
+
+        .student-dashboard-page .student-card-header {
+            background:
+                radial-gradient(circle at top right, rgba(253, 184, 19, 0.20), transparent 30%),
+                linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark)) !important;
+            color: #ffffff !important;
+            padding: 17px 20px !important;
+            font-size: 13px !important;
+            font-weight: 950 !important;
+            letter-spacing: 0.8px !important;
+            text-transform: uppercase !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 9px !important;
+        }
+
+        .student-dashboard-page .student-card-body {
+            padding: 22px !important;
+        }
+
+        /* ================= PROFILE CARD ================= */
+
+        .student-dashboard-page .profile-avatar {
+            text-align: center !important;
+            margin-bottom: 20px !important;
+        }
+
+        .student-dashboard-page .profile-avatar img {
+            width: 118px !important;
+            height: 118px !important;
+            border-radius: 50% !important;
+            border: 4px solid var(--uc-gold) !important;
+            object-fit: cover !important;
+            box-shadow: 0 14px 28px rgba(75, 44, 128, 0.18) !important;
+        }
+
+        .student-dashboard-page .profile-name {
+            margin: 0 0 4px !important;
+            color: var(--text-dark) !important;
+            text-align: center !important;
+            font-size: 18px !important;
+            font-weight: 950 !important;
+            line-height: 1.3 !important;
+        }
+
+        .student-dashboard-page .profile-id {
+            margin: 0 0 18px !important;
+            color: var(--text-muted) !important;
+            text-align: center !important;
+            font-size: 13px !important;
+            font-weight: 800 !important;
+        }
+
+        .student-dashboard-page .profile-info-list {
+            display: grid !important;
+            gap: 12px !important;
+        }
+
+        .student-dashboard-page .profile-info-item {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+            background: #f8f5ff !important;
+            border: 1px solid #ede9fe !important;
+            border-radius: 16px !important;
+            padding: 13px 14px !important;
+            color: var(--text-dark) !important;
+            min-width: 0 !important;
+        }
+
+        .student-dashboard-page .profile-info-icon {
+            width: 38px !important;
+            height: 38px !important;
+            border-radius: 13px !important;
+            background: #ede9fe !important;
+            color: var(--uc-purple) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            flex-shrink: 0 !important;
+        }
+
+        .student-dashboard-page .profile-info-item span {
+            min-width: 0 !important;
+            word-break: break-word !important;
+            color: var(--text-dark) !important;
+            font-size: 13px !important;
+            line-height: 1.4 !important;
+            font-weight: 750 !important;
+        }
+
+        .student-dashboard-page .profile-info-item strong {
+            color: var(--uc-purple) !important;
+            font-weight: 950 !important;
+        }
+
+        .student-dashboard-page .session-info-box {
+            background: #fffbeb !important;
+            border-color: rgba(253, 184, 19, 0.65) !important;
+        }
+
+        .student-dashboard-page .session-info-box .profile-info-icon {
+            color: #b45309 !important;
+            background: #fef3c7 !important;
+        }
+
+        .student-dashboard-page .session-number {
+            color: #b45309 !important;
+            font-size: 17px !important;
+            font-weight: 950 !important;
+        }
+
+        /* ================= ANNOUNCEMENTS ================= */
+
+        .student-dashboard-page .announcement-card {
+            min-height: 430px !important;
+        }
+
+        .student-dashboard-page .announcement-list {
+            display: grid !important;
+            gap: 14px !important;
+        }
+
+        .student-dashboard-page .announcement-item {
+            border: 1px solid #eef0f4 !important;
+            border-left: 5px solid var(--uc-gold) !important;
+            background: #ffffff !important;
+            padding: 15px 16px !important;
+            border-radius: 16px !important;
+            margin: 0 !important;
+            transition: all 0.22s ease !important;
+        }
+
+        .student-dashboard-page .announcement-item:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 12px 26px rgba(31, 16, 70, 0.08) !important;
+        }
+
+        .student-dashboard-page .announcement-meta {
+            margin: 0 !important;
+            color: var(--uc-purple) !important;
+            font-size: 12px !important;
+            font-weight: 950 !important;
+        }
+
+        .student-dashboard-page .announcement-text {
+            margin: 8px 0 0 !important;
+            color: #374151 !important;
+            font-size: 14px !important;
+            line-height: 1.6 !important;
+        }
+
+        .student-dashboard-page .empty-announcement {
+            text-align: center !important;
+            padding: 65px 16px !important;
+            color: #9ca3af !important;
+        }
+
+        .student-dashboard-page .empty-announcement i {
+            display: block !important;
+            margin-bottom: 14px !important;
+            color: #d1d5db !important;
+            font-size: 52px !important;
+        }
+
+        .student-dashboard-page .empty-announcement p {
+            margin: 0 !important;
+            color: #9ca3af !important;
+            font-size: 14px !important;
+            font-weight: 750 !important;
+        }
+
+        /* ================= RULES ================= */
+
+        .student-dashboard-page .rules-university {
+            margin: 0 0 4px !important;
+            color: var(--uc-purple) !important;
+            text-align: center !important;
+            font-size: 16px !important;
+            font-weight: 950 !important;
+        }
+
+        .student-dashboard-page .rules-college {
+            margin: 0 0 18px !important;
+            color: var(--text-muted) !important;
+            text-align: center !important;
+            font-size: 12px !important;
+            font-weight: 850 !important;
+            text-transform: uppercase !important;
+            line-height: 1.4 !important;
+        }
+
+        .student-dashboard-page .rules-scroll {
+            max-height: 500px !important;
+            overflow-y: auto !important;
+            padding-right: 10px !important;
+        }
+
+        .student-dashboard-page .rules-scroll p {
+            margin: 0 0 12px !important;
+            color: #374151 !important;
+            font-size: 13px !important;
+            line-height: 1.55 !important;
+        }
+
+        .student-dashboard-page .rules-scroll strong {
+            color: var(--uc-purple) !important;
+            font-weight: 950 !important;
+        }
+
+        .student-dashboard-page .rules-scroll::-webkit-scrollbar {
+            width: 8px !important;
+        }
+
+        .student-dashboard-page .rules-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9 !important;
+            border-radius: 999px !important;
+        }
+
+        .student-dashboard-page .rules-scroll::-webkit-scrollbar-thumb {
+            background: #c4b5fd !important;
+            border-radius: 999px !important;
+        }
+
+        /* ================= SUCCESS MODAL ================= */
+
+        .student-dashboard-page .ccs-modal-overlay {
+            position: fixed !important;
+            inset: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            background: rgba(15, 15, 20, 0.72) !important;
+            backdrop-filter: blur(8px) !important;
+            display: none;
+            align-items: center !important;
+            justify-content: center !important;
             z-index: 999999 !important;
+            padding: 22px !important;
         }
 
-        .ccs-modal-card {
-            background: white !important;
-            width: 380px;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            text-align: center;
+        .student-dashboard-page .ccs-modal-card {
+            background: #ffffff !important;
+            width: 390px !important;
+            max-width: 100% !important;
+            border-radius: 24px !important;
+            overflow: hidden !important;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.38) !important;
+            text-align: center !important;
+            animation: modalPop 0.4s ease-out !important;
+        }
+
+        .student-dashboard-page .ccs-modal-header {
+            background: linear-gradient(135deg, #16a34a, #22c55e) !important;
+            padding: 38px !important;
+            color: #ffffff !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+
+        .student-dashboard-page .ccs-modal-header i {
+            font-size: 78px !important;
+            animation: checkBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both !important;
+        }
+
+        .student-dashboard-page .ccs-modal-body {
+            padding: 30px !important;
+        }
+
+        .student-dashboard-page .ccs-modal-body h2 {
+            margin: 0 !important;
+            color: var(--text-dark) !important;
+            font-size: 24px !important;
+            font-weight: 950 !important;
+        }
+
+        .student-dashboard-page .ccs-modal-body p {
+            color: var(--text-muted) !important;
+            line-height: 1.5 !important;
+        }
+
+        .student-dashboard-page .ccs-btn-proceed {
+            width: 100% !important;
+            padding: 14px !important;
             border: none !important;
-            /* Added: Card itself pops in slightly */
-            animation: modalPop 0.4s ease-out;
+            border-radius: 14px !important;
+            background: linear-gradient(135deg, var(--uc-purple), var(--uc-purple-light)) !important;
+            color: #ffffff !important;
+            font-size: 15px !important;
+            font-weight: 950 !important;
+            cursor: pointer !important;
+            transition: all 0.25s ease !important;
         }
 
-        .ccs-modal-header {
-            background: #28a745 !important;
-            padding: 40px;
-            color: white !important;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .student-dashboard-page .ccs-btn-proceed:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 12px 26px rgba(75, 44, 128, 0.22) !important;
         }
 
-        /* ANIMATED CHECKMARK */
-        .ccs-modal-header i {
-            font-size: 80px;
-            /* This creates the bouncy draw-in effect */
-            animation: checkBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
-            display: inline-block;
-        }
-
-        .ccs-modal-body {
-            padding: 30px;
-        }
-
-        .ccs-modal-body h2 {
-            margin: 0;
-            color: #1a1a1a;
-            font-size: 24px;
-            font-weight: 800;
-        }
-
-        .ccs-btn-proceed {
-            background: #4b2c80 !important;
-            color: white !important;
-            border: none !important;
-            padding: 14px;
-            width: 100%;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        /* --- ANIMATIONS --- */
-
-        /* The Checkmark Bounce */
         @keyframes checkBounce {
             0% {
                 transform: scale(0) rotate(-45deg);
@@ -217,7 +615,6 @@
             }
         }
 
-        /* The Card Smooth Entrance */
         @keyframes modalPop {
             0% {
                 transform: translateY(20px);
@@ -228,151 +625,362 @@
                 opacity: 1;
             }
         }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1180px) {
+            .student-dashboard-page .student-dashboard-grid {
+                grid-template-columns: minmax(260px, 310px) minmax(0, 1fr) !important;
+            }
+
+            .student-dashboard-page .rules-card {
+                grid-column: 1 / -1 !important;
+            }
+
+            .student-dashboard-page .rules-scroll {
+                max-height: 260px !important;
+            }
+        }
+
+        @media (max-width: 850px) {
+            .student-dashboard-page .student-navbar {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                padding: 14px 18px !important;
+                gap: 12px !important;
+            }
+
+            .student-dashboard-page .student-navbar-title {
+                white-space: normal !important;
+                line-height: 1.4 !important;
+            }
+
+            .student-dashboard-page .student-nav-links {
+                width: 100% !important;
+                flex-wrap: wrap !important;
+                justify-content: flex-start !important;
+            }
+
+            .student-dashboard-page .student-nav-links a,
+            .student-dashboard-page .dropdown-toggle {
+                min-height: 40px !important;
+                border-radius: 12px !important;
+                background: rgba(255, 255, 255, 0.08) !important;
+            }
+
+            .student-dashboard-page .logout-btn {
+                border-radius: 12px !important;
+            }
+
+            .student-dashboard-page .dropdown-menu {
+                left: 0 !important;
+                right: auto !important;
+                top: calc(100% + 8px) !important;
+            }
+
+            .student-dashboard-page .dashboard-hero {
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
+
+            .student-dashboard-page .student-dashboard-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .student-dashboard-page .rules-card {
+                grid-column: auto !important;
+            }
+
+            .student-dashboard-page .rules-scroll {
+                max-height: none !important;
+                overflow-y: visible !important;
+            }
+
+            .student-dashboard-page .session-summary {
+                width: 100% !important;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .student-dashboard-page .student-page {
+                width: min(100% - 22px, 1500px) !important;
+                margin: 24px auto 36px !important;
+            }
+
+            .student-dashboard-page .hero-title {
+                align-items: flex-start !important;
+            }
+
+            .student-dashboard-page .hero-icon {
+                width: 54px !important;
+                height: 54px !important;
+                font-size: 24px !important;
+            }
+
+            .student-dashboard-page .hero-title h1 {
+                font-size: 25px !important;
+            }
+
+            .student-dashboard-page .student-card-body {
+                padding: 18px !important;
+            }
+
+            .student-dashboard-page .student-nav-links a,
+            .student-dashboard-page .dropdown-toggle {
+                flex: 1 1 calc(50% - 8px) !important;
+                justify-content: center !important;
+                font-size: 12px !important;
+            }
+
+            .student-dashboard-page .logout-btn {
+                flex: 1 1 100% !important;
+            }
+        }
     </style>
 </head>
-<body>
 
-<div class="dash-navbar">
-    <span class="dash-title">
-        <i class="fas fa-desktop" style="color: var(--uc-gold); margin-right: 8px;"></i>
+<body class="student-dashboard-page">
+
+<!-- STUDENT NAVBAR -->
+<div class="student-navbar">
+    <span class="student-navbar-title">
+        <i class="fas fa-desktop"></i>
         CCS Sit-in Monitoring System
     </span>
-    <div class="dash-menu">
-        <div class="dropdown">
-            <a href="#" class="dropdown-toggle">Notification <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 5px;"></i></a>
-            <div class="dropdown-menu">
-                <a href="#">No new notifications</a>
-            </div>
-        </div>
-        <a href="/dashboard">Home</a>
-        <a href="/edit-profile">Edit Profile</a>
-        <a href="{{ url_for('history') }}">History</a>
-        <a href="/reservation">Reservation</a>
+
+    <div class="student-nav-links">
+       <div class="dropdown" id="notificationDropdown">
+    {% if notifications %}
+        <a href="#" class="dropdown-toggle" onclick="toggleNotificationDropdown(event)">
+            <i class="fas fa-bell"></i>
+            Notification
+
+            {% if notification_count and notification_count > 0 %}
+                <span class="notif-count">{{ notification_count }}</span>
+            {% endif %}
+
+            <i class="fas fa-chevron-down" style="font-size:10px;"></i>
+        </a>
+    {% else %}
+        <a href="#" class="dropdown-toggle" onclick="toggleNotificationDropdown(event)">
+            <i class="fas fa-bell"></i>
+            Notification
+            <i class="fas fa-chevron-down" style="font-size:10px;"></i>
+        </a>
+    {% endif %}
+
+    <div class="dropdown-menu">
+        {% if notifications %}
+            {% for n in notifications %}
+                <a href="{{ url_for('read_notification', notif_id=n['id']) }}" class="notif-item">
+                    <span>{{ n['message'] }}</span>
+                    <small>{{ n['created_at'] }}</small>
+                </a>
+            {% endfor %}
+        {% else %}
+            <a href="#">No sit-in notifications</a>
+        {% endif %}
+    </div>
+</div>
+
+        <a href="/dashboard" class="active"><i class="fas fa-home"></i>Home</a>
+        <a href="/edit-profile"><i class="fas fa-user-edit"></i>Edit Profile</a>
+        <a href="{{ url_for('history') }}"><i class="fas fa-history"></i>History</a>
+        <a href="/reservation"><i class="fas fa-calendar-check"></i>Reservation</a>
         <a href="/logout" class="logout-btn">Log out</a>
     </div>
 </div>
 
-<div class="dash-body">
+<main class="student-page">
 
-    <div class="dash-card" style="flex: 0 0 280px;">
-    <div class="dash-card-header">👤 Student Profile</div>
-    <div class="dash-card-body">
-        <div class="dash-avatar">
-            <img src="{{ url_for('static', filename='uploads/' + student['id_number'] + '.png') }}"
-                 alt="Avatar"
-                 onerror="this.src='https://ui-avatars.com/api/?name={{ student.first_name }}+{{ student.last_name }}&background=4b2c80&color=fff&size=120'">
+    <!-- HERO -->
+    <section class="dashboard-hero">
+        <div class="hero-title">
+            <div class="hero-icon">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <div>
+                <h1>Student Dashboard</h1>
+                <p>View your profile, announcements, remaining sessions, and laboratory rules.</p>
+            </div>
         </div>
 
-        <div class="dash-info-list">
-            <div class="dash-info-item">
-                <i class="fas fa-id-card dash-info-icon"></i>
-                <span><strong>ID:</strong> {{ student['id_number'] }}</span>
-            </div>
-            <div class="dash-info-item">
-                <i class="fas fa-user dash-info-icon"></i>
-                <span>{{ student['first_name'] }} {{ student['last_name'] }}</span>
-            </div>
-            <div class="dash-info-item">
-                <i class="fas fa-graduation-cap dash-info-icon"></i>
-                <span>{{ student['course'] }} - {{ student['course_level'] }}</span>
-            </div>
-            <div class="dash-info-item">
-                <i class="fas fa-envelope dash-info-icon"></i>
-                <span style="font-size: 0.8rem; word-break: break-all;">{{ student['email'] }}</span>
+        <div class="session-summary">
+            <p>Remaining Sessions</p>
+            <strong>{{ remaining }}</strong>
+        </div>
+    </section>
+
+    <!-- 3-COLUMN GRID -->
+    <section class="student-dashboard-grid">
+
+        <!-- PROFILE CARD -->
+        <div class="student-card profile-card">
+            <div class="student-card-header">
+                <i class="fas fa-user"></i>
+                Student Profile
             </div>
 
-            <div class="dash-info-item" style="margin-top: 10px; background: #fffbeb; padding: 10px; border-radius: 8px; border: 1px solid var(--uc-gold);">
-                <i class="fas fa-clock dash-info-icon" style="color: #b45309;"></i>
-                <span>
-                    <strong>Sessions:</strong> 
-                    <span style="color: #b45309; font-weight: 800; font-size: 1.1rem;">
-                        {{ remaining }}
-                    </span>
-                </span>
+            <div class="student-card-body">
+                <div class="profile-avatar">
+                    <img
+                        src="{{ url_for('static', filename='uploads/' + student['id_number'] + '.png') }}"
+                        alt="Avatar"
+                        onerror="this.src='https://ui-avatars.com/api/?name={{ student.first_name }}+{{ student.last_name }}&background=4b2c80&color=fff&size=120'"
+                    >
+                </div>
+
+                <h2 class="profile-name">{{ student['first_name'] }} {{ student['last_name'] }}</h2>
+                <p class="profile-id">{{ student['id_number'] }}</p>
+
+                <div class="profile-info-list">
+                    <div class="profile-info-item">
+                        <i class="fas fa-id-card profile-info-icon"></i>
+                        <span><strong>ID:</strong> {{ student['id_number'] }}</span>
+                    </div>
+
+                    <div class="profile-info-item">
+                        <i class="fas fa-graduation-cap profile-info-icon"></i>
+                        <span><strong>Course:</strong> {{ student['course'] }} - {{ student['course_level'] }}</span>
+                    </div>
+
+                    <div class="profile-info-item">
+                        <i class="fas fa-envelope profile-info-icon"></i>
+                        <span><strong>Email:</strong> {{ student['email'] }}</span>
+                    </div>
+
+                    <div class="profile-info-item session-info-box">
+                        <i class="fas fa-clock profile-info-icon"></i>
+                        <span>
+                            <strong>Sessions:</strong>
+                            <span class="session-number">{{ remaining }}</span>
+                        </span>
+                    </div>
+                </div>
             </div>
+        </div>
+
+        <!-- ANNOUNCEMENTS CARD -->
+        <div class="student-card announcement-card">
+            <div class="student-card-header">
+                <i class="fas fa-bullhorn"></i>
+                Announcements
+            </div>
+
+            <div class="student-card-body">
+                {% if announcements %}
+                    <div class="announcement-list">
+                        {% for a in announcements %}
+                        <div class="announcement-item">
+                            <p class="announcement-meta">
+                                <i class="fas fa-user-shield"></i>
+                                CCS Admin | {{ a['posted_at'][:10] }}
+                            </p>
+                            <p class="announcement-text">{{ a['message'] }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-announcement">
+                        <i class="fas fa-bullhorn"></i>
+                        <p>No announcements from admin yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- LAB RULES CARD -->
+        <div class="student-card rules-card">
+            <div class="student-card-header">
+                <i class="fas fa-clipboard-list"></i>
+                Lab Rules
+            </div>
+
+            <div class="student-card-body">
+                <h3 class="rules-university">University of Cebu</h3>
+                <p class="rules-college">College of Information &amp; Computer Studies</p>
+
+                <div class="rules-scroll">
+                    <p><strong>1.</strong> Maintain silence and discipline inside the laboratory.</p>
+                    <p><strong>2.</strong> Games are strictly prohibited. This includes computer games and card games.</p>
+                    <p><strong>3.</strong> Surfing is allowed only with permission. Illegal downloads are not allowed.</p>
+                    <p><strong>4.</strong> Food and drinks are strictly prohibited inside the laboratory.</p>
+                    <p><strong>5.</strong> Clean your workstation before leaving.</p>
+                    <p><strong>6.</strong> Report equipment damage immediately to the admin.</p>
+                    <p><strong>7.</strong> Log in and log out properly through the monitoring system.</p>
+                    <p><strong>8.</strong> Observe proper dress code at all times.</p>
+                    <p><strong>9.</strong> Only authorized users may use the laboratory computers.</p>
+                    <p><strong>10.</strong> Violations may result in disciplinary action.</p>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</main>
+
+<!-- SUCCESS MODAL -->
+<div id="statusModal" class="ccs-modal-overlay">
+    <div class="ccs-modal-card">
+        <div class="ccs-modal-header">
+            <i class="fas fa-check-circle"></i>
+        </div>
+
+        <div class="ccs-modal-body">
+            <h2>Operation Successful</h2>
+            <p id="modalMessage"></p>
+            <button onclick="hideModal()" class="ccs-btn-proceed">Proceed</button>
         </div>
     </div>
 </div>
 
-    <div class="dash-card" style="flex: 1;">
-        <div class="dash-card-header">📢 Announcements</div>
-        <div class="dash-card-body">
-            {% if announcements %}
-                {% for a in announcements %}
-                <div class="announcement-item">
-                    <p class="announcement-meta"><i class="fas fa-user-shield"></i> CCS Admin | {{ a['posted_at'][:10] }}</p>
-                    <p class="announcement-text">{{ a['message'] }}</p>
-                </div>
-                {% endfor %}
-            {% else %}
-                <div style="text-align: center; padding: 40px 0;">
-                    <i class="fas fa-bullhorn" style="font-size: 3rem; color: #eee; margin-bottom: 10px;"></i>
-                    <p style="font-size:13px; color:#aaa;">No announcements from admin yet.</p>
-                </div>
-            {% endif %}
-        </div>
-    </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const messages = {{ get_flashed_messages(with_categories=true) | tojson | safe }};
 
-    <div class="dash-card" style="flex: 1.2;">
-        <div class="dash-card-header">📋 Lab Rules</div>
-        <div class="dash-card-body dash-rules">
-            <h3 class="rules-university">University of Cebu</h3>
-            <p class="rules-college">COLLEGE OF INFORMATION &amp; COMPUTER STUDIES</p>
+    if (messages && messages.length > 0) {
+        messages.forEach(function(item) {
+            const category = item[0];
+            const message = item[1];
 
-            <div style="height: 350px; overflow-y: auto; padding-right: 10px;">
-                <p><strong>1.</strong> Maintain silence and discipline inside the laboratory.</p>
-                <p><strong>2.</strong> Games are strictly prohibited (Computer/Card games).</p>
-                <p><strong>3.</strong> Surfing is allowed only with permission. No illegal downloads.</p>
-                <p><strong>4.</strong> Food and drinks are strictly prohibited.</p>
-                <p><strong>5.</strong> Clean your workstation before leaving.</p>
-                <p><strong>6.</strong> Report equipment damage immediately to the admin.</p>
-                <p><strong>7.</strong> Log in and Log out properly via the monitoring system.</p>
-                <p><strong>8.</strong> Observe proper dress code at all times.</p>
-                <p><strong>9.</strong> Authorized users only.</p>
-                <p><strong>10.</strong> Violations result in disciplinary action.</p>
-            </div>
-        </div>
-    </div>
+            if (category === 'success') {
+                const modal = document.getElementById('statusModal');
+                const msgContainer = document.getElementById('modalMessage');
 
-</div>
-
-    <div id="statusModal" class="ccs-modal-overlay">
-        <div class="ccs-modal-card">
-            <div class="ccs-modal-header">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <div class="ccs-modal-body">
-                <h2>Operation Successful</h2>
-                <p id="modalMessage"></p>
-                <button onclick="hideModal()" class="ccs-btn-proceed">Proceed</button>
-            </div>
-        </div>
-    </div>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Capture flashed messages from Flask
-        const messages = {{ get_flashed_messages(with_categories=true) | tojson | safe }};
-        
-        if (messages && messages.length > 0) {
-            messages.forEach(function(item) {
-                const category = item[0];
-                const message = item[1];
-
-                if (category === 'success') {
-                    const modal = document.getElementById('statusModal');
-                    const msgContainer = document.getElementById('modalMessage');
-                    if (modal && msgContainer) {
-                        msgContainer.innerText = message;
-                        modal.style.display = 'flex';
-                    }
+                if (modal && msgContainer) {
+                    msgContainer.innerText = message;
+                    modal.style.display = 'flex';
                 }
-            });
-        }
-    });
-
-    function hideModal() {
-        document.getElementById('statusModal').style.display = 'none';
+            }
+        });
     }
+});
+
+function hideModal() {
+    const modal = document.getElementById('statusModal');
+
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+function toggleNotificationDropdown(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const dropdown = document.getElementById('notificationDropdown');
+
+    if (dropdown) {
+        dropdown.classList.toggle('open');
+    }
+}
+
+document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('notificationDropdown');
+
+    if (dropdown && !dropdown.contains(event.target)) {
+        dropdown.classList.remove('open');
+    }
+});
 </script>
 
 </body>

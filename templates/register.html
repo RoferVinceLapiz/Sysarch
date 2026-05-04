@@ -1,27 +1,539 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Sign Up</title>
+    <title>Student Registration - CCS Sit-in Monitoring System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        :root {
+            --uc-purple: #4b2c80;
+            --uc-purple-dark: #2d1a4d;
+            --uc-purple-light: #6b3fa0;
+            --uc-gold: #fdb813;
+            --text-dark: #111827;
+            --text-muted: #64748b;
+            --border-soft: #e5e7eb;
+            --danger: #dc2626;
+        }
+
+        body.student-register-page {
+            margin: 0 !important;
+            min-height: 100vh !important;
+            font-family: 'Segoe UI', Arial, sans-serif !important;
+            color: var(--text-dark) !important;
+            background:
+                radial-gradient(circle at 8% 18%, rgba(253, 184, 19, 0.22), transparent 26%),
+                radial-gradient(circle at 88% 10%, rgba(107, 63, 160, 0.16), transparent 28%),
+                linear-gradient(135deg, #fffaf0 0%, #f7f2ff 42%, #f8fafc 100%) !important;
+            overflow-x: hidden !important;
+        }
+
+        .student-register-page * {
+            box-sizing: border-box;
+        }
+
+        /* Prevent old style.css from adding duplicate icons/badges */
+        .student-register-page .form-title h3::before,
+        .student-register-page .form-title h3::after,
+        .student-register-page .register-brand-card::before,
+        .student-register-page .register-brand-card::after {
+            content: none !important;
+            display: none !important;
+        }
+
+        /* ================= TOP HEADER ================= */
+
+        .student-register-page .register-header {
+            width: min(1180px, calc(100% - 32px)) !important;
+            margin: 0 auto !important;
+            padding: 26px 0 10px !important;
+            background: transparent !important;
+            border: none !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 20px !important;
+            text-align: left !important;
+        }
+
+        .student-register-page .back-btn {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 10px 16px !important;
+            border-radius: 999px !important;
+            background: rgba(75, 44, 128, 0.10) !important;
+            color: var(--uc-purple) !important;
+            text-decoration: none !important;
+            font-size: 13px !important;
+            font-weight: 950 !important;
+            transition: all 0.25s ease !important;
+            border: none !important;
+        }
+
+        .student-register-page .back-btn:hover {
+            background: var(--uc-purple) !important;
+            color: #ffffff !important;
+            transform: translateY(-2px) !important;
+        }
+
+        .student-register-page .register-header h2 {
+            margin: 0 !important;
+            color: var(--uc-purple) !important;
+            font-size: 30px !important;
+            font-weight: 950 !important;
+            letter-spacing: -0.8px !important;
+        }
+
+        .student-register-page .register-header p {
+            margin: 4px 0 0 !important;
+            color: var(--text-muted) !important;
+            font-size: 14px !important;
+        }
+
+        /* ================= MAIN LAYOUT ================= */
+
+        .student-register-page .register-layout {
+            width: min(1180px, calc(100% - 32px)) !important;
+            min-height: calc(100vh - 110px) !important;
+            margin: 0 auto !important;
+            padding: 28px 0 54px !important;
+            display: grid !important;
+            grid-template-columns: minmax(300px, 410px) minmax(420px, 1fr) !important;
+            align-items: center !important;
+            gap: 48px !important;
+        }
+
+        /* ================= BRAND CARD ================= */
+
+        .student-register-page .register-brand-card {
+            padding: 34px !important;
+            border-radius: 30px !important;
+            background:
+                radial-gradient(circle at top left, rgba(253, 184, 19, 0.20), transparent 32%),
+                rgba(255, 255, 255, 0.54) !important;
+            border: 1px solid rgba(255, 255, 255, 0.75) !important;
+            box-shadow: 0 26px 70px rgba(31, 16, 70, 0.10) !important;
+            backdrop-filter: blur(14px) !important;
+            color: var(--text-dark) !important;
+            height: auto !important;
+        }
+
+        .student-register-page .system-badge {
+            display: inline-flex !important;
+            width: fit-content !important;
+            margin-bottom: 18px !important;
+            padding: 8px 13px !important;
+            border-radius: 999px !important;
+            background: rgba(253, 184, 19, 0.24) !important;
+            color: #b45309 !important;
+            font-size: 11px !important;
+            font-weight: 950 !important;
+            letter-spacing: 0.8px !important;
+            text-transform: uppercase !important;
+        }
+
+        .student-register-page .uc-logo-img {
+            width: 150px !important;
+            height: auto !important;
+            display: block !important;
+            margin-bottom: 24px !important;
+            filter: drop-shadow(0 14px 18px rgba(75, 44, 128, 0.16)) !important;
+            animation: none !important;
+        }
+
+        .student-register-page .register-brand-card h1 {
+            margin: 0 0 12px !important;
+            color: var(--text-dark) !important;
+            font-size: 32px !important;
+            line-height: 1.1 !important;
+            font-weight: 950 !important;
+            letter-spacing: -0.8px !important;
+        }
+
+        .student-register-page .register-brand-card p {
+            margin: 0 !important;
+            color: #475569 !important;
+            line-height: 1.7 !important;
+            font-size: 15px !important;
+        }
+
+        .student-register-page .register-benefits {
+            margin-top: 24px !important;
+            display: grid !important;
+            gap: 12px !important;
+        }
+
+        .student-register-page .register-benefits span {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            padding: 12px 14px !important;
+            border-radius: 999px !important;
+            background: #ffffff !important;
+            color: var(--text-dark) !important;
+            border: 1px solid #eef0f4 !important;
+            font-size: 13px !important;
+            font-weight: 850 !important;
+            box-shadow: 0 10px 22px rgba(31, 16, 70, 0.05) !important;
+        }
+
+        .student-register-page .center-col {
+            width: 100% !important;
+            max-width: none !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+
+        /* ================= REGISTER FORM ================= */
+
+        .student-register-page .register-form {
+            width: 100% !important;
+            max-width: 700px !important;
+            margin: 0 !important;
+            padding: 34px !important;
+            border-radius: 30px !important;
+            background: rgba(255, 255, 255, 0.94) !important;
+            border: 1px solid rgba(255, 255, 255, 0.82) !important;
+            box-shadow: 0 34px 90px rgba(31, 16, 70, 0.16) !important;
+            backdrop-filter: blur(18px) !important;
+            animation: none !important;
+        }
+
+        .student-register-page .form-title {
+            text-align: center !important;
+            margin-bottom: 28px !important;
+        }
+
+        .student-register-page .register-icon {
+            width: 58px !important;
+            height: 58px !important;
+            margin: 0 auto 12px !important;
+            border-radius: 20px !important;
+            background: linear-gradient(135deg, rgba(253, 184, 19, 0.28), rgba(75, 44, 128, 0.13)) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 31px !important;
+            box-shadow: 0 14px 28px rgba(31, 16, 70, 0.08) !important;
+        }
+
+        .student-register-page .form-title h3 {
+            margin: 0 !important;
+            color: var(--uc-purple) !important;
+            font-size: 29px !important;
+            font-weight: 950 !important;
+            letter-spacing: -0.6px !important;
+        }
+
+        .student-register-page .form-title p {
+            margin: 8px 0 0 !important;
+            color: var(--text-muted) !important;
+            font-size: 14px !important;
+            line-height: 1.5 !important;
+        }
+
+        .student-register-page .flash {
+            padding: 12px 14px !important;
+            border-radius: 14px !important;
+            font-size: 13px !important;
+            font-weight: 850 !important;
+            margin-bottom: 18px !important;
+        }
+
+        .student-register-page .flash.success {
+            background: #dcfce7 !important;
+            color: #166534 !important;
+            border: 1px solid #bbf7d0 !important;
+        }
+
+        .student-register-page .flash.error {
+            background: #fee2e2 !important;
+            color: #991b1b !important;
+            border: 1px solid #fecaca !important;
+        }
+
+        .student-register-page .form-grid {
+            width: 100% !important;
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 22px 18px !important;
+        }
+
+        .student-register-page .input-group {
+            width: 100% !important;
+            position: relative !important;
+            min-height: 66px !important;
+            opacity: 1 !important;
+            animation: none !important;
+        }
+
+        .student-register-page .input-group input,
+        .student-register-page .input-group select {
+            width: 100% !important;
+            height: 54px !important;
+            min-height: 54px !important;
+            border: 1.8px solid var(--border-soft) !important;
+            border-radius: 16px !important;
+            background: #ffffff !important;
+            color: var(--text-dark) !important;
+            font-size: 14px !important;
+            font-weight: 650 !important;
+            padding: 18px 14px 7px !important;
+            outline: none !important;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04) !important;
+            transition: all 0.22s ease !important;
+            box-sizing: border-box !important;
+        }
+
+        .student-register-page .input-group select {
+            appearance: none !important;
+            cursor: pointer !important;
+            background-image:
+                linear-gradient(45deg, transparent 50%, var(--uc-purple) 50%),
+                linear-gradient(135deg, var(--uc-purple) 50%, transparent 50%) !important;
+            background-position:
+                calc(100% - 18px) 24px,
+                calc(100% - 13px) 24px !important;
+            background-size: 5px 5px, 5px 5px !important;
+            background-repeat: no-repeat !important;
+            padding-right: 38px !important;
+        }
+
+        .student-register-page .input-group input:focus,
+        .student-register-page .input-group select:focus {
+            border-color: var(--uc-purple) !important;
+            box-shadow:
+                0 0 0 4px rgba(75, 44, 128, 0.12),
+                0 12px 26px rgba(75, 44, 128, 0.08) !important;
+            transform: translateY(-1px) !important;
+        }
+
+        .student-register-page .input-label {
+            position: absolute !important;
+            top: 9px !important;
+            left: 14px !important;
+            margin: 0 !important;
+            color: var(--text-dark) !important;
+            font-size: 11px !important;
+            font-weight: 900 !important;
+            pointer-events: none !important;
+            letter-spacing: 0.2px !important;
+            transition: all 0.18s ease !important;
+            text-transform: none !important;
+        }
+
+        .student-register-page .input-group input:focus + .input-label,
+        .student-register-page .input-group input:not(:placeholder-shown) + .input-label,
+        .student-register-page .input-group select:focus + .input-label,
+        .student-register-page .input-group select:valid + .input-label {
+            color: var(--uc-purple) !important;
+            text-transform: uppercase !important;
+            font-size: 10px !important;
+            letter-spacing: 0.6px !important;
+        }
+
+        .student-register-page .error-msg {
+            display: block !important;
+            min-height: 14px !important;
+            margin: 0 0 4px 4px !important;
+            color: var(--danger) !important;
+            font-size: 11px !important;
+            font-weight: 850 !important;
+            animation: none !important;
+        }
+
+        .student-register-page .input-error {
+            border-color: var(--danger) !important;
+            background: #fff7f7 !important;
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.10) !important;
+        }
+
+        .student-register-page .register-actions {
+            margin-top: 26px !important;
+            display: grid !important;
+            grid-template-columns: minmax(0, 1fr) auto !important;
+            align-items: center !important;
+            gap: 18px !important;
+        }
+
+        .student-register-page .register-btn {
+            width: 100% !important;
+            min-height: 58px !important;
+            margin: 0 !important;
+            border: none !important;
+            border-radius: 16px !important;
+            background: linear-gradient(135deg, var(--uc-purple), var(--uc-purple-light)) !important;
+            color: #ffffff !important;
+            font-size: 15px !important;
+            font-weight: 950 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            cursor: pointer !important;
+            box-shadow: 0 16px 30px rgba(75, 44, 128, 0.26) !important;
+            transition: all 0.25s ease !important;
+            padding: 0 26px !important;
+        }
+
+        .student-register-page .register-btn:hover {
+            background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+            color: var(--uc-purple-dark) !important;
+            transform: translateY(-3px) !important;
+            box-shadow: 0 20px 36px rgba(245, 158, 11, 0.28) !important;
+        }
+
+        .student-register-page .signin-note {
+            margin: 0 !important;
+            color: var(--text-muted) !important;
+            font-size: 13px !important;
+            font-weight: 700 !important;
+            text-align: right !important;
+        }
+
+        .student-register-page .signin-note a {
+            color: var(--uc-purple) !important;
+            font-weight: 950 !important;
+            text-decoration: none !important;
+        }
+
+        .student-register-page .signin-note a:hover {
+            color: #b45309 !important;
+            text-decoration: underline !important;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 980px) {
+            .student-register-page .register-layout {
+                grid-template-columns: 1fr !important;
+                gap: 24px !important;
+                align-items: stretch !important;
+            }
+
+            .student-register-page .register-brand-card {
+                text-align: center !important;
+            }
+
+            .student-register-page .system-badge,
+            .student-register-page .uc-logo-img {
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+
+            .student-register-page .register-benefits {
+                max-width: 440px !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+
+            .student-register-page .register-header {
+                align-items: flex-start !important;
+            }
+
+            .student-register-page .register-form {
+                max-width: 760px !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .student-register-page .register-header {
+                flex-direction: column !important;
+                padding-top: 18px !important;
+            }
+
+            .student-register-page .register-header h2 {
+                font-size: 24px !important;
+            }
+
+            .student-register-page .register-form {
+                padding: 24px 18px !important;
+                border-radius: 24px !important;
+            }
+
+            .student-register-page .form-grid {
+                grid-template-columns: 1fr !important;
+                gap: 18px !important;
+            }
+
+            .student-register-page .register-actions {
+                grid-template-columns: 1fr !important;
+            }
+
+            .student-register-page .signin-note {
+                text-align: center !important;
+            }
+
+            .student-register-page .register-btn {
+                width: 100% !important;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .student-register-page .register-layout,
+            .student-register-page .register-header {
+                width: min(100% - 22px, 1180px) !important;
+            }
+
+            .student-register-page .register-brand-card {
+                padding: 24px 18px !important;
+                border-radius: 24px !important;
+            }
+
+            .student-register-page .register-brand-card h1 {
+                font-size: 26px !important;
+            }
+
+            .student-register-page .form-title h3 {
+                font-size: 24px !important;
+            }
+        }
+    </style>
 </head>
 
-<body style="background: linear-gradient(135deg, #4b2c80 25%, #f0f2f5 25%); background-attachment: fixed;">
+<body class="student-register-page">
 
     <div class="register-header">
-        <a href="/" class="back-btn">Back</a>
-        <h2>Sign up</h2>
+        <a href="/" class="back-btn">← Back</a>
+        <div>
+            <h2>Student Sit-in Monitoring</h2>
+            <p>Create your account to reserve, track, and manage your laboratory sit-in sessions.</p>
+        </div>
     </div>
 
-    <div class="register-layout">
+    <main class="register-layout">
 
-        <div class="side-col">
+        <section class="register-brand-card">
+            <span class="system-badge">Lab Monitoring System</span>
+
             <img class="uc-logo-img" src="{{ url_for('static', filename='Uc logo.png') }}" alt="UC Logo">
-        </div>
 
-        <div class="center-col">
+            <h1>Student Sit-in Portal</h1>
+
+            <p>
+                Register your student account to access the sit-in monitoring system,
+                view announcements, manage reservations, and track your laboratory sessions.
+            </p>
+
+            <div class="register-benefits">
+                <span>✓ Reserve sit-in sessions</span>
+                <span>✓ Track remaining sessions</span>
+                <span>✓ View lab announcements</span>
+            </div>
+        </section>
+
+        <section class="center-col">
             <form class="register-form" method="POST" action="/register" id="registerForm" novalidate>
+
+                <div class="form-title">
+                    <div class="register-icon">🧑‍🎓</div>
+                    <h3>Student Registration</h3>
+                    <p>Enter your student details to start using the sit-in monitoring system.</p>
+                </div>
 
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
@@ -31,113 +543,119 @@
                     {% endif %}
                 {% endwith %}
 
-                <div class="input-group">
-                    <span class="error-msg" id="id_number_error"></span>
-                    <input type="text" name="id_number" id="id_number" placeholder="ID Number">
-                    <span class="input-label">ID Number</span>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <span class="error-msg" id="id_number_error"></span>
+                        <input type="text" name="id_number" id="id_number" placeholder=" ">
+                        <span class="input-label">ID Number</span>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="error-msg" id="last_name_error"></span>
+                        <input type="text" name="last_name" id="last_name" placeholder=" ">
+                        <span class="input-label">Last Name</span>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="error-msg" id="first_name_error"></span>
+                        <input type="text" name="first_name" id="first_name" placeholder=" ">
+                        <span class="input-label">First Name</span>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="error-msg" id="middle_name_error"></span>
+                        <input type="text" name="middle_name" id="middle_name" placeholder=" ">
+                        <span class="input-label">Middle Name</span>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="error-msg" id="course_error"></span>
+                        <select class="register-input-field" name="course" id="course" required>
+                            <option value="" disabled selected></option>
+                            <option value="BSIT">BSIT - Information Technology</option>
+                            <option value="BSCS">BSCS - Computer Science</option>
+                            <option value="BSCE">BSCE - Civil Engineering</option>
+                            <option value="BSEE">BSEE - Electrical Engineering</option>
+                            <option value="BSME">BSME - Mechanical Engineering</option>
+                            <option value="BSECE">BSECE - Electronics Engineering</option>
+                            <option value="BSIE">BSIE - Industrial Engineering</option>
+                            <option value="BSCHE">BSChE - Chemical Engineering</option>
+                            <option value="BSMATH">BS Mathematics</option>
+                            <option value="BSBIO">BS Biology</option>
+                            <option value="BSPSYCH">BS Psychology</option>
+                            <option value="ABCOMM">AB Communication</option>
+                            <option value="ABPOLSCI">AB Political Science</option>
+                            <option value="BSBA">BSBA - Business Administration</option>
+                            <option value="BSACT">BS Accountancy</option>
+                            <option value="BSMA">BS Management Accounting</option>
+                            <option value="BSENT">BS Entrepreneurship</option>
+                            <option value="BEED">BEED - Elementary Education</option>
+                            <option value="BSED">BSED - Secondary Education</option>
+                            <option value="BSN">BSN - Nursing</option>
+                            <option value="BSPHAR">BS Pharmacy</option>
+                            <option value="BSHM">BSHM - Hospitality Management</option>
+                            <option value="BSTM">BSTM - Tourism Management</option>
+                            <option value="BSCJ">BSCJ - Criminal Justice</option>
+                            <option value="JD">JD - Juris Doctor</option>
+                            <option value="BSARCH">BS Architecture</option>
+                            <option value="BSSW">BS Social Work</option>
+                            <option value="BSMARE">BS Marine Engineering</option>
+                            <option value="BSMARTR">BS Marine Transportation</option>
+                        </select>
+                        <span class="input-label">Course</span>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="error-msg" id="course_level_error"></span>
+                        <select class="register-input-field" name="course_level" id="course_level" required>
+                            <option value="" disabled selected></option>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                        </select>
+                        <span class="input-label">Course Level</span>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="error-msg" id="password_error"></span>
+                        <input type="password" name="password" id="password" placeholder=" ">
+                        <span class="input-label">Password</span>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="error-msg" id="repeat_password_error"></span>
+                        <input type="password" name="repeat_password" id="repeat_password" placeholder=" ">
+                        <span class="input-label">Repeat Password</span>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="error-msg" id="email_error"></span>
+                        <input type="email" name="email" id="email" placeholder=" ">
+                        <span class="input-label">Email Address</span>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="error-msg" id="address_error"></span>
+                        <input type="text" name="address" id="address" placeholder=" ">
+                        <span class="input-label">Home Address</span>
+                    </div>
                 </div>
 
-                <div class="input-group">
-                    <span class="error-msg" id="last_name_error"></span>
-                    <input type="text" name="last_name" id="last_name" placeholder="Last Name">
-                    <span class="input-label">Last Name</span>
-                </div>
+                <div class="register-actions">
+                    <button type="submit" class="register-btn" onclick="return validateRegister()">
+                        Register Student Account
+                    </button>
 
-                <div class="input-group">
-                    <span class="error-msg" id="first_name_error"></span>
-                    <input type="text" name="first_name" id="first_name" placeholder="First Name">
-                    <span class="input-label">First Name</span>
+                    <p class="signin-note">
+                        Already have an account? <a href="/">Log in here</a>
+                    </p>
                 </div>
-
-                <div class="input-group">
-                    <span class="error-msg" id="middle_name_error"></span>
-                    <input type="text" name="middle_name" id="middle_name" placeholder="Middle Name">
-                    <span class="input-label">Middle Name</span>
-                </div>
-
-                <div class="input-group">
-                    <span class="error-msg" id="course_error"></span>
-                    <select class="register-input-field" name="course" id="course">
-                        <option value="" disabled selected>Course</option>
-                        <option value="BSIT">BSIT - Information Technology</option>
-                        <option value="BSCS">BSCS - Computer Science</option>
-                        <option value="BSCE">BSCE - Civil Engineering</option>
-                        <option value="BSEE">BSEE - Electrical Engineering</option>
-                        <option value="BSME">BSME - Mechanical Engineering</option>
-                        <option value="BSECE">BSECE - Electronics Engineering</option>
-                        <option value="BSIE">BSIE - Industrial Engineering</option>
-                        <option value="BSCHE">BSChE - Chemical Engineering</option>
-                        <option value="BSMATH">BS Mathematics</option>
-                        <option value="BSBIO">BS Biology</option>
-                        <option value="BSPSYCH">BS Psychology</option>
-                        <option value="ABCOMM">AB Communication</option>
-                        <option value="ABPOLSCI">AB Political Science</option>
-                        <option value="BSBA">BSBA - Business Administration</option>
-                        <option value="BSACT">BS Accountancy</option>
-                        <option value="BSMA">BS Management Accounting</option>
-                        <option value="BSENT">BS Entrepreneurship</option>
-                        <option value="BEED">BEED - Elementary Education</option>
-                        <option value="BSED">BSED - Secondary Education</option>
-                        <option value="BSN">BSN - Nursing</option>
-                        <option value="BSPHAR">BS Pharmacy</option>
-                        <option value="BSHM">BSHM - Hospitality Management</option>
-                        <option value="BSTM">BSTM - Tourism Management</option>
-                        <option value="BSCJ">BSCJ - Criminal Justice</option>
-                        <option value="JD">JD - Juris Doctor</option>
-                        <option value="BSARCH">BS Architecture</option>
-                        <option value="BSSW">BS Social Work</option>
-                        <option value="BSMARE">BS Marine Engineering</option>
-                        <option value="BSMARTR">BS Marine Transportation</option>
-                    </select>
-                    <span class="input-label">Course</span>
-                </div>
-
-                <div class="input-group">
-                    <span class="error-msg" id="course_level_error"></span>
-                    <select class="register-input-field" name="course_level" id="course_level">
-                        <option value="" disabled selected>Course Level</option>
-                        <option value="1">1st Year</option>
-                        <option value="2">2nd Year</option>
-                        <option value="3">3rd Year</option>
-                        <option value="4">4th Year</option>
-                    </select>
-                    <span class="input-label">Course Level</span>
-                </div>
-
-                <div class="input-group">
-                    <span class="error-msg" id="password_error"></span>
-                    <input type="password" name="password" id="password" placeholder="Password">
-                    <span class="input-label">Password</span>
-                </div>
-
-                <div class="input-group">
-                    <span class="error-msg" id="repeat_password_error"></span>
-                    <input type="password" name="repeat_password" id="repeat_password" placeholder="Repeat your password">
-                    <span class="input-label">Repeat password</span>
-                </div>
-
-                <div class="input-group">
-                    <span class="error-msg" id="email_error"></span>
-                    <input type="email" name="email" id="email" placeholder="Email">
-                    <span class="input-label">Email Address</span>
-                </div>
-
-                <div class="input-group">
-                    <span class="error-msg" id="address_error"></span>
-                    <input type="text" name="address" id="address" placeholder="Address">
-                    <span class="input-label">Home Address</span>
-                </div>
-
-                <button type="submit" class="register-btn" onclick="return validateRegister()">Register</button>
 
             </form>
-        </div>
+        </section>
 
-        <div class="side-col">
-            <img class="register-char-img" src="{{ url_for('static', filename='register.png') }}" alt="Register Character">
-        </div>
-
-    </div>
+    </main>
 
 <script>
 function validateRegister() {
@@ -156,26 +674,47 @@ function validateRegister() {
         { id: 'address',         errorId: 'address_error',         msg: '⚠ Home Address is required.' },
     ];
 
-    // Reset all errors first
     fields.forEach(f => {
-        document.getElementById(f.errorId).textContent = '';
-        document.getElementById(f.id).classList.remove('input-error');
+        const errorEl = document.getElementById(f.errorId);
+        const inputEl = document.getElementById(f.id);
+
+        if (errorEl) errorEl.textContent = '';
+        if (inputEl) inputEl.classList.remove('input-error');
     });
 
-    // Validate each field
     fields.forEach(f => {
         const el = document.getElementById(f.id);
-        if (el.value.trim() === '' || el.value === '') {
-            document.getElementById(f.errorId).textContent = f.msg;
+        const errorEl = document.getElementById(f.errorId);
+
+        if (!el || !errorEl) return;
+
+        if (el.value.trim() === '') {
+            errorEl.textContent = f.msg;
             el.classList.add('input-error');
             valid = false;
         }
     });
 
-    // Extra check: passwords must match
+    const email = document.getElementById('email');
+    const emailError = document.getElementById('email_error');
+    const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,}$/i;
+
+    if (email.value.trim() !== '' && !emailPattern.test(email.value.trim())) {
+        emailError.textContent = '⚠ Please enter a valid email address.';
+        email.classList.add('input-error');
+        valid = false;
+    }
+
     const password = document.getElementById('password');
     const repeat = document.getElementById('repeat_password');
+    const passwordError = document.getElementById('password_error');
     const repeatError = document.getElementById('repeat_password_error');
+
+    if (password.value && password.value.length < 8) {
+        passwordError.textContent = '⚠ Password must be at least 8 characters.';
+        password.classList.add('input-error');
+        valid = false;
+    }
 
     if (password.value && repeat.value && password.value !== repeat.value) {
         repeatError.textContent = '⚠ Passwords do not match.';
