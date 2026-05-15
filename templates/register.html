@@ -403,6 +403,77 @@
             color: #b45309 !important;
             text-decoration: underline !important;
         }
+        /* =========================================================
+   REGISTER INPUTS ONLY - DARK MODE FIX
+   This only affects the form fields, labels, and validation text.
+========================================================= */
+
+body.dark-mode.student-register-page .register-form .input-group input,
+body.dark-mode.student-register-page .register-form .input-group select,
+body.dark-mode.student-register-page .register-form .register-input-field {
+    background: #020617 !important;
+    background-color: #020617 !important;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    caret-color: #f8fafc !important;
+    border: 1.8px solid rgba(253, 184, 19, 0.50) !important;
+    box-shadow:
+        0 10px 24px rgba(0, 0, 0, 0.26),
+        0 0 14px rgba(253, 184, 19, 0.08) !important;
+    opacity: 1 !important;
+}
+
+body.dark-mode.student-register-page .register-form .input-group input:focus,
+body.dark-mode.student-register-page .register-form .input-group select:focus,
+body.dark-mode.student-register-page .register-form .register-input-field:focus {
+    border-color: #fdb813 !important;
+    outline: none !important;
+    box-shadow:
+        0 0 0 4px rgba(253, 184, 19, 0.16),
+        0 0 24px rgba(253, 184, 19, 0.14) !important;
+}
+
+body.dark-mode.student-register-page .register-form .input-label {
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+    background: transparent !important;
+    text-shadow: none !important;
+}
+
+body.dark-mode.student-register-page .register-form .input-group select option {
+    background: #020617 !important;
+    color: #f8fafc !important;
+}
+
+/* keep normal dropdown arrow, no big triangle */
+body.dark-mode.student-register-page .register-form .input-group select {
+    appearance: auto !important;
+    -webkit-appearance: menulist !important;
+    background-image: none !important;
+}
+
+/* placeholders */
+body.dark-mode.student-register-page .register-form .input-group input::placeholder {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
+    opacity: 1 !important;
+}
+
+/* validation errors */
+body.dark-mode.student-register-page .register-form .error-msg {
+    color: #fca5a5 !important;
+    -webkit-text-fill-color: #fca5a5 !important;
+}
+
+/* browser autofill white background fix */
+body.dark-mode.student-register-page .register-form input:-webkit-autofill,
+body.dark-mode.student-register-page .register-form input:-webkit-autofill:hover,
+body.dark-mode.student-register-page .register-form input:-webkit-autofill:focus,
+body.dark-mode.student-register-page .register-form select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #020617 inset !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    caret-color: #f8fafc !important;
+}
 
         /* ================= RESPONSIVE ================= */
 
@@ -724,7 +795,8 @@ function validateRegister() {
 
     return valid;
 }
-</script>
 
+</script>
+<script src="{{ url_for('static', filename='darkmode.js') }}"></script>
 </body>
 </html>

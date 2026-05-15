@@ -123,37 +123,110 @@
             position: relative !important;
         }
 
-        .student-reservation-page .dropdown-menu {
-            display: none !important;
-            position: absolute !important;
-            top: calc(100% + 10px) !important;
-            right: 0 !important;
-            min-width: 240px !important;
-            background: #ffffff !important;
-            border-radius: 18px !important;
-            overflow: hidden !important;
-            box-shadow: 0 20px 45px rgba(31, 16, 70, 0.18) !important;
-            border: 1px solid rgba(255, 255, 255, 0.8) !important;
-            z-index: 10000 !important;
+        .notification-toggle-btn {
+            border: none !important;
+            background: transparent !important;
+            color: inherit !important;
+            font: inherit !important;
+            cursor: pointer !important;
         }
 
-        .student-reservation-page .dropdown:hover .dropdown-menu {
+        .notif-count {
+            min-width: 18px;
+            height: 18px;
+            padding: 0 6px;
+            border-radius: 999px;
+            background: #dc2626;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 950;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 4px;
+        }
+
+        .dropdown .notification-menu {
+            display: none !important;
+        }
+
+        .dropdown.show .notification-menu {
             display: block !important;
         }
 
-        .student-reservation-page .dropdown-menu a {
-            color: var(--text-dark) !important;
-            border-radius: 0 !important;
-            padding: 14px 16px !important;
-            min-height: auto !important;
-            font-size: 13px !important;
-            border-bottom: 1px solid #eef0f4 !important;
-            background: #ffffff !important;
+        .dropdown:hover .notification-menu {
+            display: none !important;
         }
 
-        .student-reservation-page .dropdown-menu a:hover {
-            background: #f7f2ff !important;
-            color: var(--uc-purple) !important;
+        .dropdown.show:hover .notification-menu {
+            display: block !important;
+        }
+
+        .notification-menu {
+            position: absolute !important;
+            top: 100% !important;
+            right: 0 !important;
+            max-height: 330px !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            min-width: 340px !important;
+            background: #ffffff !important;
+            border-radius: 16px !important;
+            box-shadow: 0 18px 45px rgba(31, 16, 70, 0.18) !important;
+            z-index: 999999 !important;
+            padding: 8px !important;
+        }
+
+        .notif-item {
+            display: flex !important;
+            align-items: flex-start !important;
+            gap: 10px !important;
+            white-space: normal !important;
+            line-height: 1.35 !important;
+            text-decoration: none !important;
+            padding: 12px !important;
+            border-bottom: 1px solid #eef0f4 !important;
+        }
+
+        .notif-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 12px;
+            background: #f7f2ff;
+            color: #4b2c80;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .notif-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+        }
+
+        .notif-message {
+            color: #111827;
+            font-size: 13px;
+            font-weight: 800;
+            word-break: break-word;
+        }
+
+        .notif-content small {
+            color: #6b7280;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .notif-empty {
+            padding: 18px;
+            color: #9ca3af;
+            font-size: 13px;
+            font-weight: 800;
+            text-align: center;
         }
 
         /* ================= PAGE ================= */
@@ -226,17 +299,6 @@
             box-shadow: 0 18px 42px rgba(75, 44, 128, 0.24) !important;
             position: relative !important;
             overflow: hidden !important;
-        }
-
-        .student-reservation-page .summary-card::after {
-            content: "\f274";
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            position: absolute;
-            right: 16px;
-            bottom: -14px;
-            font-size: 74px;
-            color: rgba(255, 255, 255, 0.13);
         }
 
         .student-reservation-page .summary-card p {
@@ -313,12 +375,6 @@
             gap: 12px !important;
         }
 
-        .student-reservation-page .reservation-card-header span {
-            display: inline-flex !important;
-            align-items: center !important;
-            gap: 9px !important;
-        }
-
         .student-reservation-page .reservation-card-body {
             padding: 24px !important;
         }
@@ -344,14 +400,6 @@
             font-weight: 900 !important;
             border-bottom: none !important;
             letter-spacing: 0.4px !important;
-        }
-
-        .student-reservation-page thead th:first-child {
-            border-top-left-radius: 14px !important;
-        }
-
-        .student-reservation-page thead th:last-child {
-            border-top-right-radius: 14px !important;
         }
 
         .student-reservation-page tbody td {
@@ -424,20 +472,6 @@
             color: #9ca3af !important;
         }
 
-        .student-reservation-page .empty-state i {
-            display: block !important;
-            font-size: 60px !important;
-            margin-bottom: 14px !important;
-            color: #d1d5db !important;
-        }
-
-        .student-reservation-page .empty-state p {
-            margin: 0 !important;
-            color: #9ca3af !important;
-            font-size: 15px !important;
-            font-weight: 750 !important;
-        }
-
         /* ================= MODAL ================= */
 
         .student-reservation-page .reservation-modal-overlay {
@@ -453,7 +487,7 @@
         }
 
         .student-reservation-page .reservation-modal {
-            width: min(720px, 100%) !important;
+            width: min(760px, 100%) !important;
             height: min(90vh, 760px) !important;
             overflow: hidden !important;
             border-radius: 26px !important;
@@ -727,87 +761,227 @@
             font-weight: 750 !important;
         }
 
-        .student-reservation-page .reservation-note i {
-            color: #b45309 !important;
-            margin-right: 6px !important;
+        /* ================= LAB APPS ================= */
+
+        .student-reservation-page .lab-apps-preview {
+            margin-top: 14px !important;
+            padding: 14px !important;
+            border-radius: 16px !important;
+            background: #f7f2ff !important;
+            border: 1.5px solid #ede9fe !important;
+        }
+
+        .student-reservation-page .lab-apps-preview-title {
+            color: var(--uc-purple) !important;
+            font-size: 13px !important;
+            font-weight: 950 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 7px !important;
+            margin-bottom: 10px !important;
+        }
+
+        .student-reservation-page .lab-apps-list {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+        }
+
+        .student-reservation-page .lab-app-chip {
+            padding: 7px 11px !important;
+            border-radius: 999px !important;
+            background: #ffffff !important;
+            color: #374151 !important;
+            border: 1px solid #e5e7eb !important;
+            font-size: 12px !important;
+            font-weight: 850 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+        }
+
+        .student-reservation-page .lab-app-empty {
+            color: #9ca3af !important;
+            font-size: 13px !important;
+            font-weight: 800 !important;
         }
 
         /* ================= PC GRID ================= */
 
-        .student-reservation-page .pc-grid {
-            display: grid !important;
-            grid-template-columns: repeat(10, minmax(38px, 1fr)) !important;
-            gap: 7px !important;
-            margin-top: 12px !important;
+        .pc-selection-header {
+            margin-bottom: 15px;
         }
 
-        .student-reservation-page .pc-btn {
-            min-height: 38px !important;
-            border-radius: 12px !important;
-            font-size: 12px !important;
+        .pc-selection-header h3 {
+            margin: 0;
+            color: var(--uc-purple);
+            font-size: 20px;
+            font-weight: 950;
+        }
+
+        .pc-selection-header p {
+            margin: 6px 0 0;
+            color: #6b7280;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .pc-legend {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+            font-size: 12px;
+            font-weight: 850;
+            color: #374151;
+        }
+
+        .pc-legend span {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .legend-box {
+            width: 16px;
+            height: 16px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .legend-box.available {
+            background: #dcfce7;
+            border: 1px solid #16a34a;
+        }
+
+        .legend-box.unavailable {
+            background: #fee2e2;
+            border: 1px solid #dc2626;
+        }
+
+        .legend-box.selected {
+            background: var(--uc-purple);
+            border: 1px solid var(--uc-purple);
+        }
+
+        .pc-grid {
+            display: grid;
+            grid-template-columns: repeat(10, minmax(0, 1fr));
+            gap: 10px;
+            padding: 8px 0 20px;
+        }
+
+        .pc-card {
+            min-height: 72px;
+            border: 2px solid #16a34a;
+            border-radius: 14px;
+            background: #dcfce7;
+            color: #166534;
+            cursor: pointer;
+            font-weight: 950;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .pc-card i {
+            font-size: 20px;
+        }
+
+        .pc-card .pc-hint {
+            display: inline-block;
+            margin-top: 4px;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 900;
+            background: rgba(0,0,0,0.03);
+            color: inherit;
+            opacity: 0.9;
+        }
+
+        .pc-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(22, 163, 74, 0.18);
+        }
+
+        .pc-card.unavailable {
+            background: #fee2e2;
+            border-color: #dc2626;
+            color: #991b1b;
+            cursor: not-allowed;
+            opacity: 0.75;
+        }
+
+        .pc-card.unavailable:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .pc-card.selected {
+            background: var(--uc-purple);
+            border-color: var(--uc-purple);
+            color: white;
+            box-shadow: 0 12px 26px rgba(75, 44, 128, 0.28);
+        }
+
+        /* ================= RESERVATION DETAILS TABLE ================= */
+
+        .student-reservation-page .reservation-details-box {
+            margin-top: 20px !important;
+            padding: 16px !important;
+            border-radius: 18px !important;
+            background: #f8f5ff !important;
+            border: 1.5px solid #ede9fe !important;
+        }
+
+        .student-reservation-page .reservation-details-box h3 {
+            margin: 0 0 14px !important;
+            color: var(--uc-purple) !important;
+            font-size: 16px !important;
             font-weight: 950 !important;
-            cursor: pointer !important;
             display: flex !important;
             align-items: center !important;
-            justify-content: center !important;
-            gap: 5px !important;
-            transition: all 0.22s ease !important;
+            gap: 8px !important;
         }
 
-        .student-reservation-page .pc-btn.available {
-            background: #dcfce7 !important;
-            color: #166534 !important;
-            border: 1px solid #bbf7d0 !important;
+        .student-reservation-page .reservation-details-table {
+            width: 100% !important;
+            min-width: 0 !important;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            overflow: hidden !important;
+            border-radius: 14px !important;
         }
 
-        .student-reservation-page .pc-btn.available:hover {
-            transform: translateY(-2px) !important;
-            box-shadow: 0 10px 20px rgba(22, 163, 74, 0.18) !important;
-        }
-
-        .student-reservation-page .pc-btn.unavailable {
-            background: #fee2e2 !important;
-            color: #991b1b !important;
-            border: 1px solid #fecaca !important;
-            cursor: not-allowed !important;
-            opacity: 0.8 !important;
-        }
-
-        .student-reservation-page .pc-btn.selected {
-            background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
-            color: var(--uc-purple-dark) !important;
-            border: 2px solid var(--uc-purple) !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 12px 24px rgba(245, 158, 11, 0.25) !important;
-        }
-
-        .student-reservation-page .pc-dot {
-            width: 10px !important;
-            height: 10px !important;
-            border-radius: 999px !important;
-            display: inline-block !important;
-            margin: 0 5px 0 12px !important;
-        }
-
-        .student-reservation-page .pc-dot.available {
-            background: #16a34a !important;
-        }
-
-        .student-reservation-page .pc-dot.unavailable {
-            background: #dc2626 !important;
-        }
-
-        .student-reservation-page .selected-pc-box {
-            margin-top: 10px !important;
-            padding: 10px 12px !important;
-            border-radius: 16px !important;
-            background: #f8f5ff !important;
-            border: 1px solid #ede9fe !important;
-            color: var(--uc-purple) !important;
+        .student-reservation-page .reservation-details-table th,
+        .student-reservation-page .reservation-details-table td {
+            padding: 13px 14px !important;
+            border-bottom: 1px solid #e5e7eb !important;
             font-size: 13px !important;
-            font-weight: 900 !important;
         }
 
+        .student-reservation-page .reservation-details-table th {
+            width: 190px !important;
+            background: var(--uc-purple) !important;
+            color: #ffffff !important;
+            text-align: left !important;
+            font-weight: 950 !important;
+        }
+
+        .student-reservation-page .reservation-details-table td {
+            background: #ffffff !important;
+            color: var(--text-dark) !important;
+            font-weight: 850 !important;
+        }
+
+        .student-reservation-page .reservation-details-table tr:last-child th,
+        .student-reservation-page .reservation-details-table tr:last-child td {
+            border-bottom: none !important;
+        }
 
         /* ================= SUCCESS MODAL ================= */
 
@@ -886,22 +1060,70 @@
             }
         }
 
+        /* ================= DARK MODE LOCAL FIXES ================= */
 
-
-        .student-reservation-page .reservation-step-screen[data-step="4"] {
-            min-height: 0 !important;
+        body.dark-mode.student-reservation-page .reservation-details-box {
+            background: #0f172a !important;
+            border: 1px solid rgba(148, 163, 184, 0.28) !important;
+            color: #f8fafc !important;
         }
 
-        .student-reservation-page .reservation-step-screen[data-step="4"] .step-screen-header {
-            margin-bottom: 14px !important;
+        body.dark-mode.student-reservation-page .reservation-details-box h3 {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
         }
 
-        .student-reservation-page .reservation-step-screen[data-step="4"] .step-screen-header p {
-            margin-top: 5px !important;
+        body.dark-mode.student-reservation-page .reservation-details-table th {
+            background: #2d1a4d !important;
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.24) !important;
         }
 
-        .student-reservation-page .reservation-step-screen[data-step="4"] .reservation-note {
-            font-size: 12px !important;
+        body.dark-mode.student-reservation-page .reservation-details-table td {
+            background: #111827 !important;
+            color: #f8fafc !important;
+            -webkit-text-fill-color: #f8fafc !important;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.24) !important;
+        }
+
+        body.dark-mode.student-reservation-page .pc-card {
+            background: rgba(22, 163, 74, 0.24) !important;
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+            border: 2px solid #22c55e !important;
+            opacity: 1 !important;
+        }
+
+        body.dark-mode.student-reservation-page .pc-card *,
+        body.dark-mode.student-reservation-page .pc-card i,
+        body.dark-mode.student-reservation-page .pc-card span {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+            opacity: 1 !important;
+        }
+
+        body.dark-mode.student-reservation-page .pc-card.unavailable {
+            background: rgba(220, 38, 38, 0.25) !important;
+            border: 2px solid #ef4444 !important;
+        }
+
+        body.dark-mode.student-reservation-page .pc-card.selected {
+            background: linear-gradient(135deg, #7c3aed, #4b2c80) !important;
+            border: 2px solid #fdb813 !important;
+        }
+
+        body.dark-mode.student-reservation-page .modal-footer-actions {
+            background: #111827 !important;
+            border-top: 1px solid rgba(148, 163, 184, 0.24) !important;
+        }
+
+        body.dark-mode.student-reservation-page .lab-app-chip {
+            background: rgba(253, 184, 19, 0.16) !important;
+            color: #fde68a !important;
+            -webkit-text-fill-color: #fde68a !important;
+            border: 1px solid rgba(253, 184, 19, 0.35) !important;
+            opacity: 1 !important;
         }
 
         /* ================= RESPONSIVE ================= */
@@ -914,32 +1136,10 @@
                 gap: 12px !important;
             }
 
-            .student-reservation-page .student-navbar-title {
-                white-space: normal !important;
-                line-height: 1.4 !important;
-            }
-
             .student-reservation-page .student-nav-links {
                 width: 100% !important;
                 flex-wrap: wrap !important;
                 justify-content: flex-start !important;
-            }
-
-            .student-reservation-page .student-nav-links a,
-            .student-reservation-page .dropdown-toggle {
-                min-height: 40px !important;
-                border-radius: 12px !important;
-                background: rgba(255, 255, 255, 0.08) !important;
-            }
-
-            .student-reservation-page .logout-btn {
-                border-radius: 12px !important;
-            }
-
-            .student-reservation-page .dropdown-menu {
-                left: 0 !important;
-                right: auto !important;
-                top: calc(100% + 8px) !important;
             }
 
             .student-reservation-page .page-hero {
@@ -972,39 +1172,9 @@
             }
         }
 
-        @media (max-width: 600px) {
-            .student-reservation-page .student-page {
-                width: min(100% - 22px, 1250px) !important;
-                margin: 24px auto 36px !important;
-            }
-
-            .student-reservation-page .hero-title {
-                align-items: flex-start !important;
-            }
-
-            .student-reservation-page .hero-icon {
-                width: 54px !important;
-                height: 54px !important;
-                font-size: 24px !important;
-            }
-
-            .student-reservation-page .hero-title h1 {
-                font-size: 25px !important;
-            }
-
-            .student-reservation-page .reservation-card-body {
-                padding: 18px !important;
-            }
-
-            .student-reservation-page .student-nav-links a,
-            .student-reservation-page .dropdown-toggle {
-                flex: 1 1 calc(50% - 8px) !important;
-                justify-content: center !important;
-                font-size: 12px !important;
-            }
-
-            .student-reservation-page .logout-btn {
-                flex: 1 1 100% !important;
+        @media (max-width: 520px) {
+            .student-reservation-page .pc-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
             }
 
             .student-reservation-page .modal-footer-actions {
@@ -1014,129 +1184,11 @@
             .student-reservation-page .modal-btn {
                 width: 100% !important;
             }
-        }
 
-        @media (max-width: 420px) {
-            .student-reservation-page .pc-grid {
-                grid-template-columns: repeat(4, minmax(42px, 1fr)) !important;
-            }
-
-            .student-reservation-page .step-progress {
-                grid-template-columns: 1fr !important;
+            .student-reservation-page .reservation-details-table th {
+                width: 130px !important;
             }
         }
-
-        .student-reservation-page .reservation-success-overlay {
-    display: none;
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: 100000 !important;
-    background: rgba(15, 15, 20, 0.72) !important;
-    backdrop-filter: blur(8px) !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 22px !important;
-}
-
-.student-reservation-page .reservation-success-card {
-    width: min(420px, 100%) !important;
-    background: #ffffff !important;
-    border-radius: 26px !important;
-    padding: 34px 28px !important;
-    text-align: center !important;
-    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.38) !important;
-    animation: successPop 0.28s ease-out !important;
-}
-
-.student-reservation-page .reservation-success-icon {
-    width: 82px !important;
-    height: 82px !important;
-    margin: 0 auto 18px !important;
-    border-radius: 50% !important;
-    background: #dcfce7 !important;
-    color: #16a34a !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    font-size: 44px !important;
-}
-
-.student-reservation-page .reservation-success-card h2 {
-    margin: 0 !important;
-    color: var(--uc-purple) !important;
-    font-size: 25px !important;
-    font-weight: 950 !important;
-}
-
-.student-reservation-page .reservation-success-card p {
-    margin: 10px 0 24px !important;
-    color: var(--text-muted) !important;
-    font-size: 14px !important;
-    line-height: 1.6 !important;
-    font-weight: 700 !important;
-}
-
-.student-reservation-page .reservation-success-btn {
-    width: 100% !important;
-    min-height: 52px !important;
-    border: none !important;
-    border-radius: 16px !important;
-    background: linear-gradient(135deg, var(--uc-purple), var(--uc-purple-light)) !important;
-    color: #ffffff !important;
-    font-size: 14px !important;
-    font-weight: 950 !important;
-    cursor: pointer !important;
-    box-shadow: 0 14px 26px rgba(75, 44, 128, 0.22) !important;
-}
-
-@keyframes successPop {
-    from {
-        transform: translateY(18px) scale(0.96);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-    }
-}
-.notif-count {
-    background: #ef4444 !important;
-    color: #ffffff !important;
-    min-width: 18px !important;
-    height: 18px !important;
-    padding: 0 5px !important;
-    border-radius: 999px !important;
-    font-size: 10px !important;
-    font-weight: 950 !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-.notif-item {
-    display: block !important;
-    white-space: normal !important;
-    line-height: 1.35 !important;
-}
-
-.notif-item span {
-    display: block !important;
-    font-weight: 850 !important;
-    color: var(--text-dark) !important;
-    margin-bottom: 5px !important;
-}
-
-.notif-item small {
-    display: block !important;
-    font-size: 11px !important;
-    color: var(--text-muted) !important;
-    font-weight: 700 !important;
-}
-
-.dropdown.open .dropdown-menu {
-    display: block !important;
-}
     </style>
 </head>
 
@@ -1150,43 +1202,59 @@
     </span>
 
     <div class="student-nav-links">
-        <<div class="dropdown" id="notificationDropdown">
-    {% if notifications %}
-        <a href="#" class="dropdown-toggle" onclick="toggleNotificationDropdown(event)">
-            <i class="fas fa-bell"></i>
-            Notification
+        <div class="dropdown" id="notificationDropdown">
+            <button type="button" class="dropdown-toggle notification-toggle-btn" onclick="toggleNotificationDropdown(event)">
+                <i class="fas fa-bell"></i>
+                Notification
 
-            {% if notification_count and notification_count > 0 %}
-                <span class="notif-count">{{ notification_count }}</span>
-            {% endif %}
+                {% if notification_count and notification_count > 0 %}
+                    <span class="notif-count" id="notifCount">{{ notification_count }}</span>
+                {% endif %}
 
-            <i class="fas fa-chevron-down" style="font-size:10px;"></i>
-        </a>
-    {% else %}
-        <a href="#" class="dropdown-toggle" onclick="toggleNotificationDropdown(event)">
-            <i class="fas fa-bell"></i>
-            Notification
-            <i class="fas fa-chevron-down" style="font-size:10px;"></i>
-        </a>
-    {% endif %}
+                <i class="fas fa-chevron-down" style="font-size:10px;"></i>
+            </button>
 
-    <div class="dropdown-menu">
-        {% if notifications %}
-            {% for n in notifications %}
-                <a href="{{ url_for('read_notification', notif_id=n['id']) }}" class="notif-item">
-                    <span>{{ n['message'] }}</span>
-                    <small>{{ n['created_at'] }}</small>
-                </a>
-            {% endfor %}
-        {% else %}
-            <a href="#">No sit-in notifications</a>
-        {% endif %}
-    </div>
-</div>
+            <div class="dropdown-menu notification-menu">
+                {% if notifications %}
+                    {% for n in notifications %}
+                        <a href="{{ url_for('read_notification', notif_id=n['id']) }}" class="notif-item">
+                            <span class="notif-icon">
+                                {% if 'announcement' in n['message']|lower %}
+                                    <i class="fas fa-bullhorn"></i>
+                                {% elif 'approved' in n['message']|lower %}
+                                    <i class="fas fa-check-circle"></i>
+                                {% elif 'rejected' in n['message']|lower %}
+                                    <i class="fas fa-times-circle"></i>
+                                {% elif 'reservation' in n['message']|lower %}
+                                    <i class="fas fa-calendar-check"></i>
+                                {% elif 'logged in' in n['message']|lower or 'sit-in' in n['message']|lower %}
+                                    <i class="fas fa-desktop"></i>
+                                {% elif 'reset' in n['message']|lower %}
+                                    <i class="fas fa-rotate-right"></i>
+                                {% else %}
+                                    <i class="fas fa-info-circle"></i>
+                                {% endif %}
+                            </span>
+
+                            <span class="notif-content">
+                                <span class="notif-message">{{ n['message'] }}</span>
+                                <small>{{ n['created_at'] }}</small>
+                            </span>
+                        </a>
+                    {% endfor %}
+                {% else %}
+                    <div class="notif-empty">
+                        <i class="fas fa-bell-slash"></i>
+                        No notifications yet.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
 
         <a href="/dashboard"><i class="fas fa-home"></i>Home</a>
         <a href="/edit-profile"><i class="fas fa-user-edit"></i>Edit Profile</a>
         <a href="{{ url_for('history') }}"><i class="fas fa-history"></i>History</a>
+        <a href="{{ url_for('sit_summary') }}"><i class="fas fa-chart-pie"></i>Sit-in Summary</a>
         <a href="/reservation" class="active"><i class="fas fa-calendar-check"></i>Reservation</a>
         <a href="/logout" class="logout-btn">Log out</a>
     </div>
@@ -1199,6 +1267,7 @@
             <div class="hero-icon">
                 <i class="fas fa-calendar-check"></i>
             </div>
+
             <div>
                 <h1>Laboratory Reservation</h1>
                 <p>View your recent reservations or create a new guided reservation request.</p>
@@ -1211,10 +1280,20 @@
                 <strong>{{ reservations|length if reservations else 0 }}</strong>
             </div>
 
-            <button type="button" class="add-reservation-btn" onclick="openReservationModal()">
-                <i class="fas fa-plus-circle"></i>
-                Add Reservation
-            </button>
+            {% if remaining > 0 %}
+                <button type="button" class="add-reservation-btn" onclick="openReservationModal()">
+                    <i class="fas fa-plus-circle"></i>
+                    Add Reservation
+                </button>
+                {% else %}
+                <button type="button" class="add-reservation-btn" disabled title="No remaining sessions">
+                    <i class="fas fa-plus-circle"></i>
+                    Add Reservation
+                </button>
+                <p style="color:red; font-weight:800; margin-top:5px;">
+                    You have no remaining sessions. Cannot make a reservation.
+                </p>
+                {% endif %}
         </div>
     </section>
 
@@ -1225,6 +1304,7 @@
                 <i class="fas fa-clock-rotate-left"></i>
                 Recent Reservations
             </span>
+
             <small style="opacity:0.82; font-weight:750; text-transform:none; letter-spacing:0;">
                 Showing your latest reservation requests
             </small>
@@ -1303,6 +1383,22 @@
 
 </main>
 
+<!-- NO SESSIONS MODAL -->
+<div id="noSessionsModal" class="reservation-success-overlay">
+    <div class="reservation-success-card">
+        <div class="reservation-success-icon">
+            <i class="fas fa-exclamation-circle" style="color:#dc2626;"></i>
+        </div>
+
+        <h2>No Remaining Sessions</h2>
+        <p>You have no remaining sit-in sessions left. You cannot make a reservation at this time.</p>
+
+        <button type="button" onclick="closeNoSessionsModal()" class="reservation-success-btn">
+            OK
+        </button>
+    </div>
+</div>
+
 <!-- RESERVATION MODAL -->
 <div id="reservationModal" class="reservation-modal-overlay">
     <div class="reservation-modal">
@@ -1310,13 +1406,16 @@
         <div class="reservation-modal-header">
             <div class="reservation-modal-title">
                 <i class="fas fa-calendar-plus" style="color: var(--uc-gold); font-size: 24px;"></i>
+
                 <div>
                     <h2>New Reservation</h2>
                     <p>Complete each step to submit your sit-in request.</p>
                 </div>
             </div>
 
-            <button type="button" class="reservation-modal-close" onclick="closeReservationModal()">&times;</button>
+            <button type="button" class="reservation-modal-close" onclick="closeReservationModal()">
+                &times;
+            </button>
         </div>
 
         <form method="POST" action="/reservation" id="reservationForm">
@@ -1328,14 +1427,17 @@
                         <i class="fas fa-calendar-day"></i>
                         When
                     </div>
+
                     <div class="step-pill" data-pill="2">
                         <i class="fas fa-door-open"></i>
                         Where
                     </div>
+
                     <div class="step-pill" data-pill="3">
                         <i class="fas fa-bullseye"></i>
                         What
                     </div>
+
                     <div class="step-pill" data-pill="4">
                         <i class="fas fa-desktop"></i>
                         PC
@@ -1348,6 +1450,7 @@
                         <div class="step-screen-icon">
                             <i class="fas fa-calendar-day"></i>
                         </div>
+
                         <h3>When is your sit-in?</h3>
                         <p>Select your preferred reservation date and time.</p>
                     </div>
@@ -1371,12 +1474,14 @@
                         <div class="step-screen-icon">
                             <i class="fas fa-door-open"></i>
                         </div>
+
                         <h3>Where do you want to sit in?</h3>
                         <p>Choose your preferred laboratory room.</p>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Laboratory</label>
+
                         <select name="lab" id="reservationLab" class="form-control" required>
                             <option value="" disabled selected>Select laboratory</option>
                             <option value="524">Lab 524</option>
@@ -1386,6 +1491,15 @@
                             <option value="542">Lab 542</option>
                             <option value="544">Lab 544</option>
                         </select>
+
+                        <div class="lab-apps-preview" id="labAppsPreview" style="display:none;">
+                            <div class="lab-apps-preview-title">
+                                <i class="fas fa-window-maximize"></i>
+                                Available Applications in Lab <span id="selectedLabText"></span>
+                            </div>
+
+                            <div class="lab-apps-list" id="labAppsList"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -1395,86 +1509,108 @@
                         <div class="step-screen-icon">
                             <i class="fas fa-bullseye"></i>
                         </div>
+
                         <h3>What is your purpose?</h3>
                         <p>Select the reason why you need to use the computer laboratory.</p>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Purpose</label>
-                        <select name="purpose" id="reservationPurpose" class="form-control" required>
-                            <option value="" disabled selected>Select purpose</option>
-                            <option value="Programming">Programming</option>
-                            <option value="Assignment">Assignment</option>
-                            <option value="Research">Research</option>
-                            <option value="Project">Project</option>
-                            <option value="Practice">Practice</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
+                        <label class="form-label">Choose Application</label>
 
-                    <div class="form-group" id="otherPurposeGroup" style="display:none;">
-                        <label class="form-label">Please specify</label>
-                        <input
-                            type="text"
-                            id="otherPurposeInput"
-                            class="form-control"
-                            placeholder="Enter your purpose"
-                        >
+                        <select name="purpose" id="reservationPurpose" class="form-control" required>
+                            <option value="" disabled selected>Select a laboratory first</option>
+                        </select>
                     </div>
                 </div>
 
                 <!-- STEP 4 -->
                 <div class="reservation-step-screen" data-step="4">
-                    <div class="step-screen-header">
-                        <div class="step-screen-icon">
-                            <i class="fas fa-desktop"></i>
-                        </div>
-                        <h3>Choose your PC number</h3>
-                        <p>
-                            Select one PC.
-                            <span class="pc-dot available"></span> Available
-                            <span class="pc-dot unavailable"></span> Not available
-                        </p>
+                    <div class="pc-selection-header">
+                        <h3>Select PC Number</h3>
+                        <p>Green means available. Red means already reserved.</p>
                     </div>
 
-                    <input type="hidden" name="pc_number" id="selectedPcNumber" required>
+                    <div class="pc-legend">
+                        <span>
+                            <span class="legend-box available"></span>
+                            Available
+                        </span>
 
-                    <div class="pc-grid" id="pcGrid"></div>
+                        <span>
+                            <span class="legend-box unavailable"></span>
+                            Not Available
+                        </span>
 
-                    <div class="selected-pc-box" id="selectedPcBox">
-                        No PC selected yet.
+                        <span>
+                            <span class="legend-box selected"></span>
+                            Selected
+                        </span>
                     </div>
 
-                    <div class="reservation-note">
-                        <i class="fas fa-info-circle"></i>
-                        Green PCs are available. Red PCs are already reserved or unavailable for your selected lab, date, and time.
+                    <div id="pcGrid" class="pc-grid"></div>
+
+                    <input type="hidden" name="pc_number" id="pcNumberInput">
+
+                    <div class="reservation-details-box">
+                        <h3>
+                            <i class="fas fa-clipboard-list"></i>
+                            Reservation Details
+                        </h3>
+
+                        <table class="reservation-details-table">
+                            <tbody>
+                                <tr>
+                                    <th>Date</th>
+                                    <td id="confirmDate">—</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Time In</th>
+                                    <td id="confirmTime">—</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Laboratory</th>
+                                    <td id="confirmLab">—</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Application / Purpose</th>
+                                    <td id="confirmPurpose">—</td>
+                                </tr>
+
+                                <tr>
+                                    <th>PC Number</th>
+                                    <td id="confirmPc">—</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
             </div>
 
             <div class="modal-footer-actions">
-    <button type="button" class="modal-btn btn-back-step" id="backStepBtn">
-        <i class="fas fa-arrow-left"></i>
-        Back
-    </button>
+                <button type="button" class="modal-btn btn-back-step" id="backStepBtn">
+                    <i class="fas fa-arrow-left"></i>
+                    Back
+                </button>
 
-    <button type="button" class="modal-btn btn-next-step" id="nextStepBtn">
-        Next
-        <i class="fas fa-arrow-right"></i>
-    </button>
+                <button type="button" class="modal-btn btn-next-step" id="nextStepBtn">
+                    Next
+                    <i class="fas fa-arrow-right"></i>
+                </button>
 
-    <button type="button" class="modal-btn btn-submit-reservation" id="submitReservationBtn">
-        <i class="fas fa-check-circle"></i>
-        Confirm Reservation
-    </button>
-</div>
+                <button type="button" class="modal-btn btn-submit-reservation" id="submitReservationBtn">
+                    <i class="fas fa-check-circle"></i>
+                    Confirm Reservation
+                </button>
+            </div>
 
         </form>
 
     </div>
 </div>
-
 
 <!-- SUCCESS RESERVATION MODAL -->
 <div id="reservationSuccessModal" class="reservation-success-overlay">
@@ -1491,10 +1627,12 @@
         </button>
     </div>
 </div>
+
 <script>
 let currentStep = 1;
 const totalSteps = 4;
 let unavailablePCs = [];
+const labApplications = {{ lab_applications | default({}) | tojson | safe }};
 
 const reservationModal = document.getElementById('reservationModal');
 const reservationForm = document.getElementById('reservationForm');
@@ -1503,16 +1641,22 @@ const dateInput = document.getElementById('reservationDate');
 const timeInput = document.getElementById('reservationTime');
 const labInput = document.getElementById('reservationLab');
 const purposeInput = document.getElementById('reservationPurpose');
-const otherPurposeGroup = document.getElementById('otherPurposeGroup');
-const otherPurposeInput = document.getElementById('otherPurposeInput');
 
 const pcGrid = document.getElementById('pcGrid');
-const selectedPcInput = document.getElementById('selectedPcNumber');
-const selectedPcBox = document.getElementById('selectedPcBox');
+const selectedPcInput = document.getElementById('pcNumberInput');
 
 const backStepBtn = document.getElementById('backStepBtn');
 const nextStepBtn = document.getElementById('nextStepBtn');
 const submitReservationBtn = document.getElementById('submitReservationBtn');
+
+function escapeHtml(value) {
+    return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+}
 
 function openReservationModal() {
     reservationModal.style.display = 'flex';
@@ -1527,6 +1671,34 @@ function openReservationModal() {
 function closeReservationModal() {
     reservationModal.style.display = 'none';
     document.body.style.overflow = '';
+}
+
+function updateReservationDetailsTable() {
+    const confirmDate = document.getElementById('confirmDate');
+    const confirmTime = document.getElementById('confirmTime');
+    const confirmLab = document.getElementById('confirmLab');
+    const confirmPurpose = document.getElementById('confirmPurpose');
+    const confirmPc = document.getElementById('confirmPc');
+
+    if (confirmDate) {
+        confirmDate.textContent = dateInput.value || '—';
+    }
+
+    if (confirmTime) {
+        confirmTime.textContent = timeInput.value || '—';
+    }
+
+    if (confirmLab) {
+        confirmLab.textContent = labInput.value ? 'Lab ' + labInput.value : '—';
+    }
+
+    if (confirmPurpose) {
+        confirmPurpose.textContent = purposeInput.value || '—';
+    }
+
+    if (confirmPc) {
+        confirmPc.textContent = selectedPcInput.value ? 'PC ' + selectedPcInput.value : '—';
+    }
 }
 
 function showStep(step) {
@@ -1559,6 +1731,7 @@ function showStep(step) {
     if (step === totalSteps) {
         nextStepBtn.style.setProperty('display', 'none', 'important');
         submitReservationBtn.style.setProperty('display', 'inline-flex', 'important');
+        updateReservationDetailsTable();
     } else {
         nextStepBtn.style.setProperty('display', 'inline-flex', 'important');
         submitReservationBtn.style.setProperty('display', 'none', 'important');
@@ -1581,13 +1754,13 @@ function validateStep(step) {
     }
 
     if (step === 3) {
-        if (purposeInput.value.trim() === '') {
-            alert('Please select your purpose.');
+        if (purposeInput.disabled) {
+            alert('No applications are available for the selected laboratory.');
             return false;
         }
 
-        if (purposeInput.value === 'Other' && otherPurposeInput.value.trim() === '') {
-            alert('Please specify your purpose.');
+        if (purposeInput.value.trim() === '') {
+            alert('Please select an available application.');
             return false;
         }
     }
@@ -1600,6 +1773,154 @@ function validateStep(step) {
     }
 
     return true;
+}
+
+function updateLabApplicationsDisplay() {
+    const selectedLab = labInput.value;
+    const labAppsPreview = document.getElementById('labAppsPreview');
+    const labAppsList = document.getElementById('labAppsList');
+    const selectedLabText = document.getElementById('selectedLabText');
+
+    purposeInput.innerHTML = '';
+
+    if (!selectedLab) {
+        purposeInput.innerHTML = '<option value="" disabled selected>Select a laboratory first</option>';
+
+        if (labAppsPreview) {
+            labAppsPreview.style.display = 'none';
+        }
+
+        return;
+    }
+
+    const applications = labApplications[selectedLab] || [];
+
+    if (selectedLabText) {
+        selectedLabText.textContent = selectedLab;
+    }
+
+    if (labAppsPreview) {
+        labAppsPreview.style.display = 'block';
+    }
+
+    if (applications.length === 0) {
+        purposeInput.innerHTML = '<option value="" disabled selected>No applications available in this lab</option>';
+        purposeInput.disabled = true;
+
+        if (labAppsList) {
+            labAppsList.innerHTML = `
+                <div class="lab-app-empty">
+                    <i class="fas fa-info-circle"></i>
+                    No applications are available in this laboratory yet.
+                </div>
+            `;
+        }
+
+        return;
+    }
+
+    purposeInput.disabled = false;
+    purposeInput.innerHTML = '<option value="" disabled selected>Select available application</option>';
+
+    applications.forEach(function(app) {
+        const option = document.createElement('option');
+        option.value = app.application_name;
+        option.textContent = app.application_name;
+        purposeInput.appendChild(option);
+    });
+
+    if (labAppsList) {
+        labAppsList.innerHTML = applications.map(function(app) {
+            return `
+                <span class="lab-app-chip">
+                    <i class="fas fa-check-circle"></i>
+                    ${escapeHtml(app.application_name)}
+                </span>
+            `;
+        }).join('');
+    }
+}
+
+function renderPCGrid() {
+    if (!pcGrid) return;
+
+    pcGrid.innerHTML = '';
+
+    for (let i = 1; i <= 50; i++) {
+        const pcButton = document.createElement('button');
+        pcButton.type = 'button';
+        pcButton.className = 'pc-card';
+        pcButton.dataset.pc = i;
+
+        const isUnavailable = unavailablePCs.includes(i);
+
+        if (isUnavailable) {
+            pcButton.classList.add('unavailable');
+            pcButton.disabled = true;
+            pcButton.title = 'Currently in use or reserved';
+        }
+
+        pcButton.innerHTML = `
+            <i class="fas fa-desktop"></i>
+            <span>PC ${i}</span>
+            ${isUnavailable ? '<small class="pc-hint">In use</small>' : ''}
+        `;
+
+        pcButton.addEventListener('click', function() {
+            if (pcButton.classList.contains('unavailable')) {
+                return;
+            }
+
+            document.querySelectorAll('.pc-card').forEach(function(card) {
+                card.classList.remove('selected');
+            });
+
+            pcButton.classList.add('selected');
+            selectedPcInput.value = i;
+            updateReservationDetailsTable();
+        });
+
+        pcGrid.appendChild(pcButton);
+    }
+}
+
+function resetSelectedPC() {
+    if (selectedPcInput) {
+        selectedPcInput.value = '';
+    }
+
+    document.querySelectorAll('.pc-card').forEach(function(card) {
+        card.classList.remove('selected');
+    });
+
+    updateReservationDetailsTable();
+}
+
+function loadPCAvailability() {
+    const lab = labInput.value;
+    const date = dateInput.value;
+    const timeIn = timeInput.value;
+
+    unavailablePCs = [];
+
+    if (!lab || !date || !timeIn) {
+        renderPCGrid();
+        return;
+    }
+
+    fetch(`/reservation/pc-status?lab=${encodeURIComponent(lab)}&date=${encodeURIComponent(date)}&time_in=${encodeURIComponent(timeIn)}`)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            unavailablePCs = (data.unavailable || []).map(Number);
+            renderPCGrid();
+        })
+        .catch(function(error) {
+            console.error('PC availability error:', error);
+            unavailablePCs = [];
+            renderPCGrid();
+        });
 }
 
 nextStepBtn.addEventListener('click', function() {
@@ -1626,129 +1947,58 @@ backStepBtn.addEventListener('click', function() {
 });
 
 submitReservationBtn.addEventListener('click', function() {
+    const remainingSessions = {{ remaining | default(0) }};
+    
+    if (remainingSessions <= 0) {
+        alert('You have no remaining sessions. Cannot submit reservation.');
+        return;
+    }
+
     if (!validateStep(4)) {
         return;
     }
 
-    if (purposeInput.value === 'Other') {
-        const customPurpose = otherPurposeInput.value.trim();
-
-        const otherOption = purposeInput.querySelector('option[value="Other"]');
-        otherOption.value = customPurpose;
-        otherOption.textContent = customPurpose;
-        purposeInput.value = customPurpose;
-    }
-
     closeReservationModal();
-
     document.getElementById('reservationSuccessModal').style.display = 'flex';
 });
 
-purposeInput.addEventListener('change', function() {
-    if (purposeInput.value === 'Other') {
-        otherPurposeGroup.style.display = 'flex';
-        otherPurposeInput.setAttribute('required', 'required');
-    } else {
-        otherPurposeGroup.style.display = 'none';
-        otherPurposeInput.removeAttribute('required');
-        otherPurposeInput.value = '';
-    }
-});
-
-function renderPCGrid() {
-    pcGrid.innerHTML = '';
-
-    for (let pc = 1; pc <= 50; pc++) {
-        const button = document.createElement('button');
-        button.type = 'button';
-
-        const isUnavailable = unavailablePCs.includes(pc);
-
-        button.className = isUnavailable ? 'pc-btn unavailable' : 'pc-btn available';
-        button.innerHTML = '<i class="fas fa-desktop"></i> ' + pc;
-
-        if (isUnavailable) {
-            button.disabled = true;
-            button.title = 'This PC is not available';
-        } else {
-            button.addEventListener('click', function() {
-                selectPC(pc, button);
-            });
-        }
-
-        pcGrid.appendChild(button);
-    }
-}
-
-function selectPC(pcNumber, button) {
-    document.querySelectorAll('.pc-btn').forEach(function(btn) {
-        btn.classList.remove('selected');
-    });
-
-    button.classList.add('selected');
-    selectedPcInput.value = pcNumber;
-    selectedPcBox.innerHTML = '<i class="fas fa-check-circle"></i> Selected PC Number: <strong>' + pcNumber + '</strong>';
-}
-
-function resetSelectedPC() {
-    selectedPcInput.value = '';
-    selectedPcBox.textContent = 'No PC selected yet.';
-}
-
-function loadPCAvailability() {
-    resetSelectedPC();
-
-    const lab = labInput.value;
-    const date = dateInput.value;
-    const time = timeInput.value;
-
-    if (!lab || !date || !time) {
-        unavailablePCs = [];
-        renderPCGrid();
+submitReservationBtn.addEventListener('click', function() {
+    if (!validateStep(4)) {
         return;
     }
 
-    fetch('/reservation/pc-status?lab=' + encodeURIComponent(lab) + '&date=' + encodeURIComponent(date) + '&time_in=' + encodeURIComponent(time))
+    closeReservationModal();
+    document.getElementById('reservationSuccessModal').style.display = 'flex';
+});
+
+function toggleNotificationDropdown(event) {
+    event.preventDefault();
+
+    const dropdown = document.getElementById('notificationDropdown');
+    const notifCount = document.getElementById('notifCount');
+
+    if (!dropdown) return;
+
+    dropdown.classList.toggle('show');
+
+    if (dropdown.classList.contains('show')) {
+        fetch('/notifications/mark-read', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
         .then(function(response) {
             return response.json();
         })
         .then(function(data) {
-            unavailablePCs = data.unavailable || [];
-            renderPCGrid();
+            if (data.success && notifCount) {
+                notifCount.remove();
+            }
         })
-        .catch(function() {
-            unavailablePCs = [];
-            renderPCGrid();
+        .catch(function(error) {
+            console.error('Notification read error:', error);
         });
-}
-
-labInput.addEventListener('change', loadPCAvailability);
-dateInput.addEventListener('change', loadPCAvailability);
-timeInput.addEventListener('change', loadPCAvailability);
-
-window.addEventListener('click', function(event) {
-    if (event.target === reservationModal) {
-        closeReservationModal();
-    }
-});
-
-window.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape' && reservationModal.style.display === 'flex') {
-        closeReservationModal();
-    }
-});
-
-renderPCGrid();
-showStep(currentStep);
-
-function toggleNotificationDropdown(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const dropdown = document.getElementById('notificationDropdown');
-
-    if (dropdown) {
-        dropdown.classList.toggle('open');
     }
 }
 
@@ -1756,10 +2006,44 @@ document.addEventListener('click', function(event) {
     const dropdown = document.getElementById('notificationDropdown');
 
     if (dropdown && !dropdown.contains(event.target)) {
-        dropdown.classList.remove('open');
+        dropdown.classList.remove('show');
     }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (labInput) {
+        labInput.addEventListener('change', function() {
+            updateLabApplicationsDisplay();
+            resetSelectedPC();
+            loadPCAvailability();
+            updateReservationDetailsTable();
+        });
+    }
+
+    if (dateInput) {
+        dateInput.addEventListener('change', function() {
+            resetSelectedPC();
+            loadPCAvailability();
+            updateReservationDetailsTable();
+        });
+    }
+
+    if (timeInput) {
+        timeInput.addEventListener('change', function() {
+            resetSelectedPC();
+            loadPCAvailability();
+            updateReservationDetailsTable();
+        });
+    }
+
+    if (purposeInput) {
+        purposeInput.addEventListener('change', updateReservationDetailsTable);
+    }
+
+    renderPCGrid();
 });
 </script>
 
+<script src="{{ url_for('static', filename='darkmode.js') }}"></script>
 </body>
 </html>

@@ -1,0 +1,927 @@
+<!-- =========================================================
+     REUSABLE ADMIN MODALS
+     Quick Search Modal + Sit-In Form Modal
+     Put this file in: templates/admin_modals.html
+     Include before darkmode.js in every admin page:
+========================================================= -->
+
+<style>
+/* =========================================================
+   REUSABLE ADMIN SEARCH MODAL + SIT-IN FORM
+========================================================= */
+
+.admin-search-overlay,
+#sitInFormModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    background: rgba(15, 15, 20, 0.72);
+    backdrop-filter: blur(9px);
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.admin-search-modal {
+    width: min(820px, 100%);
+    max-height: 86vh;
+    overflow: hidden;
+    border-radius: 24px;
+    background: #ffffff;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.38);
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-search-header,
+.admin-sitin-form-header {
+    background:
+        radial-gradient(circle at top right, rgba(253, 184, 19, 0.22), transparent 28%),
+        linear-gradient(135deg, #4b2c80, #2d1a4d);
+    color: #ffffff;
+    padding: 22px 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.admin-search-header span,
+.admin-search-header h2,
+.admin-search-header i,
+.admin-sitin-form-header span,
+.admin-sitin-form-header i {
+    color: #ffffff;
+}
+
+.admin-search-close,
+.admin-sitin-form-close {
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+    font-size: 25px;
+    cursor: pointer;
+    font-weight: 900;
+}
+
+.admin-search-close:hover,
+.admin-sitin-form-close:hover {
+    background: #fdb813;
+    color: #2d1a4d;
+}
+
+.admin-search-body {
+    padding: 24px 26px 28px;
+    overflow-y: auto;
+    background: #ffffff;
+}
+
+.admin-search-label {
+    display: block;
+    margin-bottom: 10px;
+    color: #4b2c80;
+    font-size: 12px;
+    font-weight: 950;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#idSearchInput {
+    width: 100%;
+    min-height: 54px;
+    padding: 12px 16px;
+    border: 2px solid #4b2c80;
+    border-radius: 18px;
+    font-size: 15px;
+    font-weight: 750;
+    outline: none;
+    margin-bottom: 28px;
+    color: #111827;
+    background: #ffffff;
+    box-shadow: 0 0 0 5px rgba(75, 44, 128, 0.10);
+}
+
+#idSearchInput:focus {
+    border-color: #4b2c80;
+    box-shadow:
+        0 0 0 5px rgba(75, 44, 128, 0.14),
+        0 12px 26px rgba(75, 44, 128, 0.10);
+}
+
+#studentsList {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.admin-student-card {
+    background: #ffffff;
+    border: 1px solid #ede9fe;
+    border-radius: 18px;
+    padding: 20px 14px 18px;
+    text-align: center;
+    box-shadow: 0 18px 40px rgba(31, 16, 70, 0.08);
+    transition: all 0.22s ease;
+}
+
+.admin-student-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 48px rgba(31, 16, 70, 0.14);
+}
+
+.admin-student-avatar {
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4b2c80, #fdb813);
+    border: 3px solid #fdb813;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 950;
+    overflow: hidden;
+}
+
+.admin-student-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.admin-student-name {
+    margin: 0 0 12px;
+    color: #111827;
+    font-size: 14px;
+    font-weight: 950;
+    min-height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-student-id {
+    width: 100%;
+    min-height: 28px;
+    border-radius: 10px;
+    background: #eef2ff;
+    color: #4b2c80;
+    font-size: 12px;
+    font-weight: 950;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.admin-student-remaining {
+    margin: 0 0 14px;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 850;
+}
+
+.admin-select-student-btn {
+    width: 100%;
+    min-height: 36px;
+    border: none;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #4b2c80, #6b3fa0);
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 950;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.admin-select-student-btn:hover {
+    background: linear-gradient(135deg, #fdb813, #f59e0b);
+    color: #2d1a4d;
+}
+
+.admin-no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: #9ca3af;
+    font-weight: 850;
+}
+
+/* =========================================================
+   SIT-IN FORM MODAL
+========================================================= */
+
+.admin-sitin-form-card {
+    width: min(540px, 100%);
+    max-height: 90vh;
+    overflow: hidden;
+    border-radius: 22px;
+    background: #ffffff;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.38);
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-sitin-form-body {
+    padding: 26px 22px;
+    background: #ffffff;
+}
+
+.admin-sitin-form-group {
+    margin-bottom: 16px;
+}
+
+.admin-sitin-form-group label,
+.admin-sitin-form-row label {
+    display: block;
+    margin-bottom: 8px;
+    color: #111827;
+    font-size: 12px;
+    font-weight: 950;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.admin-sitin-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.admin-sitin-form-card input,
+.admin-sitin-form-card select {
+    width: 100%;
+    min-height: 42px;
+    border-radius: 12px;
+    border: 1.6px solid #e5e7eb;
+    background: #f8fafc;
+    color: #111827;
+    padding: 10px 12px;
+    font-size: 13px;
+    font-weight: 850;
+    outline: none;
+}
+
+.admin-sitin-form-card input:focus,
+.admin-sitin-form-card select:focus {
+    border-color: #4b2c80;
+    box-shadow: 0 0 0 4px rgba(75, 44, 128, 0.12);
+}
+
+.admin-sitin-form-footer {
+    padding: 14px 22px;
+    background: #f8fafc;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.admin-modal-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 9px 16px;
+    font-size: 13px;
+    font-weight: 950;
+    cursor: pointer;
+}
+
+.admin-modal-btn-close {
+    background: #fdb813;
+    color: #2d1a4d;
+}
+
+.admin-modal-btn-submit {
+    background: linear-gradient(135deg, #4b2c80, #6b3fa0);
+    color: #ffffff;
+}
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+body.dark-mode .admin-search-overlay,
+body.dark-mode #sitInFormModal {
+    background: rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(10px);
+}
+
+body.dark-mode .admin-search-modal,
+body.dark-mode .admin-sitin-form-card {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.30) !important;
+}
+
+body.dark-mode .admin-search-body,
+body.dark-mode .admin-sitin-form-body,
+body.dark-mode .admin-sitin-form-footer {
+    background: #111827 !important;
+    color: #f8fafc !important;
+    scrollbar-color: #fdb813 #0f172a !important;
+}
+
+body.dark-mode #studentsList {
+    background: #111827 !important;
+}
+
+body.dark-mode #idSearchInput,
+body.dark-mode .admin-sitin-form-card input,
+body.dark-mode .admin-sitin-form-card select {
+    background: #020617 !important;
+    background-color: #020617 !important;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    caret-color: #f8fafc !important;
+    border: 1.8px solid rgba(253, 184, 19, 0.45) !important;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28) !important;
+    opacity: 1 !important;
+}
+
+body.dark-mode #idSearchInput::placeholder {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
+    opacity: 1 !important;
+}
+
+body.dark-mode .admin-sitin-form-card option {
+    background: #020617 !important;
+    color: #f8fafc !important;
+}
+
+body.dark-mode .admin-sitin-form-group label,
+body.dark-mode .admin-sitin-form-row label,
+body.dark-mode .admin-search-label {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+body.dark-mode .admin-student-card {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.28) !important;
+    box-shadow:
+        0 18px 38px rgba(0, 0, 0, 0.35),
+        0 0 18px rgba(124, 58, 237, 0.10) !important;
+}
+
+body.dark-mode .admin-student-name {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+body.dark-mode .admin-student-id {
+    background: rgba(253, 184, 19, 0.16) !important;
+    color: #fde68a !important;
+    -webkit-text-fill-color: #fde68a !important;
+    border: 1px solid rgba(253, 184, 19, 0.32) !important;
+}
+
+body.dark-mode .admin-student-remaining {
+    color: #cbd5e1 !important;
+    -webkit-text-fill-color: #cbd5e1 !important;
+}
+
+body.dark-mode .admin-select-student-btn {
+    background: linear-gradient(135deg, #7c3aed, #4b2c80) !important;
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+}
+
+body.dark-mode .admin-select-student-btn:hover {
+    background: linear-gradient(135deg, #fdb813, #f59e0b) !important;
+    color: #1e1038 !important;
+    -webkit-text-fill-color: #1e1038 !important;
+}
+
+body.dark-mode .admin-search-body::-webkit-scrollbar,
+body.dark-mode #studentsList::-webkit-scrollbar {
+    width: 9px !important;
+    height: 9px !important;
+}
+
+body.dark-mode .admin-search-body::-webkit-scrollbar-track,
+body.dark-mode #studentsList::-webkit-scrollbar-track {
+    background: #0f172a !important;
+    border-radius: 999px !important;
+}
+
+body.dark-mode .admin-search-body::-webkit-scrollbar-thumb,
+body.dark-mode #studentsList::-webkit-scrollbar-thumb {
+    background: #fdb813 !important;
+    border-radius: 999px !important;
+    border: 2px solid #0f172a !important;
+}
+
+@media (max-width: 900px) {
+    #studentsList {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+@media (max-width: 520px) {
+    #studentsList {
+        grid-template-columns: 1fr !important;
+    }
+
+    .admin-sitin-form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================================
+   FINAL OVERRIDE - SIT-IN FORM DARK MODE INPUT FIX
+   Paste this at the VERY BOTTOM of admin_modals.html <style>
+========================================================= */
+
+body.dark-mode #sitInFormModal .admin-sitin-form-card {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+body.dark-mode #sitInFormModal .admin-sitin-form-body {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+body.dark-mode #sitInFormModal .admin-sitin-form-footer {
+    background: #111827 !important;
+    border-top: 1px solid rgba(148, 163, 184, 0.28) !important;
+}
+
+body.dark-mode #sitInFormModal label,
+body.dark-mode #sitInFormModal .admin-sitin-form-group label,
+body.dark-mode #sitInFormModal .admin-sitin-form-row label {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-weight: 950 !important;
+}
+
+/* This is the important part */
+body.dark-mode #sitInFormModal input,
+body.dark-mode #sitInFormModal select,
+body.dark-mode #sitInFormModal textarea,
+body.dark-mode #sitInFormModal .admin-sitin-form-card input,
+body.dark-mode #sitInFormModal .admin-sitin-form-card select,
+body.dark-mode #sitInFormModal .admin-sitin-form-card textarea {
+    background: #020617 !important;
+    background-color: #020617 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    caret-color: #ffffff !important;
+    border: 2px solid rgba(253, 184, 19, 0.55) !important;
+    box-shadow:
+        0 0 0 3px rgba(253, 184, 19, 0.08),
+        0 10px 24px rgba(0, 0, 0, 0.28) !important;
+    opacity: 1 !important;
+}
+
+/* Placeholder text */
+body.dark-mode #sitInFormModal input::placeholder,
+body.dark-mode #sitInFormModal textarea::placeholder {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
+    opacity: 1 !important;
+}
+
+/* Disabled / readonly fields */
+body.dark-mode #sitInFormModal input[readonly],
+body.dark-mode #sitInFormModal input:disabled,
+body.dark-mode #sitInFormModal select:disabled,
+body.dark-mode #sitInFormModal textarea:disabled {
+    background: #020617 !important;
+    background-color: #020617 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: 2px solid rgba(253, 184, 19, 0.55) !important;
+    opacity: 1 !important;
+}
+
+/* Select dropdown option colors */
+body.dark-mode #sitInFormModal select option {
+    background: #020617 !important;
+    color: #ffffff !important;
+}
+
+/* Focus glow */
+body.dark-mode #sitInFormModal input:focus,
+body.dark-mode #sitInFormModal select:focus,
+body.dark-mode #sitInFormModal textarea:focus {
+    border-color: #fdb813 !important;
+    outline: none !important;
+    box-shadow:
+        0 0 0 4px rgba(253, 184, 19, 0.18),
+        0 0 24px rgba(253, 184, 19, 0.16) !important;
+}
+
+/* Fix Chrome autofill white background */
+body.dark-mode #sitInFormModal input:-webkit-autofill,
+body.dark-mode #sitInFormModal input:-webkit-autofill:hover,
+body.dark-mode #sitInFormModal input:-webkit-autofill:focus,
+body.dark-mode #sitInFormModal select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #020617 inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    caret-color: #ffffff !important;
+}
+</style>
+
+<!-- SEARCH MODAL -->
+<div id="searchModal" class="admin-search-overlay">
+    <div class="admin-search-modal">
+        <div class="admin-search-header">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <i class="fas fa-search"></i>
+                <span>Quick Select Student</span>
+            </div>
+
+            <button type="button" class="admin-search-close" onclick="adminCloseModal('searchModal')">
+                &times;
+            </button>
+        </div>
+
+        <div class="admin-search-body">
+            <label class="admin-search-label">Search or Browse Students</label>
+
+            <input
+                type="text"
+                id="idSearchInput"
+                placeholder="Type to search by ID or name..."
+                onkeyup="adminFilterStudents(event)"
+            >
+
+            <div id="studentsList"></div>
+
+            <div id="noResults" class="admin-no-results" style="display:none;">
+                <i class="fas fa-inbox" style="font-size:42px; color:#d1d5db; margin-bottom:12px; display:block;"></i>
+                <p style="margin:0;">No students found</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SIT-IN FORM MODAL -->
+<div id="sitInFormModal">
+    <div class="admin-sitin-form-card">
+        <div class="admin-sitin-form-header">
+            <span>
+                <i class="fas fa-desktop" style="margin-right:8px;"></i>
+                Sit-In Form
+            </span>
+
+            <button type="button" class="admin-sitin-form-close" onclick="adminCloseModal('sitInFormModal')">
+                &times;
+            </button>
+        </div>
+
+        <form action="{{ url_for('admin_sitin') }}" method="POST">
+            <div class="admin-sitin-form-body">
+                <div class="admin-sitin-form-group">
+                    <label>ID Number</label>
+                    <input type="text" name="id_number" id="display_id" readonly>
+                </div>
+
+                <div class="admin-sitin-form-group">
+                    <label>Student Name</label>
+                    <input type="text" id="display_name" readonly>
+                </div>
+
+                <div class="admin-sitin-form-row">
+                    <div>
+                        <label>Purpose</label>
+
+                        <select name="purpose" required>
+                            <option value="" disabled selected>Select purpose</option>
+                            <option value="C Programming">C Programming</option>
+                            <option value="Java">Java</option>
+                            <option value="PHP">PHP</option>
+                            <option value="Python">Python</option>
+                            <option value="Database">Database</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>Lab</label>
+
+                        <select name="lab" id="sitInLab" required>
+                            <option value="" disabled selected>Select lab</option>
+                            <option value="524">524</option>
+                            <option value="526">526</option>
+                            <option value="528">528</option>
+                            <option value="530">530</option>
+                            <option value="542">542</option>
+                            <option value="544">544</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="admin-sitin-form-row">
+                    <div>
+                        <label>Date</label>
+                        <input type="date" name="date" id="sitInDate" required>
+                    </div>
+
+                    <div>
+                        <label>Time</label>
+                        <input type="time" name="time" id="sitInTime" required>
+                    </div>
+                </div>
+
+                <div class="admin-sitin-form-row">
+                    <div>
+                        <label>PC</label>
+                        <select name="pc_number" id="sitInPC" required>
+                            <option value="" disabled selected>Select PC</option>
+                            <option value="1">PC 1</option>
+                            <option value="2">PC 2</option>
+                            <option value="3">PC 3</option>
+                            <option value="4">PC 4</option>
+                            <option value="5">PC 5</option>
+                            <option value="6">PC 6</option>
+                            <option value="7">PC 7</option>
+                            <option value="8">PC 8</option>
+                            <option value="9">PC 9</option>
+                            <option value="10">PC 10</option>
+                            <option value="11">PC 11</option>
+                            <option value="12">PC 12</option>
+                            <option value="13">PC 13</option>
+                            <option value="14">PC 14</option>
+                            <option value="15">PC 15</option>
+                            <option value="16">PC 16</option>
+                            <option value="17">PC 17</option>
+                            <option value="18">PC 18</option>
+                            <option value="19">PC 19</option>
+                            <option value="20">PC 20</option>
+                            <option value="21">PC 21</option>
+                            <option value="22">PC 22</option>
+                            <option value="23">PC 23</option>
+                            <option value="24">PC 24</option>
+                            <option value="25">PC 25</option>
+                            <option value="26">PC 26</option>
+                            <option value="27">PC 27</option>
+                            <option value="28">PC 28</option>
+                            <option value="29">PC 29</option>
+                            <option value="30">PC 30</option>
+                            <option value="31">PC 31</option>
+                            <option value="32">PC 32</option>
+                            <option value="33">PC 33</option>
+                            <option value="34">PC 34</option>
+                            <option value="35">PC 35</option>
+                            <option value="36">PC 36</option>
+                            <option value="37">PC 37</option>
+                            <option value="38">PC 38</option>
+                            <option value="39">PC 39</option>
+                            <option value="40">PC 40</option>
+                            <option value="41">PC 41</option>
+                            <option value="42">PC 42</option>
+                            <option value="43">PC 43</option>
+                            <option value="44">PC 44</option>
+                            <option value="45">PC 45</option>
+                            <option value="46">PC 46</option>
+                            <option value="47">PC 47</option>
+                            <option value="48">PC 48</option>
+                            <option value="49">PC 49</option>
+                            <option value="50">PC 50</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>Remaining Session</label>
+                        <input type="text" id="display_remaining" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-sitin-form-footer">
+                <button type="button" class="admin-modal-btn admin-modal-btn-close" onclick="adminCloseModal('sitInFormModal')">
+                    Close
+                </button>
+
+                <button type="submit" class="admin-modal-btn admin-modal-btn-submit">
+                    Confirm Sit-In
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+window.adminAllStudents = window.adminAllStudents || [];
+
+function openSearchModal() {
+    const modal = document.getElementById('searchModal');
+    const input = document.getElementById('idSearchInput');
+
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    adminLoadAllStudents();
+
+    if (input) {
+        input.value = '';
+
+        setTimeout(function() {
+            input.focus();
+        }, 100);
+    }
+}
+
+function adminCloseModal(modalId) {
+    const modal = document.getElementById(modalId);
+
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+}
+
+function closeModal(modalId) {
+    adminCloseModal(modalId);
+}
+
+function adminLoadAllStudents() {
+    fetch('/admin/search-students?q=')
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            window.adminAllStudents = data.students || [];
+            adminDisplayStudents(window.adminAllStudents);
+        })
+        .catch(function(error) {
+            console.error('Error loading students:', error);
+
+            const studentsList = document.getElementById('studentsList');
+
+            if (studentsList) {
+                studentsList.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;">Error loading students</p>';
+            }
+        });
+}
+
+function adminFilterStudents(event) {
+    const query = event.target.value.trim().toLowerCase();
+
+    if (!window.adminAllStudents || window.adminAllStudents.length === 0) {
+        adminLoadAllStudents();
+        return;
+    }
+
+    const filtered = window.adminAllStudents.filter(function(student) {
+        return String(student.id_number || '').toLowerCase().includes(query) ||
+               String(student.first_name || '').toLowerCase().includes(query) ||
+               String(student.last_name || '').toLowerCase().includes(query);
+    });
+
+    adminDisplayStudents(filtered);
+}
+
+function filterStudents(event) {
+    adminFilterStudents(event);
+}
+
+function adminDisplayStudents(students) {
+    const studentsList = document.getElementById('studentsList');
+    const noResults = document.getElementById('noResults');
+
+    if (!studentsList) {
+        return;
+    }
+
+    studentsList.innerHTML = '';
+
+    if (!students || students.length === 0) {
+        if (noResults) {
+            noResults.style.display = 'block';
+        }
+
+        return;
+    }
+
+    if (noResults) {
+        noResults.style.display = 'none';
+    }
+
+    students.forEach(function(student) {
+        const idNumber = student.id_number || '';
+        const firstName = student.first_name || '';
+        const lastName = student.last_name || '';
+        const remaining = student.remaining || student.remaining_sessions || 0;
+        const studentName = `${firstName} ${lastName}`.trim();
+        const photoPath = `/static/uploads/${idNumber}.png`;
+        const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+
+        const studentCard = document.createElement('div');
+        studentCard.className = 'admin-student-card';
+
+        studentCard.innerHTML = `
+            <div class="admin-student-avatar">
+                <img
+                    src="${photoPath}"
+                    alt="${studentName}"
+                    onerror="this.style.display='none'; this.parentElement.textContent='${initials}';"
+                >
+            </div>
+
+            <div class="admin-student-name">${studentName}</div>
+            <div class="admin-student-id">${idNumber}</div>
+            <div class="admin-student-remaining">${remaining} sessions left</div>
+
+            <button type="button" class="admin-select-student-btn">
+                Select Student
+            </button>
+        `;
+
+        const selectButton = studentCard.querySelector('.admin-select-student-btn');
+
+        selectButton.addEventListener('click', function() {
+            adminOpenSitInForm(idNumber, studentName, remaining);
+        });
+
+        studentsList.appendChild(studentCard);
+    });
+}
+
+function displayStudents(students) {
+    adminDisplayStudents(students);
+}
+
+function adminOpenSitInForm(idNumber, studentName, remaining) {
+    const idInput = document.getElementById('display_id');
+    const nameInput = document.getElementById('display_name');
+    const remainingInput = document.getElementById('display_remaining');
+    const dateInput = document.getElementById('sitInDate');
+    const timeInput = document.getElementById('sitInTime');
+    const pcInput = document.getElementById('sitInPC');
+    const now = new Date();
+
+    if (idInput) {
+        idInput.value = idNumber;
+    }
+
+    if (nameInput) {
+        nameInput.value = studentName;
+    }
+
+    if (remainingInput) {
+        remainingInput.value = remaining;
+    }
+
+    if (dateInput) {
+        dateInput.value = now.toISOString().slice(0, 10);
+    }
+
+    if (timeInput) {
+        timeInput.value = now.toTimeString().slice(0, 5);
+    }
+
+    if (pcInput) {
+        pcInput.selectedIndex = 0;
+    }
+
+    adminCloseModal('searchModal');
+
+    const sitInModal = document.getElementById('sitInFormModal');
+
+    if (sitInModal) {
+        sitInModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function openSitInForm(idNumber, studentName, remaining) {
+    adminOpenSitInForm(idNumber, studentName, remaining);
+}
+
+document.addEventListener('click', function(event) {
+    const searchModal = document.getElementById('searchModal');
+    const sitInModal = document.getElementById('sitInFormModal');
+
+    if (searchModal && event.target === searchModal) {
+        adminCloseModal('searchModal');
+    }
+
+    if (sitInModal && event.target === sitInModal) {
+        adminCloseModal('sitInFormModal');
+    }
+});
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        adminCloseModal('searchModal');
+        adminCloseModal('sitInFormModal');
+    }
+});
+</script>

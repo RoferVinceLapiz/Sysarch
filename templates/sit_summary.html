@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sit-in Summary - CCS</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --uc-purple: #4b2c80;
+            --uc-purple-dark: #2d1a4d;
+            --uc-purple-light: #6b3fa0;
+            --uc-gold: #fdb813;
+            --text-dark: #111827;
+            --text-muted: #64748b;
+            --border-soft: #e5e7eb;
+        }
+
+        html,
+        body.student-summary-page {
+            width: 100% !important;
+            min-height: 100vh !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            display: block !important;
+            overflow-x: hidden !important;
+        }
+
+        body.student-summary-page {
+            font-family: 'Segoe UI', Arial, sans-serif !important;
+            color: var(--text-dark) !important;
+            background:
+                radial-gradient(circle at 8% 18%, rgba(253, 184, 19, 0.18), transparent 26%),
+                radial-gradient(circle at 88% 10%, rgba(107, 63, 160, 0.14), transparent 28%),
+                linear-gradient(135deg, #fffaf0 0%, #f7f2ff 42%, #f8fafc 100%) !important;
+        }
+
+        body.student-summary-page * {
+            box-sizing: border-box;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .student-summary-page .student-navbar {
+            width: 100% !important;
+            min-height: 68px !important;
+            padding: 0 22px !important;
+            background:
+                radial-gradient(circle at top left, rgba(253, 184, 19, 0.18), transparent 30%),
+                linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark)) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 18px !important;
+            position: sticky !important;
+            top: 0 !important;
+            left: 0 !important;
+            z-index: 9999 !important;
+            box-shadow: 0 10px 28px rgba(31, 16, 70, 0.24) !important;
+        }
+
+        .student-summary-page .student-navbar-title {
+            display: flex !important;
+            align-items: center !important;
+            gap: 9px !important;
+            color: #ffffff !important;
+            font-size: 14px !important;
+            font-weight: 950 !important;
+            letter-spacing: 0.4px !important;
+            white-space: nowrap !important;
+        }
+
+        .student-summary-page .student-navbar-title i {
+            color: var(--uc-gold) !important;
+        }
+
+        .student-summary-page .student-nav-links {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-end !important;
+            gap: 6px !important;
+            flex-wrap: nowrap !important;
+        }
+
+        .student-summary-page .student-nav-links a,
+        .student-summary-page .dropdown-toggle {
+            min-height: 42px !important;
+            padding: 0 12px !important;
+            border-radius: 999px !important;
+            color: rgba(255, 255, 255, 0.92) !important;
+            text-decoration: none !important;
+            font-size: 13px !important;
+            font-weight: 850 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 7px !important;
+            transition: all 0.22s ease !important;
+            white-space: nowrap !important;
+            cursor: pointer !important;
+        }
+
+        .student-summary-page .student-nav-links a:hover:not(.logout-btn),
+        .student-summary-page .student-nav-links a.active,
+        .student-summary-page .dropdown-toggle:hover,
+        .student-summary-page .dropdown.open .dropdown-toggle {
+            background: rgba(255, 255, 255, 0.14) !important;
+            color: var(--uc-gold) !important;
+        }
+
+        .student-summary-page .logout-btn {
+            background: var(--uc-gold) !important;
+            color: var(--uc-purple-dark) !important;
+            font-weight: 950 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            padding: 0 18px !important;
+        }
+
+        .student-summary-page .logout-btn:hover {
+            background: #ffffff !important;
+            color: var(--uc-purple-dark) !important;
+        }
+
+        /* ================= NOTIFICATION DROPDOWN ================= */
+
+        .student-summary-page .dropdown {
+            position: relative !important;
+        }
+
+        .student-summary-page .dropdown-menu {
+            display: none !important;
+            position: absolute !important;
+            top: calc(100% + 10px) !important;
+            right: 0 !important;
+            min-width: 240px !important;
+            background: #ffffff !important;
+            border-radius: 18px !important;
+            overflow: hidden !important;
+            box-shadow: 0 20px 45px rgba(31, 16, 70, 0.18) !important;
+            border: 1px solid rgba(255, 255, 255, 0.8) !important;
+            z-index: 10000 !important;
+        }
+
+        .student-summary-page .dropdown.open .dropdown-menu {
+            display: block !important;
+        }
+
+        .student-summary-page .dropdown-menu a {
+            color: var(--text-dark) !important;
+            border-radius: 0 !important;
+            padding: 14px 16px !important;
+            min-height: auto !important;
+            font-size: 13px !important;
+            border-bottom: 1px solid #eef0f4 !important;
+            background: #ffffff !important;
+        }
+
+        .student-summary-page .dropdown-menu a:hover {
+            background: #f7f2ff !important;
+            color: var(--uc-purple) !important;
+        }
+        .notif-count {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: #dc2626;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 950;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 4px;
+}
+
+        .student-summary-page .notif-count {
+            background: #ef4444 !important;
+            color: #ffffff !important;
+            min-width: 18px !important;
+            height: 18px !important;
+            padding: 0 5px !important;
+            border-radius: 999px !important;
+            font-size: 10px !important;
+            font-weight: 950 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .student-summary-page .notif-item {
+            display: block !important;
+            white-space: normal !important;
+            line-height: 1.35 !important;
+        }
+
+        .student-summary-page .notif-item span {
+            display: block !important;
+            font-weight: 850 !important;
+            color: var(--text-dark) !important;
+            margin-bottom: 5px !important;
+        }
+
+        .student-summary-page .notif-item small {
+            display: block !important;
+            font-size: 11px !important;
+            color: var(--text-muted) !important;
+            font-weight: 700 !important;
+        }
+
+        /* ================= PAGE CONTENT ================= */
+
+        .student-summary-page .summary-page {
+            width: min(1200px, calc(100% - 32px)) !important;
+            margin: 34px auto 50px !important;
+            display: block !important;
+        }
+
+        .student-summary-page .summary-hero {
+            display: flex !important;
+            align-items: center !important;
+            gap: 16px !important;
+            margin-bottom: 26px !important;
+        }
+
+        .student-summary-page .summary-icon {
+            width: 64px !important;
+            height: 64px !important;
+            border-radius: 20px !important;
+            background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+            color: var(--uc-purple-dark) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 28px !important;
+            box-shadow: 0 14px 28px rgba(253, 184, 19, 0.28) !important;
+            flex-shrink: 0 !important;
+        }
+
+        .student-summary-page .summary-hero h1 {
+            margin: 0 !important;
+            color: var(--uc-purple) !important;
+            font-size: 34px !important;
+            font-weight: 950 !important;
+            line-height: 1.1 !important;
+        }
+
+        .student-summary-page .summary-hero p {
+            margin: 7px 0 0 !important;
+            color: var(--text-muted) !important;
+            font-size: 14px !important;
+            line-height: 1.5 !important;
+        }
+
+        .student-summary-page .summary-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+            gap: 18px !important;
+            margin-bottom: 24px !important;
+        }
+
+        .student-summary-page .summary-card {
+            background: #ffffff !important;
+            border-radius: 22px !important;
+            padding: 24px !important;
+            border: 1px solid rgba(255, 255, 255, 0.8) !important;
+            box-shadow: 0 18px 42px rgba(31, 16, 70, 0.10) !important;
+            min-width: 0 !important;
+            overflow-wrap: anywhere !important;
+        }
+
+        .student-summary-page .summary-card i {
+            width: 46px !important;
+            height: 46px !important;
+            border-radius: 15px !important;
+            background: #f7f2ff !important;
+            color: var(--uc-purple) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 20px !important;
+            margin-bottom: 16px !important;
+        }
+
+        .student-summary-page .summary-card span {
+            display: block !important;
+            color: var(--text-muted) !important;
+            font-size: 12px !important;
+            font-weight: 850 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.7px !important;
+            line-height: 1.35 !important;
+        }
+
+        .student-summary-page .summary-card strong {
+            display: block !important;
+            margin-top: 8px !important;
+            color: var(--uc-purple) !important;
+            font-size: 30px !important;
+            font-weight: 950 !important;
+            line-height: 1.25 !important;
+        }
+
+        .student-summary-page .table-card {
+            width: 100% !important;
+            max-width: 100% !important;
+            background: #ffffff !important;
+            border-radius: 24px !important;
+            overflow: hidden !important;
+            border: 1px solid rgba(255, 255, 255, 0.8) !important;
+            box-shadow: 0 18px 42px rgba(31, 16, 70, 0.10) !important;
+        }
+
+        .student-summary-page .table-header {
+            background: linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark)) !important;
+            color: #ffffff !important;
+            padding: 18px 22px !important;
+            font-size: 14px !important;
+            font-weight: 950 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.8px !important;
+        }
+
+        .student-summary-page .table-wrapper {
+            width: 100% !important;
+            overflow-x: auto !important;
+        }
+
+        .student-summary-page table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            min-width: 760px !important;
+        }
+
+        .student-summary-page th,
+        .student-summary-page td {
+            padding: 15px 18px !important;
+            text-align: left !important;
+            border-bottom: 1px solid #eef0f4 !important;
+            font-size: 14px !important;
+            white-space: nowrap !important;
+        }
+
+        .student-summary-page th {
+            color: var(--uc-purple) !important;
+            background: #f8f5ff !important;
+            font-weight: 950 !important;
+            text-transform: uppercase !important;
+            font-size: 12px !important;
+            letter-spacing: 0.6px !important;
+        }
+
+        .student-summary-page td {
+            color: #374151 !important;
+            font-weight: 700 !important;
+        }
+
+        .student-summary-page .empty-row {
+            text-align: center !important;
+            color: #9ca3af !important;
+            padding: 34px !important;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 950px) {
+            .student-summary-page .student-navbar {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                padding: 14px 18px !important;
+                gap: 12px !important;
+            }
+
+            .student-summary-page .student-navbar-title {
+                white-space: normal !important;
+                line-height: 1.4 !important;
+            }
+
+            .student-summary-page .student-nav-links {
+                width: 100% !important;
+                flex-wrap: wrap !important;
+                justify-content: flex-start !important;
+            }
+
+            .student-summary-page .student-nav-links a,
+            .student-summary-page .dropdown-toggle {
+                border-radius: 12px !important;
+                background: rgba(255, 255, 255, 0.08) !important;
+            }
+
+            .student-summary-page .dropdown-menu {
+                left: 0 !important;
+                right: auto !important;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .student-summary-page .summary-page {
+                width: min(100% - 22px, 1200px) !important;
+                margin: 24px auto 40px !important;
+            }
+
+            .student-summary-page .summary-hero {
+                align-items: flex-start !important;
+            }
+
+            .student-summary-page .summary-icon {
+                width: 54px !important;
+                height: 54px !important;
+                font-size: 24px !important;
+            }
+
+            .student-summary-page .summary-hero h1 {
+                font-size: 26px !important;
+            }
+
+            .student-summary-page .summary-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .student-summary-page .student-nav-links a,
+            .student-summary-page .dropdown-toggle {
+                flex: 1 1 calc(50% - 8px) !important;
+                justify-content: center !important;
+                font-size: 12px !important;
+            }
+
+            .student-summary-page .logout-btn {
+                flex: 1 1 100% !important;
+            }
+        }
+        .notif-count {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: #dc2626;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 950;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 4px;
+}
+
+.notification-menu {
+    max-height: 330px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-width: 340px;
+}
+
+.notification-menu::-webkit-scrollbar {
+    width: 8px;
+}
+
+.notification-menu::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 999px;
+}
+
+.notification-menu::-webkit-scrollbar-thumb {
+    background: #c4b5fd;
+    border-radius: 999px;
+}
+
+.notif-item {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    white-space: normal !important;
+    line-height: 1.35 !important;
+}
+
+.notif-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    background: #f7f2ff;
+    color: #4b2c80;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.notif-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.notif-message {
+    color: #111827;
+    font-size: 13px;
+    font-weight: 800;
+    word-break: break-word;
+}
+
+.notif-content small {
+    color: #6b7280;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.notif-empty {
+    padding: 18px;
+    color: #9ca3af;
+    font-size: 13px;
+    font-weight: 800;
+    text-align: center;
+}
+
+.notif-empty i {
+    display: block;
+    font-size: 26px;
+    margin-bottom: 8px;
+}
+
+.notification-toggle-btn {
+    border: none !important;
+    background: transparent !important;
+    color: inherit !important;
+    font: inherit !important;
+    cursor: pointer !important;
+}
+
+.dropdown .notification-menu {
+    display: none !important;
+}
+
+.dropdown.show .notification-menu {
+    display: block !important;
+}
+
+.dropdown:hover .notification-menu {
+    display: none !important;
+}
+
+.dropdown.show:hover .notification-menu {
+    display: block !important;
+}
+
+.notification-menu {
+    position: absolute !important;
+    top: 100% !important;
+    right: 0 !important;
+    max-height: 330px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    min-width: 340px !important;
+    background: #ffffff !important;
+    border-radius: 16px !important;
+    box-shadow: 0 18px 45px rgba(31, 16, 70, 0.18) !important;
+    z-index: 999999 !important;
+    padding: 8px !important;
+}
+
+    </style>
+</head>
+
+<body class="student-summary-page">
+
+    <!-- STUDENT NAVBAR -->
+    <div class="student-navbar">
+        <span class="student-navbar-title">
+            <i class="fas fa-desktop"></i>
+            CCS Sit-in Monitoring System
+        </span>
+
+        <div class="student-nav-links">
+
+            <div class="dropdown" id="notificationDropdown">
+    <button type="button" class="dropdown-toggle notification-toggle-btn" onclick="toggleNotificationDropdown(event)">
+        <i class="fas fa-bell"></i>
+        Notification
+
+        {% if notification_count and notification_count > 0 %}
+            <span class="notif-count" id="notifCount">{{ notification_count }}</span>
+        {% endif %}
+
+        <i class="fas fa-chevron-down" style="font-size:10px;"></i>
+    </button>
+
+    <div class="dropdown-menu notification-menu">
+        {% if notifications %}
+            {% for n in notifications %}
+                <a href="{{ url_for('read_notification', notif_id=n['id']) }}" class="notif-item">
+                    <span class="notif-icon">
+                        {% if 'announcement' in n['message']|lower %}
+                            <i class="fas fa-bullhorn"></i>
+                        {% elif 'approved' in n['message']|lower %}
+                            <i class="fas fa-check-circle"></i>
+                        {% elif 'rejected' in n['message']|lower %}
+                            <i class="fas fa-times-circle"></i>
+                        {% elif 'reservation' in n['message']|lower %}
+                            <i class="fas fa-calendar-check"></i>
+                        {% elif 'logged in' in n['message']|lower or 'sit-in' in n['message']|lower %}
+                            <i class="fas fa-desktop"></i>
+                        {% elif 'reset' in n['message']|lower %}
+                            <i class="fas fa-rotate-right"></i>
+                        {% else %}
+                            <i class="fas fa-info-circle"></i>
+                        {% endif %}
+                    </span>
+
+                    <span class="notif-content">
+                        <span class="notif-message">{{ n['message'] }}</span>
+                        <small>{{ n['created_at'] }}</small>
+                    </span>
+                </a>
+            {% endfor %}
+        {% else %}
+            <div class="notif-empty">
+                <i class="fas fa-bell-slash"></i>
+                No notifications yet.
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+            <a href="/dashboard"><i class="fas fa-home"></i>Home</a>
+            <a href="/edit-profile"><i class="fas fa-user-edit"></i>Edit Profile</a>
+            <a href="{{ url_for('history') }}"><i class="fas fa-history"></i>History</a>
+            <a href="{{ url_for('sit_summary') }}" class="active"><i class="fas fa-chart-pie"></i>Sit-in Summary</a>
+            <a href="/reservation"><i class="fas fa-calendar-check"></i>Reservation</a>
+            <a href="/logout" class="logout-btn">Log out</a>
+
+        </div>
+    </div>
+
+    <main class="summary-page">
+
+        <section class="summary-hero">
+            <div class="summary-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+
+            <div>
+                <h1>User Sit-in Summary</h1>
+                <p>View your total sit-in hours, session count, average duration, and longest session.</p>
+            </div>
+        </section>
+
+        <section class="summary-grid">
+            <div class="summary-card">
+                <i class="fas fa-clock"></i>
+                <span>Total Sit-in Hours</span>
+                <strong>{{ total_sitin_hours|default('0 hrs') }}</strong>
+            </div>
+
+            <div class="summary-card">
+                <i class="fas fa-calendar-check"></i>
+                <span>Number of Sessions</span>
+                <strong>{{ total_sessions|default(0) }}</strong>
+            </div>
+
+            <div class="summary-card">
+                <i class="fas fa-hourglass-half"></i>
+                <span>Average Duration</span>
+                <strong>{{ average_duration|default('0 hr') }}</strong>
+            </div>
+
+            <div class="summary-card">
+                <i class="fas fa-trophy"></i>
+                <span>Longest Session</span>
+                <strong>{{ longest_session|default('0 hr') }}</strong>
+            </div>
+        </section>
+
+        <section class="table-card">
+            <div class="table-header">
+                <i class="fas fa-table"></i>
+                Sessions Table
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                            <th>Duration</th>
+                            <th>Purpose</th>
+                            <th>Lab</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% if sessions %}
+                            {% for s in sessions %}
+                            <tr>
+                                <td>{{ s['date'] }}</td>
+                                <td>{{ s['time_in'] }}</td>
+                                <td>{{ s['time_out'] }}</td>
+                                <td>{{ s['duration'] }}</td>
+                                <td>{{ s['purpose'] }}</td>
+                                <td>{{ s['lab'] }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="empty-row">No completed sit-in sessions yet.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+       function toggleNotificationDropdown(event) {
+    event.preventDefault();
+
+    const dropdown = document.getElementById('notificationDropdown');
+    const notifCount = document.getElementById('notifCount');
+
+    if (!dropdown) return;
+
+    dropdown.classList.toggle('show');
+
+    if (dropdown.classList.contains('show')) {
+        fetch('/notifications/mark-read', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && notifCount) {
+                notifCount.remove();
+            }
+        })
+        .catch(error => {
+            console.error('Notification read error:', error);
+        });
+    }
+}
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('notificationDropdown');
+
+            if (dropdown && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('open');
+            }
+        });
+
+        window.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('notificationDropdown');
+
+    if (!dropdown) return;
+
+    if (!dropdown.contains(event.target)) {
+        dropdown.classList.remove('show');
+    }
+});
+
+    </script>
+<script src="{{ url_for('static', filename='darkmode.js') }}"></script>
+</body>
+</html>

@@ -373,7 +373,165 @@
             color: #b45309 !important;
             text-decoration: underline;
         }
+        /* =========================================================
+   LOGIN INPUTS ONLY - DARK MODE FIX
+   For: <body class="login-page">
+========================================================= */
 
+body.dark-mode.login-page .login-form input,
+body.dark-mode.login-page .login-form .input-group input,
+body.dark-mode.login-page .login-card input,
+body.dark-mode.login-page input[type="text"],
+body.dark-mode.login-page input[type="password"] {
+    background: #020617 !important;
+    background-color: #020617 !important;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    caret-color: #f8fafc !important;
+    border: 1.8px solid rgba(253, 184, 19, 0.55) !important;
+    box-shadow:
+        0 10px 24px rgba(0, 0, 0, 0.28),
+        0 0 14px rgba(253, 184, 19, 0.08) !important;
+    opacity: 1 !important;
+}
+
+body.dark-mode.login-page .login-form input:focus,
+body.dark-mode.login-page .login-form .input-group input:focus,
+body.dark-mode.login-page .login-card input:focus,
+body.dark-mode.login-page input[type="text"]:focus,
+body.dark-mode.login-page input[type="password"]:focus {
+    border-color: #fdb813 !important;
+    outline: none !important;
+    box-shadow:
+        0 0 0 4px rgba(253, 184, 19, 0.16),
+        0 0 24px rgba(253, 184, 19, 0.14) !important;
+}
+
+body.dark-mode.login-page .login-form input::placeholder,
+body.dark-mode.login-page .login-card input::placeholder,
+body.dark-mode.login-page input[type="text"]::placeholder,
+body.dark-mode.login-page input[type="password"]::placeholder {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
+    opacity: 1 !important;
+}
+
+body.dark-mode.login-page .input-label,
+body.dark-mode.login-page label,
+body.dark-mode.login-page .login-form label,
+body.dark-mode.login-page .login-card label {
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+    text-shadow: none !important;
+}
+
+body.dark-mode.login-page .remember-me,
+body.dark-mode.login-page .remember-me label,
+body.dark-mode.login-page .remember-row,
+body.dark-mode.login-page .remember-row label {
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+}
+
+body.dark-mode.login-page .signup-link,
+body.dark-mode.login-page .signup-link a,
+body.dark-mode.login-page .create-account,
+body.dark-mode.login-page .create-account a {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+body.dark-mode.login-page .signup-link a,
+body.dark-mode.login-page .create-account a {
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+}
+
+body.dark-mode.login-page input:-webkit-autofill,
+body.dark-mode.login-page input:-webkit-autofill:hover,
+body.dark-mode.login-page input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #020617 inset !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    caret-color: #f8fafc !important;
+}
+
+/* =========================================================
+   FINAL LOGIN INPUT DARK MODE OVERRIDE
+   Works with <body class="login-page">
+========================================================= */
+
+body.dark-mode.login-page input,
+body.dark-mode.login-page input.form-control,
+body.dark-mode.login-page .form-control,
+body.dark-mode.login-page .login-input,
+body.dark-mode.login-page .input-field,
+body.dark-mode.login-page .input-box,
+body.dark-mode.login-page .login-card input,
+body.dark-mode.login-page .login-container input,
+body.dark-mode.login-page .form-group input,
+html.dark-mode body.login-page input,
+html.dark-mode body.login-page input.form-control,
+html.dark-mode body.login-page .form-control,
+html.dark-mode body.login-page .login-input,
+html.dark-mode body.login-page .input-field,
+html.dark-mode body.login-page .input-box,
+html.dark-mode body.login-page .login-card input,
+html.dark-mode body.login-page .login-container input,
+html.dark-mode body.login-page .form-group input {
+    background: #020617 !important;
+    background-color: #020617 !important;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    caret-color: #f8fafc !important;
+    border: 2px solid rgba(253, 184, 19, 0.65) !important;
+    box-shadow:
+        0 0 0 3px rgba(253, 184, 19, 0.10),
+        0 10px 24px rgba(0, 0, 0, 0.32) !important;
+    opacity: 1 !important;
+}
+
+body.dark-mode.login-page input::placeholder,
+html.dark-mode body.login-page input::placeholder {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
+    opacity: 1 !important;
+}
+
+body.dark-mode.login-page input:focus,
+html.dark-mode body.login-page input:focus {
+    background: #020617 !important;
+    background-color: #020617 !important;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    border-color: #fdb813 !important;
+    outline: none !important;
+    box-shadow:
+        0 0 0 4px rgba(253, 184, 19, 0.18),
+        0 0 26px rgba(253, 184, 19, 0.16) !important;
+}
+
+body.dark-mode.login-page label,
+body.dark-mode.login-page .input-label,
+body.dark-mode.login-page .form-label,
+html.dark-mode body.login-page label,
+html.dark-mode body.login-page .input-label,
+html.dark-mode body.login-page .form-label {
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+    text-shadow: none !important;
+}
+
+/* Chrome autofill white background fix */
+body.dark-mode.login-page input:-webkit-autofill,
+body.dark-mode.login-page input:-webkit-autofill:hover,
+body.dark-mode.login-page input:-webkit-autofill:focus,
+html.dark-mode body.login-page input:-webkit-autofill,
+html.dark-mode body.login-page input:-webkit-autofill:hover,
+html.dark-mode body.login-page input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #020617 inset !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    caret-color: #f8fafc !important;
+}
         @media (max-width: 980px) {
             .login-navbar {
                 align-items: flex-start;
@@ -443,6 +601,93 @@
                 padding: 8px 10px;
             }
         }
+
+        /* =========================================================
+   LOGIN PAGE INPUT DARK MODE FIX
+   Works whether dark-mode is on html OR body
+========================================================= */
+
+html.dark-mode body.login-page input,
+html.dark-mode body.login-page input[type="text"],
+html.dark-mode body.login-page input[type="password"],
+html.dark-mode body.login-page .form-control,
+html.dark-mode body.login-page .login-input,
+html.dark-mode body.login-page .input-field,
+html.dark-mode body.login-page .input-box,
+
+body.dark-mode.login-page input,
+body.dark-mode.login-page input[type="text"],
+body.dark-mode.login-page input[type="password"],
+body.dark-mode.login-page .form-control,
+body.dark-mode.login-page .login-input,
+body.dark-mode.login-page .input-field,
+body.dark-mode.login-page .input-box,
+
+.dark-mode .login-page input,
+.dark-mode .login-page input[type="text"],
+.dark-mode .login-page input[type="password"],
+.dark-mode .login-page .form-control,
+.dark-mode .login-page .login-input,
+.dark-mode .login-page .input-field,
+.dark-mode .login-page .input-box {
+    background: #020617 !important;
+    background-color: #020617 !important;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    caret-color: #f8fafc !important;
+    border: 2px solid rgba(253, 184, 19, 0.65) !important;
+    box-shadow:
+        0 0 0 3px rgba(253, 184, 19, 0.10),
+        0 10px 24px rgba(0, 0, 0, 0.32) !important;
+    opacity: 1 !important;
+}
+
+html.dark-mode body.login-page input::placeholder,
+body.dark-mode.login-page input::placeholder,
+.dark-mode .login-page input::placeholder {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
+    opacity: 1 !important;
+}
+
+html.dark-mode body.login-page input:focus,
+body.dark-mode.login-page input:focus,
+.dark-mode .login-page input:focus {
+    background: #020617 !important;
+    background-color: #020617 !important;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    border-color: #fdb813 !important;
+    outline: none !important;
+    box-shadow:
+        0 0 0 4px rgba(253, 184, 19, 0.18),
+        0 0 26px rgba(253, 184, 19, 0.16) !important;
+}
+
+html.dark-mode body.login-page label,
+html.dark-mode body.login-page .input-label,
+body.dark-mode.login-page label,
+body.dark-mode.login-page .input-label,
+.dark-mode .login-page label,
+.dark-mode .login-page .input-label {
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+}
+
+/* Chrome autofill white background fix */
+html.dark-mode body.login-page input:-webkit-autofill,
+html.dark-mode body.login-page input:-webkit-autofill:hover,
+html.dark-mode body.login-page input:-webkit-autofill:focus,
+body.dark-mode.login-page input:-webkit-autofill,
+body.dark-mode.login-page input:-webkit-autofill:hover,
+body.dark-mode.login-page input:-webkit-autofill:focus,
+.dark-mode .login-page input:-webkit-autofill,
+.dark-mode .login-page input:-webkit-autofill:hover,
+.dark-mode .login-page input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #020617 inset !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    caret-color: #f8fafc !important;
+}
     </style>
 </head>
 
@@ -561,6 +806,6 @@ function validateLogin() {
     return valid;
 }
 </script>
-
+<script src="{{ url_for('static', filename='darkmode.js') }}"></script>
 </body>
 </html>

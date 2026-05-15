@@ -18,6 +18,9 @@
             --admin-text: #111827;
             --admin-muted: #6b7280;
             --admin-border: #e5e7eb;
+            --danger: #dc2626;
+            --danger-dark: #991b1b;
+            --success: #16a34a;
         }
 
         body.admin-students-page {
@@ -28,6 +31,10 @@
                 radial-gradient(circle at top right, rgba(75, 44, 128, 0.12), transparent 30%),
                 linear-gradient(180deg, #fbf8ff 0%, #f4f4f9 100%) !important;
             color: var(--admin-text) !important;
+        }
+
+        .admin-students-page * {
+            box-sizing: border-box;
         }
 
         .admin-students-page .students-wrapper {
@@ -84,9 +91,42 @@
             line-height: 1.5 !important;
         }
 
+        .admin-students-page .header-actions {
+            display: flex !important;
+            align-items: center !important;
+            gap: 14px !important;
+            flex: 0 0 auto !important;
+        }
+
+        .admin-students-page .add-student-btn {
+            min-height: 50px !important;
+            padding: 0 20px !important;
+            border: none !important;
+            border-radius: 999px !important;
+            background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+            color: var(--uc-purple-dark) !important;
+            font-size: 13px !important;
+            font-weight: 950 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+            box-shadow: 0 12px 28px rgba(253, 184, 19, 0.28) !important;
+            transition: all 0.22s ease !important;
+            white-space: nowrap !important;
+        }
+
+        .admin-students-page .add-student-btn:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 16px 34px rgba(253, 184, 19, 0.36) !important;
+        }
+
         .admin-students-page .stats-card {
-            min-width: 250px !important;
-            padding: 26px 30px !important;
+            min-width: 220px !important;
+            padding: 22px 28px !important;
             border-radius: 22px !important;
             color: #ffffff !important;
             background:
@@ -120,7 +160,7 @@
         }
 
         .admin-students-page .stats-card .number {
-            font-size: 48px !important;
+            font-size: 44px !important;
             font-weight: 950 !important;
             margin-top: 8px !important;
             line-height: 1 !important;
@@ -172,6 +212,7 @@
             font-weight: 900 !important;
             letter-spacing: 0.4px !important;
             border-bottom: none !important;
+            white-space: nowrap !important;
         }
 
         .admin-students-page table thead th:first-child {
@@ -205,6 +246,7 @@
             font-weight: 950 !important;
             font-size: 12px !important;
             display: inline-block !important;
+            white-space: nowrap !important;
         }
 
         .admin-students-page .level-badge {
@@ -215,11 +257,55 @@
             font-size: 12px !important;
             font-weight: 900 !important;
             display: inline-block !important;
+            white-space: nowrap !important;
+        }
+
+        .admin-students-page .status-badge {
+            background: #dbeafe !important;
+            color: #1d4ed8 !important;
+            padding: 6px 12px !important;
+            border-radius: 999px !important;
+            font-size: 12px !important;
+            font-weight: 950 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            white-space: nowrap !important;
         }
 
         .admin-students-page .student-name-cell {
             font-weight: 900 !important;
             color: var(--admin-text) !important;
+        }
+
+        .admin-students-page .action-cell {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            flex-wrap: wrap !important;
+        }
+
+        .admin-students-page .delete-student-btn {
+            border: none !important;
+            border-radius: 999px !important;
+            padding: 9px 13px !important;
+            background: #fee2e2 !important;
+            color: var(--danger) !important;
+            font-size: 12px !important;
+            font-weight: 950 !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            transition: all 0.22s ease !important;
+            white-space: nowrap !important;
+        }
+
+        .admin-students-page .delete-student-btn:hover {
+            background: var(--danger) !important;
+            color: #ffffff !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 8px 18px rgba(220, 38, 38, 0.22) !important;
         }
 
         .admin-students-page .dataTables_wrapper {
@@ -311,6 +397,287 @@
             transform: none !important;
         }
 
+        /* ================= ADD STUDENT MODAL ================= */
+
+        .admin-students-page .add-modal-overlay {
+            position: fixed !important;
+            inset: 0 !important;
+            background: rgba(15, 15, 20, 0.70) !important;
+            backdrop-filter: blur(8px) !important;
+            display: none;
+            align-items: center !important;
+            justify-content: center !important;
+            z-index: 999999 !important;
+            padding: 22px !important;
+        }
+
+        .admin-students-page .add-modal {
+            width: 820px !important;
+            max-width: 100% !important;
+            max-height: 92vh !important;
+            overflow-y: auto !important;
+            border-radius: 24px !important;
+            background: #ffffff !important;
+            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.35) !important;
+        }
+
+        .admin-students-page .add-modal-header {
+            padding: 20px 24px !important;
+            background: linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark)) !important;
+            color: #ffffff !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 14px !important;
+        }
+
+        .admin-students-page .add-modal-header span {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            font-size: 16px !important;
+            font-weight: 950 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.7px !important;
+        }
+
+        .admin-students-page .add-modal-close {
+            width: 38px !important;
+            height: 38px !important;
+            border: none !important;
+            border-radius: 12px !important;
+            background: rgba(255, 255, 255, 0.14) !important;
+            color: #ffffff !important;
+            font-size: 26px !important;
+            cursor: pointer !important;
+            line-height: 1 !important;
+        }
+
+        .admin-students-page .add-modal-body {
+            padding: 24px !important;
+        }
+
+        .admin-students-page .add-form-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 16px !important;
+        }
+
+        .admin-students-page .form-group {
+            display: grid !important;
+            gap: 7px !important;
+        }
+
+        .admin-students-page .form-group.full {
+            grid-column: 1 / -1 !important;
+        }
+
+        .admin-students-page .form-group label {
+            color: var(--uc-purple) !important;
+            font-size: 12px !important;
+            font-weight: 950 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.6px !important;
+        }
+
+        .admin-students-page .form-group input,
+        .admin-students-page .form-group select,
+        .admin-students-page .form-group textarea {
+            width: 100% !important;
+            min-height: 46px !important;
+            padding: 12px 14px !important;
+            border: 1.8px solid var(--admin-border) !important;
+            border-radius: 14px !important;
+            outline: none !important;
+            color: var(--admin-text) !important;
+            font-size: 14px !important;
+            font-weight: 700 !important;
+            background: #ffffff !important;
+        }
+
+        .admin-students-page .form-group textarea {
+            resize: vertical !important;
+            min-height: 82px !important;
+        }
+
+        .admin-students-page .form-group input:focus,
+        .admin-students-page .form-group select:focus,
+        .admin-students-page .form-group textarea:focus {
+            border-color: var(--uc-purple) !important;
+            box-shadow: 0 0 0 4px rgba(75, 44, 128, 0.10) !important;
+        }
+
+        .admin-students-page .add-modal-footer {
+            padding: 18px 24px 24px !important;
+            display: flex !important;
+            justify-content: flex-end !important;
+            gap: 12px !important;
+            flex-wrap: wrap !important;
+        }
+
+        .admin-students-page .modal-btn {
+            min-height: 46px !important;
+            padding: 0 18px !important;
+            border: none !important;
+            border-radius: 14px !important;
+            font-size: 13px !important;
+            font-weight: 950 !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+        }
+
+        .admin-students-page .modal-cancel-btn {
+            background: #f3f4f6 !important;
+            color: #374151 !important;
+        }
+
+        .admin-students-page .modal-save-btn {
+            background: linear-gradient(135deg, var(--uc-purple), var(--uc-purple-light)) !important;
+            color: #ffffff !important;
+        }
+
+        .admin-students-page .flash-box {
+            margin-bottom: 18px !important;
+            display: grid !important;
+            gap: 10px !important;
+        }
+
+        .admin-students-page .flash-message {
+            padding: 13px 16px !important;
+            border-radius: 14px !important;
+            font-size: 13px !important;
+            font-weight: 850 !important;
+        }
+
+        .admin-students-page .flash-message.success {
+            background: #dcfce7 !important;
+            color: #166534 !important;
+        }
+
+        .admin-students-page .flash-message.error {
+            background: #fee2e2 !important;
+            color: #991b1b !important;
+        }
+
+        /* ================= DELETE ALERT MODAL ================= */
+
+        .admin-students-page .delete-alert-overlay {
+            position: fixed !important;
+            inset: 0 !important;
+            background: rgba(15, 15, 20, 0.72) !important;
+            backdrop-filter: blur(7px) !important;
+            display: none;
+            align-items: center !important;
+            justify-content: center !important;
+            z-index: 999999 !important;
+            padding: 22px !important;
+        }
+
+        .admin-students-page .delete-alert-modal {
+            width: 430px !important;
+            max-width: 100% !important;
+            background: #ffffff !important;
+            border-radius: 24px !important;
+            overflow: hidden !important;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35) !important;
+            animation: deleteModalPop 0.25s ease-out !important;
+        }
+
+        .admin-students-page .delete-alert-header {
+            background: linear-gradient(135deg, #dc2626, #991b1b) !important;
+            color: #ffffff !important;
+            padding: 32px 24px !important;
+            text-align: center !important;
+        }
+
+        .admin-students-page .delete-alert-header i {
+            width: 76px !important;
+            height: 76px !important;
+            border-radius: 50% !important;
+            background: rgba(255, 255, 255, 0.18) !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 38px !important;
+        }
+
+        .admin-students-page .delete-alert-body {
+            padding: 26px 28px !important;
+            text-align: center !important;
+        }
+
+        .admin-students-page .delete-alert-body h2 {
+            margin: 0 0 10px !important;
+            color: #111827 !important;
+            font-size: 24px !important;
+            font-weight: 950 !important;
+        }
+
+        .admin-students-page .delete-alert-body p {
+            margin: 0 !important;
+            color: #6b7280 !important;
+            font-size: 14px !important;
+            line-height: 1.6 !important;
+            font-weight: 700 !important;
+        }
+
+        .admin-students-page .delete-alert-body strong {
+            color: #dc2626 !important;
+            font-weight: 950 !important;
+        }
+
+        .admin-students-page .delete-alert-footer {
+            padding: 0 28px 28px !important;
+            display: flex !important;
+            justify-content: center !important;
+            gap: 12px !important;
+        }
+
+        .admin-students-page .delete-cancel-btn,
+        .admin-students-page .delete-confirm-btn {
+            min-height: 46px !important;
+            padding: 0 18px !important;
+            border: none !important;
+            border-radius: 14px !important;
+            font-size: 13px !important;
+            font-weight: 950 !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+        }
+
+        .admin-students-page .delete-cancel-btn {
+            background: #f3f4f6 !important;
+            color: #374151 !important;
+        }
+
+        .admin-students-page .delete-confirm-btn {
+            background: linear-gradient(135deg, #dc2626, #991b1b) !important;
+            color: #ffffff !important;
+        }
+
+        .admin-students-page .delete-cancel-btn:hover,
+        .admin-students-page .delete-confirm-btn:hover {
+            transform: translateY(-2px) !important;
+        }
+
+        @keyframes deleteModalPop {
+            from {
+                transform: translateY(18px) scale(0.96);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
         @media (max-width: 900px) {
             .admin-students-page .students-wrapper {
                 width: min(100% - 24px, 1450px) !important;
@@ -322,6 +689,12 @@
                 align-items: stretch !important;
             }
 
+            .admin-students-page .header-actions {
+                width: 100% !important;
+                align-items: stretch !important;
+            }
+
+            .admin-students-page .add-student-btn,
             .admin-students-page .stats-card {
                 width: 100% !important;
                 min-width: 0 !important;
@@ -347,7 +720,17 @@
             }
 
             .admin-students-page table {
-                min-width: 900px !important;
+                min-width: 1050px !important;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .admin-students-page .header-actions {
+                flex-direction: column !important;
+            }
+
+            .admin-students-page .add-form-grid {
+                grid-template-columns: 1fr !important;
             }
         }
 
@@ -370,6 +753,231 @@
                 font-size: 38px !important;
             }
         }
+        /* ================= LEADERBOARD MODAL ================= */
+
+.admin-students-page .leaderboard-btn {
+    min-height: 50px !important;
+    padding: 0 20px !important;
+    border: none !important;
+    border-radius: 999px !important;
+    background: linear-gradient(135deg, var(--uc-purple), var(--uc-purple-light)) !important;
+    color: #ffffff !important;
+    font-size: 13px !important;
+    font-weight: 950 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    box-shadow: 0 12px 28px rgba(75, 44, 128, 0.25) !important;
+    transition: all 0.22s ease !important;
+    white-space: nowrap !important;
+}
+
+.admin-students-page .leaderboard-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 16px 34px rgba(75, 44, 128, 0.32) !important;
+}
+
+.admin-students-page .leaderboard-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(15, 15, 20, 0.72) !important;
+    backdrop-filter: blur(7px) !important;
+    display: none;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 999999 !important;
+    padding: 22px !important;
+}
+
+.admin-students-page .leaderboard-modal {
+    width: 900px !important;
+    max-width: 100% !important;
+    max-height: 92vh !important;
+    overflow: hidden !important;
+    border-radius: 24px !important;
+    background: #ffffff !important;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35) !important;
+}
+
+.admin-students-page .leaderboard-header {
+    padding: 20px 24px !important;
+    background:
+        radial-gradient(circle at top right, rgba(253, 184, 19, 0.26), transparent 34%),
+        linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark)) !important;
+    color: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 14px !important;
+}
+
+.admin-students-page .leaderboard-header span {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    font-size: 16px !important;
+    font-weight: 950 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.7px !important;
+}
+
+.admin-students-page .leaderboard-close {
+    width: 38px !important;
+    height: 38px !important;
+    border: none !important;
+    border-radius: 12px !important;
+    background: rgba(255, 255, 255, 0.14) !important;
+    color: #ffffff !important;
+    font-size: 26px !important;
+    cursor: pointer !important;
+    line-height: 1 !important;
+}
+
+.admin-students-page .leaderboard-body {
+    padding: 24px !important;
+    max-height: 72vh !important;
+    overflow-y: auto !important;
+}
+
+.admin-students-page .leaderboard-note {
+    margin: 0 0 18px !important;
+    padding: 13px 15px !important;
+    border-radius: 14px !important;
+    background: #f7f2ff !important;
+    color: var(--uc-purple) !important;
+    font-size: 13px !important;
+    font-weight: 850 !important;
+    border-left: 5px solid var(--uc-gold) !important;
+}
+
+.admin-students-page .leaderboard-table {
+    width: 100% !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    font-size: 14px !important;
+}
+
+.admin-students-page .leaderboard-table th {
+    background: var(--uc-purple) !important;
+    color: white !important;
+    padding: 14px 15px !important;
+    text-align: left !important;
+    font-weight: 950 !important;
+    white-space: nowrap !important;
+}
+
+.admin-students-page .leaderboard-table th:first-child {
+    border-top-left-radius: 14px !important;
+}
+
+.admin-students-page .leaderboard-table th:last-child {
+    border-top-right-radius: 14px !important;
+}
+
+.admin-students-page .leaderboard-table td {
+    padding: 14px 15px !important;
+    border-bottom: 1px solid #eef0f4 !important;
+    vertical-align: middle !important;
+}
+
+.admin-students-page .leaderboard-rank {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    background: #ede9fe !important;
+    color: var(--uc-purple) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: 950 !important;
+}
+
+.admin-students-page .leaderboard-rank.top-1 {
+    background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+    color: var(--uc-purple-dark) !important;
+}
+
+.admin-students-page .leaderboard-rank.top-2 {
+    background: #e5e7eb !important;
+    color: #374151 !important;
+}
+
+.admin-students-page .leaderboard-rank.top-3 {
+    background: #fed7aa !important;
+    color: #9a3412 !important;
+}
+
+.admin-students-page .leaderboard-student-name {
+    font-weight: 950 !important;
+    color: var(--admin-text) !important;
+}
+
+.admin-students-page .leaderboard-student-id {
+    margin-top: 3px !important;
+    font-size: 12px !important;
+    color: var(--admin-muted) !important;
+    font-weight: 800 !important;
+}
+
+.admin-students-page .leaderboard-count {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    padding: 7px 12px !important;
+    border-radius: 999px !important;
+    background: #dcfce7 !important;
+    color: #166534 !important;
+    font-size: 13px !important;
+    font-weight: 950 !important;
+}
+
+.admin-students-page .leaderboard-empty {
+    padding: 45px 20px !important;
+    text-align: center !important;
+    color: #9ca3af !important;
+    font-weight: 850 !important;
+}
+
+.admin-students-page .reset-session-btn {
+    min-height: 50px !important;
+    padding: 0 20px !important;
+    border: none !important;
+    border-radius: 999px !important;
+    background: linear-gradient(135deg, #dc2626, #991b1b) !important;
+    color: #ffffff !important;
+    font-size: 13px !important;
+    font-weight: 950 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    box-shadow: 0 12px 28px rgba(220, 38, 38, 0.22) !important;
+    transition: all 0.22s ease !important;
+    white-space: nowrap !important;
+}
+
+.admin-students-page .reset-session-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 16px 34px rgba(220, 38, 38, 0.30) !important;
+}
+
+.admin-students-page .reset-session-modal-note {
+    padding: 14px 15px !important;
+    border-radius: 14px !important;
+    background: #fee2e2 !important;
+    color: #991b1b !important;
+    font-size: 13px !important;
+    font-weight: 850 !important;
+    border-left: 5px solid #dc2626 !important;
+    line-height: 1.5 !important;
+}
     </style>
 </head>
 
@@ -383,17 +991,34 @@
 
     <div class="admin-nav-links">
         <a href="/admin/dashboard"><i class="fas fa-home"></i>Home</a>
-        <a href="javascript:void(0)" onclick="openSearchModal()"><i class="fas fa-search"></i>Search</a>
+        <a href="javascript:void(0)" onclick="openSearchModal()">
+    <i class="fas fa-search"></i>Search
+</a>
         <a href="/admin/students" class="active"><i class="fas fa-user-graduate"></i>Students</a>
         <a href="/admin/sitin-records"><i class="fas fa-desktop"></i>Sit-in</a>
         <a href="/admin/view-sitin-records"><i class="fas fa-list"></i>View Sit-in Records</a>
+        <a href="/admin/sitin-report"><i class="fas fa-chart-pie"></i>Sit-in Report</a>
         <a href="/admin/feedback-reports"><i class="fas fa-comments"></i>Feedback Reports</a>
         <a href="/admin/reservations"><i class="fas fa-calendar-check"></i>Reservation</a>
         <a href="/admin/logout" class="admin-logout-btn">Log out</a>
     </div>
 </div>
 
+
+
 <div class="students-wrapper">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-box">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 
     <div class="students-header">
         <div class="students-title">
@@ -406,9 +1031,26 @@
             </div>
         </div>
 
-        <div class="stats-card">
-            <p>Total Students</p>
-            <div class="number">{{ total_students }}</div>
+        <div class="header-actions">
+            <button type="button" class="leaderboard-btn" onclick="openLeaderboardModal()">
+                <i class="fas fa-trophy"></i>
+                Leaderboards
+            </button>
+
+            <button type="button" class="reset-session-btn" onclick="openResetSessionModal()">
+                <i class="fas fa-rotate-right"></i>
+                Reset Sessions
+            </button>
+
+            <button type="button" class="add-student-btn" onclick="openAddStudentModal()">
+                <i class="fas fa-user-plus"></i>
+                Add Student
+            </button>
+
+            <div class="stats-card">
+                <p>Total Students</p>
+                <div class="number">{{ total_students }}</div>
+            </div>
         </div>
     </div>
 
@@ -422,6 +1064,7 @@
                     <th>Level</th>
                     <th>Email</th>
                     <th>Address</th>
+                    <th>Status / Action</th>
                 </tr>
             </thead>
 
@@ -438,6 +1081,28 @@
                     <td><span class="level-badge">{{ s.course_level }}</span></td>
                     <td>{{ s.email }}</td>
                     <td>{{ s.address }}</td>
+                    <td>
+                        <div class="action-cell">
+                            <span class="status-badge">
+                                <i class="fas fa-circle-check"></i>
+                                Active
+                            </span>
+
+                            <button
+                                type="button"
+                                class="delete-student-btn"
+                                onclick="openDeleteModal('{{ s.id_number }}', '{{ s.first_name }} {{ s.last_name }}')"
+                            >
+                                <i class="fas fa-trash"></i>
+                                Delete
+                            </button>
+                              <form action="{{ url_for('admin_reset_sessions') }}" method="POST" style="display:inline;">
+        <button type="submit" class="btn btn-warning">
+            Reset Sessions
+        </button>
+    </form>
+                        </div>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -445,7 +1110,247 @@
     </div>
 
 </div>
+<!-- LEADERBOARD MODAL -->
+<div id="leaderboardModal" class="leaderboard-overlay">
+    <div class="leaderboard-modal">
+        <div class="leaderboard-header">
+            <span>
+                <i class="fas fa-trophy"></i>
+                Student Raw Points Leaderboard
+            </span>
 
+            <button type="button" class="leaderboard-close" onclick="closeModal('leaderboardModal')">
+                &times;
+            </button>
+        </div>
+
+        <div class="leaderboard-body">
+            <p class="leaderboard-note">
+                <i class="fas fa-info-circle"></i>
+                Ranking is based on raw evaluation points given by admin after completed sit-ins.
+                Every 3.00 raw points gives the student 1 extra session.
+            </p>
+
+            {% if leaderboard_students %}
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Student</th>
+                        <th>Course / Level</th>
+                        <th>Raw Points</th>
+                        <th>Completed</th>
+                        <th>Current Active</th>
+                        <th>Extra Sessions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for student in leaderboard_students %}
+                    <tr>
+                        <td>
+                            <span class="leaderboard-rank top-{{ loop.index if loop.index <= 3 else 'other' }}">
+                                {% if loop.index == 1 %}
+                                    <i class="fas fa-crown"></i>
+                                {% else %}
+                                    {{ loop.index }}
+                                {% endif %}
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="leaderboard-student-name">
+                                {{ student.first_name }} {{ student.middle_name }} {{ student.last_name }}
+                            </div>
+                            <div class="leaderboard-student-id">
+                                {{ student.id_number }}
+                            </div>
+                        </td>
+
+                        <td>
+                            <strong>{{ student.course }}</strong>
+                            <br>
+                            <small style="color:#6b7280; font-weight:800;">
+                                {{ student.course_level }}
+                            </small>
+                        </td>
+
+                        <td>
+                            <span class="leaderboard-count" style="background:#fef3c7 !important; color:#92400e !important;">
+                                <i class="fas fa-star"></i>
+                                {{ "%.2f"|format(student.raw_points|default(0)) }}
+                            </span>
+                        </td>
+
+                        <td>{{ student.completed_sitins or 0 }}</td>
+                        <td>{{ student.active_sitins or 0 }}</td>
+
+                        <td>
+                            <span class="leaderboard-count" style="background:#ede9fe !important; color:#4b2c80 !important;">
+                                <i class="fas fa-gift"></i>
+                                {{ student.bonus_sessions or 0 }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="leaderboard-empty">
+                <i class="fas fa-inbox" style="font-size:46px; display:block; margin-bottom:12px;"></i>
+                No raw evaluation points found yet.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<!-- RESET SESSION MODAL -->
+<div id="resetSessionModal" class="leaderboard-overlay">
+    <div class="leaderboard-modal" style="width: min(520px, 100%);">
+        <div class="leaderboard-header">
+            <span>
+                <i class="fas fa-rotate-right"></i>
+                Reset All Sessions
+            </span>
+
+            <button type="button" class="leaderboard-close" onclick="closeModal('resetSessionModal')">
+                &times;
+            </button>
+        </div>
+
+        <div class="leaderboard-body">
+            <div class="reset-session-modal-note">
+                <i class="fas fa-triangle-exclamation"></i>
+                This will reset all students back to <strong>30 sessions</strong>.
+                Previous sit-in records will not be deleted, but session counting will restart from this reset.
+            </div>
+
+            <form method="POST" action="/admin/reset-sessions" style="margin-top: 20px; display:flex; justify-content:flex-end; gap:10px;">
+                <button type="button" class="btn-cancel" onclick="closeModal('resetSessionModal')">
+                    Cancel
+                </button>
+
+                <button type="submit" class="reset-session-btn">
+                    <i class="fas fa-check-circle"></i>
+                    Confirm Reset
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- ADD STUDENT MODAL -->
+<div id="addStudentModal" class="add-modal-overlay">
+    <div class="add-modal">
+        <div class="add-modal-header">
+            <span>
+                <i class="fas fa-user-plus"></i>
+                Add New Student
+            </span>
+            <button type="button" class="add-modal-close" onclick="closeModal('addStudentModal')">&times;</button>
+        </div>
+
+        <form action="{{ url_for('admin_add_student') }}" method="POST">
+            <div class="add-modal-body">
+                <div class="add-form-grid">
+                    <div class="form-group">
+                        <label>ID Number</label>
+                        <input type="text" name="id_number" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Course Level</label>
+                        <select name="course_level" required>
+                            <option value="" disabled selected>Select level</option>
+                            <option value="1st Year">1st Year</option>
+                            <option value="2nd Year">2nd Year</option>
+                            <option value="3rd Year">3rd Year</option>
+                            <option value="4th Year">4th Year</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" name="last_name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" name="first_name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Middle Name</label>
+                        <input type="text" name="middle_name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Course</label>
+                        <select name="course" required>
+                            <option value="" disabled selected>Select course</option>
+                           <option value="BSIT">BSIT - Information Technology</option>
+                            <option value="BSCS">BSCS - Computer Science</option>
+                            <option value="BSCE">BSCE - Civil Engineering</option>
+                            <option value="BSEE">BSEE - Electrical Engineering</option>
+                            <option value="BSME">BSME - Mechanical Engineering</option>
+                            <option value="BSECE">BSECE - Electronics Engineering</option>
+                            <option value="BSIE">BSIE - Industrial Engineering</option>
+                            <option value="BSCHE">BSChE - Chemical Engineering</option>
+                            <option value="BSMATH">BS Mathematics</option>
+                            <option value="BSBIO">BS Biology</option>
+                            <option value="BSPSYCH">BS Psychology</option>
+                            <option value="ABCOMM">AB Communication</option>
+                            <option value="ABPOLSCI">AB Political Science</option>
+                            <option value="BSBA">BSBA - Business Administration</option>
+                            <option value="BSACT">BS Accountancy</option>
+                            <option value="BSMA">BS Management Accounting</option>
+                            <option value="BSENT">BS Entrepreneurship</option>
+                            <option value="BEED">BEED - Elementary Education</option>
+                            <option value="BSED">BSED - Secondary Education</option>
+                            <option value="BSN">BSN - Nursing</option>
+                            <option value="BSPHAR">BS Pharmacy</option>
+                            <option value="BSHM">BSHM - Hospitality Management</option>
+                            <option value="BSTM">BSTM - Tourism Management</option>
+                            <option value="BSCJ">BSCJ - Criminal Justice</option>
+                            <option value="JD">JD - Juris Doctor</option>
+                            <option value="BSARCH">BS Architecture</option>
+                            <option value="BSSW">BS Social Work</option>
+                            <option value="BSMARE">BS Marine Engineering</option>
+                            <option value="BSMARTR">BS Marine Transportation</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Default Password</label>
+                        <input type="text" name="password" value="12345" required>
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Address</label>
+                        <textarea name="address" placeholder="Enter student address"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="add-modal-footer">
+                <button type="button" class="modal-btn modal-cancel-btn" onclick="closeModal('addStudentModal')">
+                    Cancel
+                </button>
+
+                <button type="submit" class="modal-btn modal-save-btn">
+                    <i class="fas fa-save"></i>
+                    Save Student
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- SEARCH STUDENT MODAL -->
 <div id="searchModal" class="admin-search-overlay">
     <div class="admin-search-modal">
         <div class="admin-search-header">
@@ -477,74 +1382,37 @@
     </div>
 </div>
 
-<div id="sitInFormModal" class="modal-overlay">
-    <div class="modal-content">
 
-        <div class="modal-header">
-            <span>
-                <i class="fas fa-desktop" style="margin-right:8px;"></i>
-                Sit-In Form
-            </span>
-            <button type="button" onclick="closeModal('sitInFormModal')" style="background:none;border:none;color:white;font-size:24px;cursor:pointer;">&times;</button>
+
+<!-- DELETE STUDENT ALERT MODAL -->
+<div id="deleteAlertModal" class="delete-alert-overlay">
+    <div class="delete-alert-modal">
+        <div class="delete-alert-header">
+            <i class="fas fa-triangle-exclamation"></i>
         </div>
 
-        <form action="/admin/sit-in" method="POST">
-            <div class="modal-body">
+        <div class="delete-alert-body">
+            <h2>Delete Student?</h2>
+            <p>
+                Are you sure you want to delete
+                <strong id="deleteStudentName">this student</strong>?
+                <br>
+                This action cannot be undone.
+            </p>
+        </div>
 
-                <div style="margin-bottom: 15px;">
-                    <label>ID Number</label>
-                    <input type="text" name="id_number" id="display_id" readonly>
-                </div>
+        <div class="delete-alert-footer">
+            <button type="button" class="delete-cancel-btn" onclick="closeModal('deleteAlertModal')">
+                Cancel
+            </button>
 
-                <div style="margin-bottom: 15px;">
-                    <label>Student Name</label>
-                    <input type="text" id="display_name" readonly>
-                </div>
-
-                <div style="display:flex; gap:15px; margin-bottom:15px;">
-                    <div style="flex:1;">
-                        <label>Purpose</label>
-                        <select name="purpose">
-                            <option value="C Programming">C Programming</option>
-                            <option value="Java">Java</option>
-                            <option value="PHP">PHP</option>
-                            <option value="Python">Python</option>
-                            <option value="Database">Database</option>
-                        </select>
-                    </div>
-
-                    <div style="flex:1;">
-                        <label>Lab</label>
-                        <select name="lab" required>
-                            <option value="" disabled selected>Select lab</option>
-                            <option value="524">524</option>
-                            <option value="526">526</option>
-                            <option value="528">528</option>
-                            <option value="530">530</option>
-                            <option value="542">542</option>
-                            <option value="544">544</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <label>Remaining Session</label>
-                    <input type="text" id="display_remaining" readonly>
-                </div>
-
-            </div>
-
-            <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:12px;">
-                <button type="button" class="btn btn-reset" onclick="closeModal('sitInFormModal')">
-                    Close
+            <form id="deleteStudentForm" method="POST">
+                <button type="submit" class="delete-confirm-btn">
+                    <i class="fas fa-trash"></i>
+                    Yes, Delete
                 </button>
-
-                <button type="submit" class="btn btn-search">
-                    Sit In
-                </button>
-            </div>
-        </form>
-
+            </form>
+        </div>
     </div>
 </div>
 
@@ -580,6 +1448,32 @@ $(document).ready(function() {
         }
     });
 });
+
+function openAddStudentModal() {
+    const modal = document.getElementById('addStudentModal');
+
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+}
+
+function openDeleteModal(idNumber, studentName) {
+    const modal = document.getElementById('deleteAlertModal');
+    const nameText = document.getElementById('deleteStudentName');
+    const deleteForm = document.getElementById('deleteStudentForm');
+
+    if (nameText) {
+        nameText.textContent = studentName;
+    }
+
+    if (deleteForm) {
+        deleteForm.action = `/admin/delete-student/${idNumber}`;
+    }
+
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+}
 
 function openSearchModal() {
     const modal = document.getElementById('searchModal');
@@ -735,15 +1629,47 @@ function lookupStudent() {
         })
         .catch(error => console.error('Error:', error));
 }
+function openLeaderboardModal() {
+    const modal = document.getElementById('leaderboardModal');
+
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+}
 
 window.addEventListener('click', function(event) {
     const searchModal = document.getElementById('searchModal');
+    const addStudentModal = document.getElementById('addStudentModal');
+    const deleteAlertModal = document.getElementById('deleteAlertModal');
+    const leaderboardModal = document.getElementById('leaderboardModal');
 
     if (event.target === searchModal) {
         closeModal('searchModal');
     }
+
+    if (event.target === addStudentModal) {
+        closeModal('addStudentModal');
+    }
+
+    if (event.target === deleteAlertModal) {
+        closeModal('deleteAlertModal');
+    }
+
+    if (event.target === leaderboardModal) {
+        closeModal('leaderboardModal');
+    }
 });
+
+function openResetSessionModal() {
+    const modal = document.getElementById('resetSessionModal');
+
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+}
 </script>
+{% include 'admin_modals.html' %}
+<script src="{{ url_for('static', filename='darkmode.js') }}"></script>
 
 </body>
 </html>

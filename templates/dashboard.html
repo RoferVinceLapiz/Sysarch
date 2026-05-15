@@ -154,6 +154,20 @@
             color: var(--uc-purple) !important;
         }
 
+        .notif-count {
+            min-width: 18px;
+            height: 18px;
+            padding: 0 6px;
+            border-radius: 999px;
+            background: #dc2626;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 950;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 4px;
+        }
         .student-dashboard-page .notif-count {
             background: #ef4444 !important;
             color: #ffffff !important;
@@ -736,6 +750,951 @@
                 flex: 1 1 100% !important;
             }
         }
+
+    .notif-count {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: #dc2626;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 950;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 4px;
+}
+
+.notification-menu {
+    max-height: 330px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-width: 340px;
+}
+
+.notification-menu::-webkit-scrollbar {
+    width: 8px;
+}
+
+.notification-menu::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 999px;
+}
+
+.notification-menu::-webkit-scrollbar-thumb {
+    background: #c4b5fd;
+    border-radius: 999px;
+}
+
+.notif-item {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    white-space: normal !important;
+    line-height: 1.35 !important;
+}
+
+.notif-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    background: #f7f2ff;
+    color: #4b2c80;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.notif-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.notif-message {
+    color: #111827;
+    font-size: 13px;
+    font-weight: 800;
+    word-break: break-word;
+}
+
+.notif-content small {
+    color: #6b7280;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.notif-empty {
+    padding: 18px;
+    color: #9ca3af;
+    font-size: 13px;
+    font-weight: 800;
+    text-align: center;
+}
+
+.notif-empty i {
+    display: block;
+    font-size: 26px;
+    margin-bottom: 8px;
+}
+
+.notification-toggle-btn {
+    border: none !important;
+    background: transparent !important;
+    color: inherit !important;
+    font: inherit !important;
+    cursor: pointer !important;
+}
+
+.dropdown .notification-menu {
+    display: none !important;
+}
+
+.dropdown.show .notification-menu {
+    display: block !important;
+}
+
+.dropdown:hover .notification-menu {
+    display: none !important;
+}
+
+.dropdown.show:hover .notification-menu {
+    display: block !important;
+}
+
+.notification-menu {
+    position: absolute !important;
+    top: 100% !important;
+    right: 0 !important;
+    max-height: 330px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    min-width: 340px !important;
+    background: #ffffff !important;
+    border-radius: 16px !important;
+    box-shadow: 0 18px 45px rgba(31, 16, 70, 0.18) !important;
+    z-index: 999999 !important;
+    padding: 8px !important;
+}
+
+/* ================= STUDENT DASHBOARD LEADERBOARD ================= */
+
+.dashboard-leaderboard-section {
+    margin: 24px 0 !important;
+    display: grid !important;
+    grid-template-columns: minmax(280px, 420px) minmax(0, 1fr) !important;
+    gap: 22px !important;
+    align-items: stretch !important;
+}
+
+.my-rank-card,
+.top-leaderboard-card {
+    background: rgba(255, 255, 255, 0.96) !important;
+    border: 1px solid rgba(255, 255, 255, 0.78) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 22px 55px rgba(31, 16, 70, 0.11) !important;
+    overflow: hidden !important;
+}
+
+.my-rank-header,
+.top-leaderboard-header {
+    background:
+        radial-gradient(circle at top right, rgba(253, 184, 19, 0.22), transparent 30%),
+        linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark)) !important;
+    color: #ffffff !important;
+    padding: 17px 20px !important;
+    font-size: 13px !important;
+    font-weight: 950 !important;
+    letter-spacing: 0.8px !important;
+    text-transform: uppercase !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 9px !important;
+}
+
+.my-rank-body {
+    padding: 24px !important;
+    text-align: center !important;
+}
+
+.rank-circle {
+    width: 118px !important;
+    height: 118px !important;
+    border-radius: 50% !important;
+    margin: 0 auto 16px !important;
+    background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+    color: var(--uc-purple-dark) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    box-shadow: 0 16px 34px rgba(253, 184, 19, 0.30) !important;
+}
+
+.rank-circle small {
+    font-size: 12px !important;
+    font-weight: 950 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.7px !important;
+}
+
+.rank-circle strong {
+    font-size: 42px !important;
+    font-weight: 950 !important;
+    line-height: 1 !important;
+}
+
+.rank-title {
+    margin: 0 !important;
+    color: var(--uc-purple) !important;
+    font-size: 20px !important;
+    font-weight: 950 !important;
+}
+
+.rank-subtitle {
+    margin: 7px 0 18px !important;
+    color: #6b7280 !important;
+    font-size: 13px !important;
+    font-weight: 750 !important;
+}
+
+.rank-mini-stats {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 10px !important;
+}
+
+.rank-mini-stat {
+    padding: 13px 10px !important;
+    border-radius: 16px !important;
+    background: #f8f5ff !important;
+    border: 1px solid #ede9fe !important;
+}
+
+.rank-mini-stat span {
+    display: block !important;
+    color: #6b7280 !important;
+    font-size: 11px !important;
+    font-weight: 850 !important;
+    text-transform: uppercase !important;
+}
+
+.rank-mini-stat strong {
+    display: block !important;
+    margin-top: 4px !important;
+    color: var(--uc-purple) !important;
+    font-size: 20px !important;
+    font-weight: 950 !important;
+}
+
+.top-leaderboard-body {
+    padding: 18px !important;
+    max-height: 360px !important;
+    overflow-y: auto !important;
+}
+
+.leaderboard-row {
+    display: grid !important;
+    grid-template-columns: 54px minmax(0, 1fr) auto !important;
+    gap: 12px !important;
+    align-items: center !important;
+    padding: 12px !important;
+    border-radius: 16px !important;
+    border: 1px solid #eef0f4 !important;
+    background: #ffffff !important;
+    margin-bottom: 10px !important;
+}
+
+.leaderboard-row.me {
+    background: #fffbeb !important;
+    border-color: rgba(253, 184, 19, 0.75) !important;
+}
+
+.leaderboard-rank-badge {
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 50% !important;
+    background: #ede9fe !important;
+    color: var(--uc-purple) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: 950 !important;
+}
+
+.leaderboard-rank-badge.top-1 {
+    background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+    color: var(--uc-purple-dark) !important;
+}
+
+.leaderboard-rank-badge.top-2 {
+    background: #e5e7eb !important;
+    color: #374151 !important;
+}
+
+.leaderboard-rank-badge.top-3 {
+    background: #fed7aa !important;
+    color: #9a3412 !important;
+}
+
+.leaderboard-name {
+    color: #111827 !important;
+    font-size: 14px !important;
+    font-weight: 950 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.leaderboard-meta {
+    margin-top: 3px !important;
+    color: #6b7280 !important;
+    font-size: 11px !important;
+    font-weight: 750 !important;
+}
+
+.leaderboard-score {
+    padding: 7px 11px !important;
+    border-radius: 999px !important;
+    background: #dcfce7 !important;
+    color: #166534 !important;
+    font-size: 12px !important;
+    font-weight: 950 !important;
+    white-space: nowrap !important;
+}
+
+.leaderboard-empty {
+    padding: 34px 16px !important;
+    text-align: center !important;
+    color: #9ca3af !important;
+    font-size: 13px !important;
+    font-weight: 850 !important;
+}
+
+@media (max-width: 900px) {
+    .dashboard-leaderboard-section {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 520px) {
+    .rank-mini-stats {
+        grid-template-columns: 1fr !important;
+    }
+
+    .leaderboard-row {
+        grid-template-columns: 44px minmax(0, 1fr) !important;
+    }
+
+    .leaderboard-score {
+        grid-column: 2 !important;
+        width: fit-content !important;
+    }
+}
+.remaining-session-card {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+    flex-wrap: wrap !important;
+}
+
+.view-ranking-btn {
+    margin-left: auto !important;
+    border: none !important;
+    border-radius: 999px !important;
+    padding: 10px 14px !important;
+    background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+    color: var(--uc-purple-dark) !important;
+    font-size: 12px !important;
+    font-weight: 950 !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    box-shadow: 0 10px 22px rgba(253, 184, 19, 0.25) !important;
+    transition: all 0.22s ease !important;
+    white-space: nowrap !important;
+}
+
+.view-ranking-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 14px 28px rgba(253, 184, 19, 0.34) !important;
+}
+
+.ranking-modal-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    display: none;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 24px !important;
+    background: rgba(15, 15, 20, 0.72) !important;
+    backdrop-filter: blur(7px) !important;
+    z-index: 999999 !important;
+}
+
+.ranking-modal {
+    width: min(920px, 100%) !important;
+    max-height: 92vh !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+    border-radius: 24px !important;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35) !important;
+}
+
+.ranking-modal-header {
+    background:
+        radial-gradient(circle at top right, rgba(253, 184, 19, 0.25), transparent 32%),
+        linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark)) !important;
+    color: #ffffff !important;
+    padding: 19px 23px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+}
+
+.ranking-modal-header span {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 9px !important;
+    font-size: 15px !important;
+    font-weight: 950 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.7px !important;
+}
+
+.ranking-close-btn {
+    width: 38px !important;
+    height: 38px !important;
+    border: none !important;
+    border-radius: 12px !important;
+    background: rgba(255, 255, 255, 0.14) !important;
+    color: #ffffff !important;
+    font-size: 25px !important;
+    cursor: pointer !important;
+}
+
+.ranking-modal-body {
+    padding: 24px !important;
+    max-height: 76vh !important;
+    overflow-y: auto !important;
+}
+
+.ranking-grid {
+    display: grid !important;
+    grid-template-columns: minmax(260px, 360px) minmax(0, 1fr) !important;
+    gap: 20px !important;
+}
+
+.my-ranking-card,
+.top-ranking-card {
+    border: 1px solid #eef0f4 !important;
+    border-radius: 20px !important;
+    background: #ffffff !important;
+    overflow: hidden !important;
+}
+
+.my-ranking-card-header,
+.top-ranking-card-header {
+    padding: 14px 17px !important;
+    background: #f7f2ff !important;
+    color: var(--uc-purple) !important;
+    font-size: 13px !important;
+    font-weight: 950 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    text-transform: uppercase !important;
+}
+
+.my-ranking-body {
+    padding: 24px 18px !important;
+    text-align: center !important;
+}
+
+.rank-circle {
+    width: 118px !important;
+    height: 118px !important;
+    border-radius: 50% !important;
+    margin: 0 auto 16px !important;
+    background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+    color: var(--uc-purple-dark) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 16px 34px rgba(253, 184, 19, 0.30) !important;
+}
+
+.rank-circle small {
+    font-size: 12px !important;
+    font-weight: 950 !important;
+    text-transform: uppercase !important;
+}
+
+.rank-circle strong {
+    font-size: 40px !important;
+    font-weight: 950 !important;
+    line-height: 1 !important;
+}
+
+.rank-title {
+    margin: 0 !important;
+    color: var(--uc-purple) !important;
+    font-size: 19px !important;
+    font-weight: 950 !important;
+}
+
+.rank-subtitle {
+    margin: 7px 0 18px !important;
+    color: #6b7280 !important;
+    font-size: 13px !important;
+    font-weight: 750 !important;
+}
+
+.rank-mini-stats {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 9px !important;
+}
+
+.rank-mini-stat {
+    padding: 12px 8px !important;
+    border-radius: 15px !important;
+    background: #f8f5ff !important;
+    border: 1px solid #ede9fe !important;
+}
+
+.rank-mini-stat span {
+    display: block !important;
+    color: #6b7280 !important;
+    font-size: 10px !important;
+    font-weight: 850 !important;
+    text-transform: uppercase !important;
+}
+
+.rank-mini-stat strong {
+    display: block !important;
+    margin-top: 4px !important;
+    color: var(--uc-purple) !important;
+    font-size: 19px !important;
+    font-weight: 950 !important;
+}
+
+.top-ranking-list {
+    padding: 15px !important;
+    max-height: 430px !important;
+    overflow-y: auto !important;
+}
+
+.ranking-row {
+    display: grid !important;
+    grid-template-columns: 50px minmax(0, 1fr) auto !important;
+    gap: 12px !important;
+    align-items: center !important;
+    padding: 12px !important;
+    border-radius: 16px !important;
+    border: 1px solid #eef0f4 !important;
+    margin-bottom: 10px !important;
+    background: #ffffff !important;
+}
+
+.ranking-row.me {
+    background: #fffbeb !important;
+    border-color: rgba(253, 184, 19, 0.75) !important;
+}
+
+.ranking-rank-badge {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    background: #ede9fe !important;
+    color: var(--uc-purple) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: 950 !important;
+}
+
+.ranking-rank-badge.top-1 {
+    background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+    color: var(--uc-purple-dark) !important;
+}
+
+.ranking-rank-badge.top-2 {
+    background: #e5e7eb !important;
+    color: #374151 !important;
+}
+
+.ranking-rank-badge.top-3 {
+    background: #fed7aa !important;
+    color: #9a3412 !important;
+}
+
+.ranking-name {
+    color: #111827 !important;
+    font-size: 14px !important;
+    font-weight: 950 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.ranking-meta {
+    margin-top: 3px !important;
+    color: #6b7280 !important;
+    font-size: 11px !important;
+    font-weight: 750 !important;
+}
+
+.ranking-score {
+    padding: 7px 11px !important;
+    border-radius: 999px !important;
+    background: #dcfce7 !important;
+    color: #166534 !important;
+    font-size: 12px !important;
+    font-weight: 950 !important;
+    white-space: nowrap !important;
+}
+
+@media (max-width: 850px) {
+    .ranking-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .view-ranking-btn {
+        margin-left: 0 !important;
+    }
+}
+
+@media (max-width: 520px) {
+    .rank-mini-stats {
+        grid-template-columns: 1fr !important;
+    }
+
+    .ranking-row {
+        grid-template-columns: 44px minmax(0, 1fr) !important;
+    }
+
+    .ranking-score {
+        grid-column: 2 !important;
+        width: fit-content !important;
+    }
+}
+
+.student-dashboard-page .ranking-session-summary {
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
+    flex-wrap: wrap !important;
+}
+
+.student-dashboard-page .view-ranking-btn {
+    position: relative !important;
+    z-index: 2 !important;
+    border: none !important;
+    border-radius: 999px !important;
+    padding: 10px 14px !important;
+    background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+    color: var(--uc-purple-dark) !important;
+    font-size: 12px !important;
+    font-weight: 950 !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    box-shadow: 0 10px 22px rgba(253, 184, 19, 0.25) !important;
+}
+
+.student-dashboard-page .ranking-modal-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    display: none;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 24px !important;
+    background: rgba(15, 15, 20, 0.72) !important;
+    backdrop-filter: blur(7px) !important;
+    z-index: 999999 !important;
+}
+
+.student-dashboard-page .ranking-modal {
+    width: min(920px, 100%) !important;
+    max-height: 92vh !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+    border-radius: 24px !important;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35) !important;
+}
+
+.student-dashboard-page .ranking-modal-header {
+    background:
+        radial-gradient(circle at top right, rgba(253, 184, 19, 0.25), transparent 32%),
+        linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark)) !important;
+    color: #ffffff !important;
+    padding: 19px 23px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+}
+
+.student-dashboard-page .ranking-modal-header span {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 9px !important;
+    font-size: 15px !important;
+    font-weight: 950 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.7px !important;
+}
+
+.student-dashboard-page .ranking-close-btn {
+    width: 38px !important;
+    height: 38px !important;
+    border: none !important;
+    border-radius: 12px !important;
+    background: rgba(255, 255, 255, 0.14) !important;
+    color: #ffffff !important;
+    font-size: 25px !important;
+    cursor: pointer !important;
+}
+
+.student-dashboard-page .ranking-modal-body {
+    padding: 24px !important;
+    max-height: 76vh !important;
+    overflow-y: auto !important;
+}
+
+.student-dashboard-page .ranking-grid {
+    display: grid !important;
+    grid-template-columns: minmax(260px, 360px) minmax(0, 1fr) !important;
+    gap: 20px !important;
+}
+
+.student-dashboard-page .my-ranking-card,
+.student-dashboard-page .top-ranking-card {
+    border: 1px solid #eef0f4 !important;
+    border-radius: 20px !important;
+    background: #ffffff !important;
+    overflow: hidden !important;
+}
+
+.student-dashboard-page .my-ranking-card-header,
+.student-dashboard-page .top-ranking-card-header {
+    padding: 14px 17px !important;
+    background: #f7f2ff !important;
+    color: var(--uc-purple) !important;
+    font-size: 13px !important;
+    font-weight: 950 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    text-transform: uppercase !important;
+}
+
+.student-dashboard-page .my-ranking-body {
+    padding: 24px 18px !important;
+    text-align: center !important;
+}
+
+.student-dashboard-page .rank-circle {
+    width: 118px !important;
+    height: 118px !important;
+    border-radius: 50% !important;
+    margin: 0 auto 16px !important;
+    background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+    color: var(--uc-purple-dark) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 16px 34px rgba(253, 184, 19, 0.30) !important;
+}
+
+.student-dashboard-page .rank-circle small {
+    font-size: 12px !important;
+    font-weight: 950 !important;
+    text-transform: uppercase !important;
+}
+
+.student-dashboard-page .rank-circle strong {
+    font-size: 40px !important;
+    font-weight: 950 !important;
+    line-height: 1 !important;
+}
+
+.student-dashboard-page .rank-title {
+    margin: 0 !important;
+    color: var(--uc-purple) !important;
+    font-size: 19px !important;
+    font-weight: 950 !important;
+}
+
+.student-dashboard-page .rank-subtitle {
+    margin: 7px 0 18px !important;
+    color: #6b7280 !important;
+    font-size: 13px !important;
+    font-weight: 750 !important;
+}
+
+.student-dashboard-page .rank-mini-stats {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 9px !important;
+}
+
+.student-dashboard-page .rank-mini-stat {
+    padding: 12px 8px !important;
+    border-radius: 15px !important;
+    background: #f8f5ff !important;
+    border: 1px solid #ede9fe !important;
+}
+
+.student-dashboard-page .rank-mini-stat span {
+    display: block !important;
+    color: #6b7280 !important;
+    font-size: 10px !important;
+    font-weight: 850 !important;
+    text-transform: uppercase !important;
+}
+
+.student-dashboard-page .rank-mini-stat strong {
+    display: block !important;
+    margin-top: 4px !important;
+    color: var(--uc-purple) !important;
+    font-size: 19px !important;
+    font-weight: 950 !important;
+}
+
+.student-dashboard-page .top-ranking-list {
+    padding: 15px !important;
+    max-height: 430px !important;
+    overflow-y: auto !important;
+}
+
+.student-dashboard-page .ranking-row {
+    display: grid !important;
+    grid-template-columns: 50px minmax(0, 1fr) auto !important;
+    gap: 12px !important;
+    align-items: center !important;
+    padding: 12px !important;
+    border-radius: 16px !important;
+    border: 1px solid #eef0f4 !important;
+    margin-bottom: 10px !important;
+    background: #ffffff !important;
+}
+
+.student-dashboard-page .ranking-row.me {
+    background: #fffbeb !important;
+    border-color: rgba(253, 184, 19, 0.75) !important;
+}
+
+.student-dashboard-page .ranking-rank-badge {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    background: #ede9fe !important;
+    color: var(--uc-purple) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: 950 !important;
+}
+
+.student-dashboard-page .ranking-rank-badge.top-1 {
+    background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+    color: var(--uc-purple-dark) !important;
+}
+
+.student-dashboard-page .ranking-rank-badge.top-2 {
+    background: #e5e7eb !important;
+    color: #374151 !important;
+}
+
+.student-dashboard-page .ranking-rank-badge.top-3 {
+    background: #fed7aa !important;
+    color: #9a3412 !important;
+}
+
+.student-dashboard-page .ranking-name {
+    color: #111827 !important;
+    font-size: 14px !important;
+    font-weight: 950 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.student-dashboard-page .ranking-meta {
+    margin-top: 3px !important;
+    color: #6b7280 !important;
+    font-size: 11px !important;
+    font-weight: 750 !important;
+}
+
+.student-dashboard-page .ranking-score {
+    padding: 7px 11px !important;
+    border-radius: 999px !important;
+    background: #fef3c7 !important;
+    color: #92400e !important;
+    font-size: 12px !important;
+    font-weight: 950 !important;
+    white-space: nowrap !important;
+}
+
+@media (max-width: 850px) {
+    .student-dashboard-page .ranking-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 520px) {
+    .student-dashboard-page .rank-mini-stats {
+        grid-template-columns: 1fr !important;
+    }
+
+    .student-dashboard-page .ranking-row {
+        grid-template-columns: 44px minmax(0, 1fr) !important;
+    }
+
+    .student-dashboard-page .ranking-score {
+        grid-column: 2 !important;
+        width: fit-content !important;
+    }
+}
+/* =========================================================
+   SAFE FIX - STUDENT DASHBOARD PROFILE TEXT READABILITY
+========================================================= */
+
+body.dark-mode .profile-info-item span {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-weight: 900 !important;
+}
+
+body.dark-mode .profile-info-item strong {
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+    font-weight: 950 !important;
+}
+
+body.dark-mode .profile-info-item .session-number {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-weight: 950 !important;
+}
+
+body.dark-mode .profile-info-icon {
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+}
     </style>
 </head>
 
@@ -749,45 +1708,84 @@
     </span>
 
     <div class="student-nav-links">
-       <div class="dropdown" id="notificationDropdown">
-    {% if notifications %}
-        <a href="#" class="dropdown-toggle" onclick="toggleNotificationDropdown(event)">
-            <i class="fas fa-bell"></i>
-            Notification
+        <div class="dropdown" id="notificationDropdown">
+    <button type="button" class="dropdown-toggle notification-toggle-btn" onclick="toggleNotificationDropdown(event)">
+        <i class="fas fa-bell"></i>
+        Notification
 
-            {% if notification_count and notification_count > 0 %}
-                <span class="notif-count">{{ notification_count }}</span>
-            {% endif %}
+        {% if notification_count and notification_count > 0 %}
+            <span class="notif-count" id="notifCount">{{ notification_count }}</span>
+        {% endif %}
 
-            <i class="fas fa-chevron-down" style="font-size:10px;"></i>
-        </a>
-    {% else %}
-        <a href="#" class="dropdown-toggle" onclick="toggleNotificationDropdown(event)">
-            <i class="fas fa-bell"></i>
-            Notification
-            <i class="fas fa-chevron-down" style="font-size:10px;"></i>
-        </a>
-    {% endif %}
+        <i class="fas fa-chevron-down" style="font-size:10px;"></i>
+    </button>
 
-    <div class="dropdown-menu">
+    <div class="dropdown-menu notification-menu">
         {% if notifications %}
             {% for n in notifications %}
                 <a href="{{ url_for('read_notification', notif_id=n['id']) }}" class="notif-item">
-                    <span>{{ n['message'] }}</span>
-                    <small>{{ n['created_at'] }}</small>
+                    <span class="notif-icon">
+                        {% if 'announcement' in n['message']|lower %}
+                            <i class="fas fa-bullhorn"></i>
+                        {% elif 'approved' in n['message']|lower %}
+                            <i class="fas fa-check-circle"></i>
+                        {% elif 'rejected' in n['message']|lower %}
+                            <i class="fas fa-times-circle"></i>
+                        {% elif 'reservation' in n['message']|lower %}
+                            <i class="fas fa-calendar-check"></i>
+                        {% elif 'logged in' in n['message']|lower or 'sit-in' in n['message']|lower %}
+                            <i class="fas fa-desktop"></i>
+                        {% elif 'reset' in n['message']|lower %}
+                            <i class="fas fa-rotate-right"></i>
+                        {% else %}
+                            <i class="fas fa-info-circle"></i>
+                        {% endif %}
+                    </span>
+
+                    <span class="notif-content">
+                        <span class="notif-message">{{ n['message'] }}</span>
+                        <small>{{ n['created_at'] }}</small>
+                    </span>
                 </a>
             {% endfor %}
         {% else %}
-            <a href="#">No sit-in notifications</a>
+            <div class="notif-empty">
+                <i class="fas fa-bell-slash"></i>
+                No notifications yet.
+            </div>
         {% endif %}
     </div>
 </div>
+       
 
-        <a href="/dashboard" class="active"><i class="fas fa-home"></i>Home</a>
-        <a href="/edit-profile"><i class="fas fa-user-edit"></i>Edit Profile</a>
-        <a href="{{ url_for('history') }}"><i class="fas fa-history"></i>History</a>
-        <a href="/reservation"><i class="fas fa-calendar-check"></i>Reservation</a>
-        <a href="/logout" class="logout-btn">Log out</a>
+        <a href="/dashboard" class="active">
+            <i class="fas fa-home"></i>
+            Home
+        </a>
+
+        <a href="/edit-profile">
+            <i class="fas fa-user-edit"></i>
+            Edit Profile
+        </a>
+
+        <a href="{{ url_for('history') }}">
+            <i class="fas fa-history"></i>
+            History
+        </a>
+
+        <a href="{{ url_for('sit_summary') }}">
+            <i class="fas fa-chart-pie"></i>
+            Sit-in Summary
+        </a>
+
+        <a href="/reservation">
+            <i class="fas fa-calendar-check"></i>
+            Reservation
+        </a>
+
+        <a href="/logout" class="logout-btn">
+            Log out
+        </a>
     </div>
 </div>
 
@@ -805,10 +1803,12 @@
             </div>
         </div>
 
-        <div class="session-summary">
-            <p>Remaining Sessions</p>
-            <strong>{{ remaining }}</strong>
-        </div>
+        <div class="stat-card remaining-session-card">
+    <button type="button" class="view-ranking-btn" onclick="openRankingModal()">
+        <i class="fas fa-trophy"></i>
+        View My Ranking
+    </button>
+</div>
     </section>
 
     <!-- 3-COLUMN GRID -->
@@ -859,6 +1859,7 @@
                 </div>
             </div>
         </div>
+        
 
         <!-- ANNOUNCEMENTS CARD -->
         <div class="student-card announcement-card">
@@ -918,6 +1919,132 @@
     </section>
 
 </main>
+<!-- MY RANKING MODAL -->
+<div class="ranking-modal-overlay" id="rankingModal">
+    <div class="ranking-modal">
+        <div class="ranking-modal-header">
+            <span>
+                <i class="fas fa-trophy"></i>
+                My Leaderboard Ranking
+            </span>
+
+            <button type="button" class="ranking-close-btn" onclick="closeRankingModal()">
+                &times;
+            </button>
+        </div>
+
+        <div class="ranking-modal-body">
+            <div class="ranking-grid">
+
+                <div class="my-ranking-card">
+                    <div class="my-ranking-card-header">
+                        <i class="fas fa-user-check"></i>
+                        My Place
+                    </div>
+
+                    <div class="my-ranking-body">
+                        <div class="rank-circle">
+                            <small>Rank</small>
+                            <strong>
+                                {% if leaderboard_rank %}
+                                    #{{ leaderboard_rank }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </strong>
+                        </div>
+
+                        <h2 class="rank-title">
+                            {% if leaderboard_rank %}
+                                You are ranked #{{ leaderboard_rank }} out of {{ total_ranked_students }} students
+                            {% else %}
+                                No ranking yet
+                            {% endif %}
+                        </h2>
+
+                        <p class="rank-subtitle">
+                            Ranking is based on raw evaluation points.
+                            Every 3.00 raw points gives 1 extra session.
+                        </p>
+
+                        <div class="rank-mini-stats">
+                            <div class="rank-mini-stat">
+                                <span>Raw Points</span>
+                                <strong>
+                                    {% if current_leaderboard_info %}
+                                        {{ "%.2f"|format(current_leaderboard_info.raw_points|default(0)) }}
+                                    {% else %}
+                                        0.00
+                                    {% endif %}
+                                </strong>
+                            </div>
+
+                            <div class="rank-mini-stat">
+                                <span>Extra</span>
+                                <strong>{{ bonus_sessions }}</strong>
+                            </div>
+
+                            <div class="rank-mini-stat">
+                                <span>Remaining</span>
+                                <strong>{{ remaining }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="top-ranking-card">
+                    <div class="top-ranking-card-header">
+                        <i class="fas fa-ranking-star"></i>
+                        Top 10 Students
+                    </div>
+
+                    <div class="top-ranking-list">
+                        {% if top_leaderboard %}
+                            {% for student_rank in top_leaderboard %}
+                            <div class="ranking-row {{ 'me' if student_rank.id_number == session['student_id'] else '' }}">
+                                <div class="ranking-rank-badge top-{{ student_rank.rank if student_rank.rank <= 3 else 'other' }}">
+                                    {% if student_rank.rank == 1 %}
+                                        <i class="fas fa-crown"></i>
+                                    {% else %}
+                                        {{ student_rank.rank }}
+                                    {% endif %}
+                                </div>
+
+                                <div>
+                                    <div class="ranking-name">
+                                        {{ student_rank.first_name }} {{ student_rank.last_name }}
+
+                                        {% if student_rank.id_number == session['student_id'] %}
+                                            <span style="color:#b45309;">(You)</span>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="ranking-meta">
+                                        {{ student_rank.course }} - {{ student_rank.course_level }}
+                                        · Completed: {{ student_rank.completed_sitins }}
+                                        · Extra: {{ student_rank.bonus_sessions }}
+                                    </div>
+                                </div>
+
+                                <div class="ranking-score">
+                                    <i class="fas fa-star"></i>
+                                    {{ "%.2f"|format(student_rank.raw_points|default(0)) }} pts
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div style="padding:34px 16px; text-align:center; color:#9ca3af; font-size:13px; font-weight:850;">
+                                <i class="fas fa-inbox" style="font-size:34px; display:block; margin-bottom:10px;"></i>
+                                No raw evaluation points yet.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- SUCCESS MODAL -->
 <div id="statusModal" class="ccs-modal-overlay">
@@ -930,6 +2057,132 @@
             <h2>Operation Successful</h2>
             <p id="modalMessage"></p>
             <button onclick="hideModal()" class="ccs-btn-proceed">Proceed</button>
+        </div>
+    </div>
+</div>
+
+<!-- MY RANKING MODAL -->
+<div class="ranking-modal-overlay" id="rankingModal">
+    <div class="ranking-modal">
+        <div class="ranking-modal-header">
+            <span>
+                <i class="fas fa-trophy"></i>
+                My Sit-in Ranking
+            </span>
+
+            <button type="button" class="ranking-close-btn" onclick="closeRankingModal()">
+                &times;
+            </button>
+        </div>
+
+        <div class="ranking-modal-body">
+            <div class="ranking-grid">
+
+                <div class="my-ranking-card">
+                    <div class="my-ranking-card-header">
+                        <i class="fas fa-user-check"></i>
+                        My Place
+                    </div>
+
+                    <div class="my-ranking-body">
+                        <div class="rank-circle">
+                            <small>Rank</small>
+                            <strong>
+                                {% if leaderboard_rank %}
+                                    #{{ leaderboard_rank }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </strong>
+                        </div>
+
+                        <h2 class="rank-title">
+                            {% if leaderboard_rank %}
+                                You are ranked #{{ leaderboard_rank }} out of {{ total_ranked_students }} students
+                            {% else %}
+                                No ranking yet
+                            {% endif %}
+                        </h2>
+
+                        <p class="rank-subtitle">
+                            Ranking is based on completed sit-in records.
+                        </p>
+
+                        <div class="rank-mini-stats">
+                            <div class="rank-mini-stat">
+                                <span>Completed</span>
+                                <strong>{{ completed_sitins }}</strong>
+                            </div>
+
+                            <div class="rank-mini-stat">
+                                <span>Bonus</span>
+                                <strong>{{ bonus_sessions }}</strong>
+                            </div>
+
+                            <div class="session-summary ranking-session-summary">
+                                <div>
+                                    <p>Remaining Sessions</p>
+                                    <strong>{{ remaining }}</strong>
+                                </div>
+
+                                <button type="button" class="view-ranking-btn" onclick="openRankingModal()">
+                                    <i class="fas fa-trophy"></i>
+                                    View My Ranking
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="top-ranking-card">
+                    <div class="top-ranking-card-header">
+                        <i class="fas fa-ranking-star"></i>
+                        Top 10 Students
+                    </div>
+
+                    <div class="top-ranking-list">
+                        {% if top_leaderboard %}
+                            {% for student_rank in top_leaderboard %}
+                            <div class="ranking-row {{ 'me' if student_rank.id_number == session['student_id'] else '' }}">
+                                <div class="ranking-rank-badge top-{{ student_rank.rank if student_rank.rank <= 3 else 'other' }}">
+                                    {% if student_rank.rank == 1 %}
+                                        <i class="fas fa-crown"></i>
+                                    {% else %}
+                                        {{ student_rank.rank }}
+                                    {% endif %}
+                                </div>
+
+                                <div>
+                                    <div class="ranking-name">
+                                        {{ student_rank.first_name }} {{ student_rank.last_name }}
+
+                                        {% if student_rank.id_number == session['student_id'] %}
+                                            <span style="color:#b45309;">(You)</span>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="ranking-meta">
+                                        {{ student_rank.course }} - {{ student_rank.course_level }}
+                                        · Bonus: {{ student_rank.bonus_sessions }}
+                                    </div>
+                                </div>
+
+                                <div class="ranking-score">
+                                    <i class="fas fa-desktop"></i>
+                                    {{ student_rank.completed_sitins }} sit-ins
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div style="padding:34px 16px; text-align:center; color:#9ca3af; font-size:13px; font-weight:850;">
+                                <i class="fas fa-inbox" style="font-size:34px; display:block; margin-bottom:10px;"></i>
+                                No completed sit-in records yet.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>
@@ -965,12 +2218,30 @@ function hideModal() {
 }
 function toggleNotificationDropdown(event) {
     event.preventDefault();
-    event.stopPropagation();
 
     const dropdown = document.getElementById('notificationDropdown');
+    const notifCount = document.getElementById('notifCount');
 
-    if (dropdown) {
-        dropdown.classList.toggle('open');
+    if (!dropdown) return;
+
+    dropdown.classList.toggle('show');
+
+    if (dropdown.classList.contains('show')) {
+        fetch('/notifications/mark-read', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && notifCount) {
+                notifCount.remove();
+            }
+        })
+        .catch(error => {
+            console.error('Notification read error:', error);
+        });
     }
 }
 
@@ -981,7 +2252,57 @@ document.addEventListener('click', function(event) {
         dropdown.classList.remove('open');
     }
 });
+
+function openRankingModal() {
+    const modal = document.getElementById('rankingModal');
+
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+}
+
+function closeRankingModal() {
+    const modal = document.getElementById('rankingModal');
+
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('rankingModal');
+
+    if (event.target === modal) {
+        closeRankingModal();
+    }
+});
+
+function openRankingModal() {
+    const modal = document.getElementById('rankingModal');
+
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+}
+
+function closeRankingModal() {
+    const modal = document.getElementById('rankingModal');
+
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+window.addEventListener('click', function(event) {
+    const rankingModal = document.getElementById('rankingModal');
+
+    if (event.target === rankingModal) {
+        closeRankingModal();
+    }
+});
+
 </script>
+<script src="{{ url_for('static', filename='darkmode.js') }}"></script>
 
 </body>
 </html>

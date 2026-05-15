@@ -567,17 +567,18 @@
         }
 
         .notif-count {
-    background: #ef4444 !important;
-    color: #ffffff !important;
-    min-width: 18px !important;
-    height: 18px !important;
-    padding: 0 5px !important;
-    border-radius: 999px !important;
-    font-size: 10px !important;
-    font-weight: 950 !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: #dc2626;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 950;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 4px;
 }
 
 .notif-item {
@@ -602,6 +603,136 @@
 .dropdown.open .dropdown-menu {
     display: block !important;
 }
+
+.notif-count {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: #dc2626;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 950;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 4px;
+}
+
+.notification-menu {
+    max-height: 330px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-width: 340px;
+}
+
+.notification-menu::-webkit-scrollbar {
+    width: 8px;
+}
+
+.notification-menu::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 999px;
+}
+
+.notification-menu::-webkit-scrollbar-thumb {
+    background: #c4b5fd;
+    border-radius: 999px;
+}
+
+.notif-item {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    white-space: normal !important;
+    line-height: 1.35 !important;
+}
+
+.notif-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    background: #f7f2ff;
+    color: #4b2c80;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.notif-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.notif-message {
+    color: #111827;
+    font-size: 13px;
+    font-weight: 800;
+    word-break: break-word;
+}
+
+.notif-content small {
+    color: #6b7280;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.notif-empty {
+    padding: 18px;
+    color: #9ca3af;
+    font-size: 13px;
+    font-weight: 800;
+    text-align: center;
+}
+
+.notif-empty i {
+    display: block;
+    font-size: 26px;
+    margin-bottom: 8px;
+}
+
+.notification-toggle-btn {
+    border: none !important;
+    background: transparent !important;
+    color: inherit !important;
+    font: inherit !important;
+    cursor: pointer !important;
+}
+
+.dropdown .notification-menu {
+    display: none !important;
+}
+
+.dropdown.show .notification-menu {
+    display: block !important;
+}
+
+.dropdown:hover .notification-menu {
+    display: none !important;
+}
+
+.dropdown.show:hover .notification-menu {
+    display: block !important;
+}
+
+.notification-menu {
+    position: absolute !important;
+    top: 100% !important;
+    right: 0 !important;
+    max-height: 330px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    min-width: 340px !important;
+    background: #ffffff !important;
+    border-radius: 16px !important;
+    box-shadow: 0 18px 45px rgba(31, 16, 70, 0.18) !important;
+    z-index: 999999 !important;
+    padding: 8px !important;
+}
     </style>
 </head>
 
@@ -616,42 +747,59 @@
 
     <div class="student-nav-links">
        <div class="dropdown" id="notificationDropdown">
-    {% if notifications %}
-        <a href="#" class="dropdown-toggle" onclick="toggleNotificationDropdown(event)">
-            <i class="fas fa-bell"></i>
-            Notification
+    <button type="button" class="dropdown-toggle notification-toggle-btn" onclick="toggleNotificationDropdown(event)">
+        <i class="fas fa-bell"></i>
+        Notification
 
-            {% if notification_count and notification_count > 0 %}
-                <span class="notif-count">{{ notification_count }}</span>
-            {% endif %}
+        {% if notification_count and notification_count > 0 %}
+            <span class="notif-count" id="notifCount">{{ notification_count }}</span>
+        {% endif %}
 
-            <i class="fas fa-chevron-down" style="font-size:10px;"></i>
-        </a>
-    {% else %}
-        <a href="#" class="dropdown-toggle" onclick="toggleNotificationDropdown(event)">
-            <i class="fas fa-bell"></i>
-            Notification
-            <i class="fas fa-chevron-down" style="font-size:10px;"></i>
-        </a>
-    {% endif %}
+        <i class="fas fa-chevron-down" style="font-size:10px;"></i>
+    </button>
 
-    <div class="dropdown-menu">
+    <div class="dropdown-menu notification-menu">
         {% if notifications %}
             {% for n in notifications %}
                 <a href="{{ url_for('read_notification', notif_id=n['id']) }}" class="notif-item">
-                    <span>{{ n['message'] }}</span>
-                    <small>{{ n['created_at'] }}</small>
+                    <span class="notif-icon">
+                        {% if 'announcement' in n['message']|lower %}
+                            <i class="fas fa-bullhorn"></i>
+                        {% elif 'approved' in n['message']|lower %}
+                            <i class="fas fa-check-circle"></i>
+                        {% elif 'rejected' in n['message']|lower %}
+                            <i class="fas fa-times-circle"></i>
+                        {% elif 'reservation' in n['message']|lower %}
+                            <i class="fas fa-calendar-check"></i>
+                        {% elif 'logged in' in n['message']|lower or 'sit-in' in n['message']|lower %}
+                            <i class="fas fa-desktop"></i>
+                        {% elif 'reset' in n['message']|lower %}
+                            <i class="fas fa-rotate-right"></i>
+                        {% else %}
+                            <i class="fas fa-info-circle"></i>
+                        {% endif %}
+                    </span>
+
+                    <span class="notif-content">
+                        <span class="notif-message">{{ n['message'] }}</span>
+                        <small>{{ n['created_at'] }}</small>
+                    </span>
                 </a>
             {% endfor %}
         {% else %}
-            <a href="#">No sit-in notifications</a>
+            <div class="notif-empty">
+                <i class="fas fa-bell-slash"></i>
+                No notifications yet.
+            </div>
         {% endif %}
     </div>
 </div>
 
+
         <a href="/dashboard"><i class="fas fa-home"></i>Home</a>
         <a href="/edit-profile" class="active"><i class="fas fa-user-edit"></i>Edit Profile</a>
         <a href="{{ url_for('history') }}"><i class="fas fa-history"></i>History</a>
+        <a href="{{ url_for('sit_summary') }}"><i class="fas fa-chart-pie"></i>Sit-in Summary</a>
         <a href="/reservation"><i class="fas fa-calendar-check"></i>Reservation</a>
         <a href="/logout" class="logout-btn">Log out</a>
     </div>
@@ -857,15 +1005,32 @@ function previewImage(event) {
 
 function toggleNotificationDropdown(event) {
     event.preventDefault();
-    event.stopPropagation();
 
     const dropdown = document.getElementById('notificationDropdown');
+    const notifCount = document.getElementById('notifCount');
 
-    if (dropdown) {
-        dropdown.classList.toggle('open');
+    if (!dropdown) return;
+
+    dropdown.classList.toggle('show');
+
+    if (dropdown.classList.contains('show')) {
+        fetch('/notifications/mark-read', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && notifCount) {
+                notifCount.remove();
+            }
+        })
+        .catch(error => {
+            console.error('Notification read error:', error);
+        });
     }
 }
-
 document.addEventListener('click', function(event) {
     const dropdown = document.getElementById('notificationDropdown');
 
@@ -873,7 +1038,19 @@ document.addEventListener('click', function(event) {
         dropdown.classList.remove('open');
     }
 });
+
+window.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('notificationDropdown');
+
+    if (!dropdown) return;
+
+    if (!dropdown.contains(event.target)) {
+        dropdown.classList.remove('show');
+    }
+});
+
 </script>
+<script src="{{ url_for('static', filename='darkmode.js') }}"></script>
 
 </body>
 </html>

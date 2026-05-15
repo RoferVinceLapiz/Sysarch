@@ -390,6 +390,180 @@
             box-shadow: 0 10px 24px rgba(220, 38, 38, 0.22);
         }
 
+
+        /* ================= LAB APPLICATION MANAGER ================= */
+        .lab-manager-card {
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            border-radius: 24px;
+            box-shadow: 0 18px 45px rgba(31, 16, 70, 0.10);
+            overflow: hidden;
+            margin-bottom: 26px;
+        }
+
+        .lab-manager-header {
+            background:
+                radial-gradient(circle at top right, rgba(253, 184, 19, 0.22), transparent 28%),
+                linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark));
+            color: white;
+            padding: 18px 22px;
+            font-size: 13px;
+            font-weight: 950;
+            letter-spacing: 0.9px;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .lab-manager-header span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lab-grid {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 14px;
+            padding: 22px;
+            background: #ffffff;
+        }
+
+        .lab-card-btn {
+            border: 1.8px solid #ede9fe;
+            border-radius: 18px;
+            padding: 18px 14px;
+            background:
+                radial-gradient(circle at top right, rgba(253, 184, 19, 0.16), transparent 34%),
+                #faf7ff;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.22s ease;
+        }
+
+        .lab-card-btn:hover {
+            transform: translateY(-3px);
+            border-color: var(--uc-purple);
+            box-shadow: 0 14px 30px rgba(75, 44, 128, 0.16);
+        }
+
+        .lab-card-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--uc-purple);
+            font-size: 19px;
+            font-weight: 950;
+        }
+
+        .lab-card-count {
+            margin-top: 8px;
+            color: var(--admin-muted);
+            font-size: 12px;
+            font-weight: 850;
+        }
+
+        .lab-modal-box {
+            width: min(620px, 100%);
+        }
+
+        .lab-number-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: #ede9fe;
+            color: var(--uc-purple);
+            font-size: 14px;
+            font-weight: 950;
+            margin-bottom: 16px;
+        }
+
+        .lab-add-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .lab-add-form input {
+            flex: 1;
+            padding: 12px 14px;
+            border: 1.8px solid var(--admin-border);
+            border-radius: 13px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .lab-add-form input:focus {
+            border-color: var(--uc-purple);
+            box-shadow: 0 0 0 4px rgba(75, 44, 128, 0.11);
+        }
+
+        .btn-add-application {
+            background: var(--uc-purple);
+            color: white;
+            border: none;
+            border-radius: 13px;
+            padding: 0 16px;
+            font-size: 12px;
+            font-weight: 950;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .application-list {
+            border: 1px solid #eef0f4;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .application-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 13px 15px;
+            border-bottom: 1px solid #eef0f4;
+            background: #ffffff;
+        }
+
+        .application-item:last-child {
+            border-bottom: none;
+        }
+
+        .application-name {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 850;
+        }
+
+        .btn-delete-application {
+            background: #fee2e2;
+            color: #991b1b;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 11px;
+            font-size: 12px;
+            font-weight: 950;
+            cursor: pointer;
+        }
+
+        .application-empty {
+            padding: 24px 15px;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
         .empty-state {
             text-align: center;
             padding: 75px 20px;
@@ -515,6 +689,147 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 24px rgba(31, 16, 70, 0.14);
         }
+        /* ================= EVALUATION MODAL ================= */
+
+.evaluation-box {
+    margin-top: 18px;
+    padding: 16px;
+    border-radius: 16px;
+    background: #f7f2ff;
+    border: 1.5px solid #ede9fe;
+}
+
+.evaluation-title {
+    color: var(--uc-purple);
+    font-size: 14px;
+    font-weight: 950;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.evaluation-title i {
+    color: var(--uc-gold);
+}
+
+.evaluation-text {
+    margin: 0 0 14px !important;
+    color: #374151 !important;
+    font-size: 13px !important;
+    font-weight: 750 !important;
+    line-height: 1.45 !important;
+}
+
+.evaluation-options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.evaluation-option {
+    cursor: pointer;
+}
+
+.evaluation-option input {
+    display: none;
+}
+
+.evaluation-option span {
+    min-height: 50px;
+    border-radius: 13px;
+    border: 1.6px solid #e5e7eb;
+    background: #ffffff;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    transition: all 0.2s ease;
+    padding: 10px 13px;
+}
+
+.evaluation-option span i {
+    color: var(--uc-purple);
+}
+
+.evaluation-option span small {
+    margin-left: auto;
+    color: #6b7280;
+    font-size: 11px;
+    font-weight: 850;
+}
+
+.evaluation-option input:checked + span {
+    border-color: var(--uc-purple);
+    background: var(--uc-purple);
+    color: #ffffff;
+    box-shadow: 0 10px 22px rgba(75, 44, 128, 0.22);
+}
+
+.evaluation-option input:checked + span i,
+.evaluation-option input:checked + span small {
+    color: #ffffff;
+}
+
+.evaluation-total {
+    margin-top: 13px;
+    padding: 13px 14px;
+    border-radius: 14px;
+    background: #fffbeb;
+    border: 1.5px solid #fde68a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.evaluation-total span {
+    color: #92400e;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.evaluation-total strong {
+    color: var(--uc-purple-dark);
+    font-size: 22px;
+    font-weight: 950;
+}
+
+.evaluation-note-wrap {
+    margin-top: 14px;
+}
+
+.evaluation-note-wrap label {
+    display: block;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 900;
+    margin-bottom: 7px;
+}
+
+.evaluation-note-wrap label small {
+    color: #9ca3af;
+    font-weight: 700;
+}
+
+.evaluation-note-wrap textarea {
+    width: 100%;
+    resize: vertical;
+    padding: 11px 13px;
+    border-radius: 13px;
+    border: 1.6px solid #e5e7eb;
+    outline: none;
+    font-family: inherit;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+.evaluation-note-wrap textarea:focus {
+    border-color: var(--uc-purple);
+    box-shadow: 0 0 0 4px rgba(75, 44, 128, 0.11);
+}
 
         @media (max-width: 900px) {
             .sitin-header {
@@ -524,6 +839,19 @@
 
             .stat-row {
                 grid-template-columns: 1fr;
+            }
+
+            .lab-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .lab-add-form {
+                flex-direction: column;
+            }
+
+            .btn-add-application {
+                justify-content: center;
+                padding: 12px 16px;
             }
 
             .sitin-title {
@@ -574,15 +902,144 @@
                 flex-direction: column;
             }
 
+            .lab-grid {
+                grid-template-columns: 1fr;
+            }
+
             .btn-cancel,
             .btn-confirm-logout {
                 width: 100%;
             }
         }
+        /* =========================================================
+   LOGOUT EVALUATION MODAL FIX
+========================================================= */
+
+.logout-evaluation-modal {
+    max-height: calc(100vh - 40px) !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.logout-evaluation-body {
+    overflow-y: auto !important;
+    max-height: calc(100vh - 165px) !important;
+    padding-right: 18px !important;
+}
+
+.logout-evaluation-footer {
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 5 !important;
+}
+
+.logout-text,
+.modal-student-id,
+.evaluation-text,
+.evaluation-text strong,
+.evaluation-title,
+.evaluation-title i,
+.evaluation-note-wrap label,
+.evaluation-note-wrap small {
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+}
+
+.modal-warning,
+.modal-warning * {
+    color: #78350f !important;
+    -webkit-text-fill-color: #78350f !important;
+}
+
+.evaluation-option span,
+.evaluation-option i,
+.evaluation-option small {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+.evaluation-total span {
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+}
+
+.evaluation-total strong {
+    color: #fef3c7 !important;
+    -webkit-text-fill-color: #fef3c7 !important;
+}
+
+.evaluation-note-wrap textarea {
+    background: #020617 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: 1.8px solid rgba(253, 184, 19, 0.45) !important;
+}
+
+.evaluation-note-wrap textarea::placeholder {
+    color: #cbd5e1 !important;
+    -webkit-text-fill-color: #cbd5e1 !important;
+    opacity: 1 !important;
+}
+
+/* Disabled 1 Hour option */
+.evaluation-option-disabled {
+    cursor: not-allowed !important;
+    opacity: 0.58 !important;
+    background: #1e293b !important;
+    border: 1.5px dashed rgba(148, 163, 184, 0.55) !important;
+    box-shadow: none !important;
+}
+
+.evaluation-option-disabled:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.evaluation-option-disabled input {
+    pointer-events: none !important;
+}
+
+.evaluation-option-disabled span,
+.evaluation-option-disabled strong,
+.evaluation-option-disabled small,
+.evaluation-option-disabled i {
+    color: #cbd5e1 !important;
+    -webkit-text-fill-color: #cbd5e1 !important;
+}
+/* =========================================================
+   FINAL FIX - LOGOUT WARNING BOX TEXT READABILITY
+========================================================= */
+
+#logoutModal .modal-warning,
+#logoutModal .modal-warning span,
+#logoutModal .modal-warning strong,
+#logoutModal .modal-warning i,
+.logout-evaluation-modal .modal-warning,
+.logout-evaluation-modal .modal-warning span,
+.logout-evaluation-modal .modal-warning strong,
+.logout-evaluation-modal .modal-warning i {
+    color: #78350f !important;
+    -webkit-text-fill-color: #78350f !important;
+    text-shadow: none !important;
+    opacity: 1 !important;
+}
+
+#logoutModal .modal-warning {
+    background: #fef3c7 !important;
+    border-left: 5px solid #f59e0b !important;
+}
+
+#logoutModal .modal-warning strong {
+    font-weight: 950 !important;
+    color: #92400e !important;
+    -webkit-text-fill-color: #92400e !important;
+}
+
     </style>
 </head>
 
-<body>
+<body class="admin-sitin-page">
 
 <!-- NAVBAR -->
 <div class="admin-navbar">
@@ -593,10 +1050,13 @@
 
     <div class="admin-nav-links">
         <a href="/admin/dashboard"><i class="fas fa-home"></i>Home</a>
-        <a href="javascript:void(0)" onclick="openSearchModal()"><i class="fas fa-search"></i>Search</a>
+        <a href="javascript:void(0)" onclick="openSearchModal()">
+    <i class="fas fa-search"></i>Search
+</a>
         <a href="/admin/students"><i class="fas fa-user-graduate"></i>Students</a>
         <a href="/admin/sitin-records" class="active"><i class="fas fa-desktop"></i>Sit-in</a>
         <a href="/admin/view-sitin-records"><i class="fas fa-list"></i>View Sit-in Records</a>
+        <a href="/admin/sitin-report"><i class="fas fa-chart-pie"></i>Sit-in Report</a>
         <a href="/admin/feedback-reports"><i class="fas fa-comments"></i>Feedback Reports</a>
         <a href="/admin/reservations"><i class="fas fa-calendar-check"></i>Reservation</a>
         <a href="/admin/logout" class="admin-logout-btn">Log out</a>
@@ -657,6 +1117,36 @@
                 <div class="stat-num">{{ total_logout }}</div>
                 <div class="stat-label">Logged Out Today</div>
             </div>
+        </div>
+    </div>
+
+
+    <!-- LAB APPLICATION MANAGER -->
+    <div class="lab-manager-card">
+        <div class="lab-manager-header">
+            <span>
+                <i class="fas fa-flask"></i>
+                Laboratory Applications
+            </span>
+            <small style="opacity:0.8; font-weight:700; text-transform:none; letter-spacing:0;">Click a lab to add or delete applications</small>
+        </div>
+
+        <div class="lab-grid">
+            {% for lab in labs %}
+            <button
+                type="button"
+                class="lab-card-btn"
+                onclick="openLabModal('{{ lab }}')"
+            >
+                <div class="lab-card-title">
+                    <i class="fas fa-door-open"></i>
+                    Lab {{ lab }}
+                </div>
+                <div class="lab-card-count">
+                    {{ lab_applications.get(lab, []) | length }} application{{ '' if (lab_applications.get(lab, []) | length) == 1 else 's' }} installed
+                </div>
+            </button>
+            {% endfor %}
         </div>
     </div>
 
@@ -776,35 +1266,161 @@
 
 </div>
 
-<!-- CONFIRM LOGOUT MODAL -->
-<div class="modal-bg" id="logoutModal">
-    <div class="modal-box">
+
+<!-- LAB APPLICATION MODAL -->
+<div class="modal-bg" id="labModal">
+    <div class="modal-box lab-modal-box">
         <div class="modal-box-header">
             <span>
-                <i class="fas fa-sign-out-alt"></i>
-                Confirm Student Log Out
+                <i class="fas fa-flask"></i>
+                Manage Laboratory Applications
+            </span>
+            <button type="button" class="modal-close-btn" onclick="closeLabModal()">&times;</button>
+        </div>
+
+        <div class="modal-box-body">
+            <div class="lab-number-display">
+                <i class="fas fa-door-open"></i>
+                Laboratory Number: <span id="labModalNumber"></span>
+            </div>
+
+            <form class="lab-add-form" method="POST" action="/admin/lab-application/add">
+                <input type="hidden" name="lab" id="labApplicationLab">
+                <input
+                    type="text"
+                    name="application_name"
+                    id="labApplicationName"
+                    placeholder="Enter application name, e.g. Visual Studio Code"
+                    required
+                >
+                <button type="submit" class="btn-add-application">
+                    <i class="fas fa-plus"></i>
+                    Add Application
+                </button>
+            </form>
+
+            <div class="application-list" id="labApplicationsList"></div>
+        </div>
+
+        <div class="modal-box-footer">
+            <button type="button" class="btn-cancel" onclick="closeLabModal()">Close</button>
+        </div>
+    </div>
+</div>
+
+ <!-- CONFIRM LOGOUT / EVALUATION MODAL -->
+<div class="modal-bg" id="logoutModal">
+    <div class="modal-box logout-evaluation-modal">
+        <div class="modal-box-header">
+            <span>
+                <i class="fas fa-clipboard-check"></i>
+                Student Log Out Evaluation
             </span>
             <button type="button" class="modal-close-btn" onclick="closeLogoutModal()">&times;</button>
         </div>
 
-        <div class="modal-box-body">
-            <p>You are about to log out:</p>
+        <div class="modal-box-body logout-evaluation-body">
+            <p class="logout-text">You are about to log out:</p>
             <p class="student-highlight" id="modalStudentName"></p>
-            <p style="font-size:0.82rem; color:#888;" id="modalStudentId"></p>
+            <p class="modal-student-id" id="modalStudentId"></p>
 
             <div class="modal-warning">
                 <i class="fas fa-info-circle"></i>
-                This will deduct <strong>1 session</strong> from the student's remaining sessions.
+                <span>
+                    This will complete the student's sit-in record and deduct <strong>1 session</strong>.
+                </span>
+            </div>
+
+            <div class="evaluation-box">
+                <div class="evaluation-title">
+                    <i class="fas fa-clipboard-check"></i>
+                    Evaluation for Student
+                </div>
+
+                <p class="evaluation-text">
+                    Check only the criteria achieved by the student.
+                    Raw points will be added to the student's leaderboard score.
+                    Every <strong>3.00 raw points</strong> gives <strong>1 extra session</strong>.
+                </p>
+
+                <div class="evaluation-options">
+
+                    <!-- CLEANLINESS - CLICKABLE -->
+                    <label class="evaluation-option">
+                        <input
+                            type="checkbox"
+                            name="evaluation_cleanliness"
+                            value="1"
+                            form="logoutForm"
+                            data-points="0.50"
+                            onchange="updateEvaluationTotal()"
+                        >
+                        <span>
+                            <i class="fas fa-broom"></i>
+                            Cleanliness
+                            <small>50% / +0.50</small>
+                        </span>
+                    </label>
+
+                    <!-- 1 HOUR - NOT CLICKABLE / AUTO ONLY -->
+                    <label class="evaluation-option evaluation-option-disabled" title="This is automatic. It will be added only if the student reached at least 1 hour.">
+                        <input
+                            type="checkbox"
+                            disabled
+                            data-points="0.30"
+                        >
+                        <span>
+                            <i class="fas fa-clock"></i>
+                            1 Hour Sit-in
+                            <small>Auto / +0.30</small>
+                        </span>
+                    </label>
+
+                    <!-- TASK COMPLETED - CLICKABLE -->
+                    <label class="evaluation-option">
+                        <input
+                            type="checkbox"
+                            name="evaluation_task"
+                            value="1"
+                            form="logoutForm"
+                            data-points="0.20"
+                            onchange="updateEvaluationTotal()"
+                        >
+                        <span>
+                            <i class="fas fa-list-check"></i>
+                            Task Completed
+                            <small>20% / +0.20</small>
+                        </span>
+                    </label>
+
+                </div>
+
+                <div class="evaluation-total">
+                    <span>Total Raw Points</span>
+                    <strong id="evaluationTotal">0.00</strong>
+                </div>
+
+                <div class="evaluation-note-wrap">
+                    <label>Admin Note <small>(optional)</small></label>
+                    <textarea
+                        name="evaluation_note"
+                        form="logoutForm"
+                        rows="3"
+                        placeholder="Example: Student completed the task and left the area clean..."
+                    ></textarea>
+                </div>
             </div>
         </div>
 
-        <div class="modal-box-footer">
-            <button type="button" class="btn-cancel" onclick="closeLogoutModal()">Cancel</button>
+        <div class="modal-box-footer logout-evaluation-footer">
+            <button type="button" class="btn-cancel" onclick="closeLogoutModal()">
+                Cancel
+            </button>
 
             <form id="logoutForm" method="POST">
                 <button type="submit" class="btn-confirm-logout">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Confirm Log Out
+                    <i class="fas fa-check-circle"></i>
+                    Done
                 </button>
             </form>
         </div>
@@ -843,79 +1459,79 @@
     </div>
 </div>
 
-<!-- SIT-IN FORM MODAL -->
-<div id="sitInFormModal" class="modal-overlay">
-    <div class="modal-content">
 
-        <div class="modal-header">
-            <span>
-                <i class="fas fa-desktop" style="margin-right:8px;"></i>
-                Sit-In Form
-            </span>
-            <button type="button" onclick="closeModal('sitInFormModal')" style="background:none;border:none;color:white;font-size:24px;cursor:pointer;">&times;</button>
-        </div>
-
-        <form action="/admin/sit-in" method="POST">
-            <div class="modal-body">
-
-                <div style="margin-bottom: 15px;">
-                    <label>ID Number</label>
-                    <input type="text" name="id_number" id="display_id" readonly>
-                </div>
-
-                <div style="margin-bottom: 15px;">
-                    <label>Student Name</label>
-                    <input type="text" id="display_name" readonly>
-                </div>
-
-                <div style="display:flex; gap:15px; margin-bottom:15px;">
-                    <div style="flex:1;">
-                        <label>Purpose</label>
-                        <select name="purpose">
-                            <option value="C Programming">C Programming</option>
-                            <option value="Java">Java</option>
-                            <option value="PHP">PHP</option>
-                            <option value="Python">Python</option>
-                            <option value="Database">Database</option>
-                        </select>
-                    </div>
-
-                    <div style="flex:1;">
-                        <label>Lab</label>
-                        <select name="lab" required>
-                            <option value="" disabled selected>Select lab</option>
-                            <option value="524">524</option>
-                            <option value="526">526</option>
-                            <option value="528">528</option>
-                            <option value="530">530</option>
-                            <option value="542">542</option>
-                            <option value="544">544</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <label>Remaining Session</label>
-                    <input type="text" id="display_remaining" readonly>
-                </div>
-
-            </div>
-
-            <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:12px;">
-                <button type="button" class="btn btn-reset" onclick="closeModal('sitInFormModal')">
-                    Close
-                </button>
-
-                <button type="submit" class="btn btn-search">
-                    Sit In
-                </button>
-            </div>
-        </form>
-
-    </div>
-</div>
 
 <script>
+
+const labApplications = {{ lab_applications | tojson }};
+
+function openLabModal(labNumber) {
+    const labModal = document.getElementById('labModal');
+    const labModalNumber = document.getElementById('labModalNumber');
+    const labApplicationLab = document.getElementById('labApplicationLab');
+    const labApplicationsList = document.getElementById('labApplicationsList');
+    const labApplicationName = document.getElementById('labApplicationName');
+
+    if (labModalNumber) labModalNumber.textContent = labNumber;
+    if (labApplicationLab) labApplicationLab.value = labNumber;
+    if (labApplicationName) labApplicationName.value = '';
+
+    const applications = labApplications[labNumber] || [];
+
+    if (labApplicationsList) {
+        if (applications.length === 0) {
+            labApplicationsList.innerHTML = `
+                <div class="application-empty">
+                    <i class="fas fa-inbox"></i>
+                    No applications added for this lab yet.
+                </div>
+            `;
+        } else {
+            labApplicationsList.innerHTML = applications.map(app => `
+                <div class="application-item">
+                    <div class="application-name">
+                        <i class="fas fa-window-maximize"></i>
+                        ${app.application_name}
+                    </div>
+                    <form method="POST" action="/admin/lab-application/delete/${app.id}" onsubmit="return confirm('Delete this application from Lab ${labNumber}?');">
+                        <button type="submit" class="btn-delete-application">
+                            <i class="fas fa-trash"></i>
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            `).join('');
+        }
+    }
+
+    if (labModal) labModal.style.display = 'flex';
+    setTimeout(() => {
+        if (labApplicationName) labApplicationName.focus();
+    }, 100);
+}
+
+function closeLabModal() {
+    const labModal = document.getElementById('labModal');
+    if (labModal) labModal.style.display = 'none';
+}
+function updateEvaluationTotal() {
+    let total = 0;
+
+    document
+        .querySelectorAll('#logoutModal .evaluation-option input[type="checkbox"]:not(:disabled)[data-points]')
+        .forEach(function(checkbox) {
+            if (checkbox.checked) {
+                total += parseFloat(checkbox.dataset.points || '0');
+            }
+        });
+
+    const evaluationTotal = document.getElementById('evaluationTotal');
+
+    if (evaluationTotal) {
+        evaluationTotal.textContent = total.toFixed(2);
+    }
+}
+
 function updateTimers() {
     document.querySelectorAll('.timer').forEach(timerElement => {
         const loginStr = timerElement.dataset.login;
@@ -923,8 +1539,12 @@ function updateTimers() {
 
         const login = new Date(loginStr.replace(' ', 'T'));
         const now = new Date();
-        const diff = Math.floor((now - login) / 1000);
 
+        let diff = Math.floor((now - login) / 1000);
+
+            if (diff < 0) {
+                diff = 0;
+            }
         const hours = Math.floor(diff / 3600).toString().padStart(2, '0');
         const minutes = Math.floor((diff % 3600) / 60).toString().padStart(2, '0');
         const seconds = (diff % 60).toString().padStart(2, '0');
@@ -961,15 +1581,24 @@ function confirmLogout(recordId, studentName, studentId) {
     const modalStudentId = document.getElementById('modalStudentId');
     const logoutForm = document.getElementById('logoutForm');
     const logoutModal = document.getElementById('logoutModal');
+    const labModal = document.getElementById('labModal');
 
     if (modalStudentName) modalStudentName.textContent = studentName;
-    if (modalStudentId) modalStudentId.textContent = 'ID: ' + studentId;
-    if (logoutForm) logoutForm.action = '/admin/sitin-logout/' + recordId;
-    if (logoutModal) logoutModal.style.display = 'flex';
+if (modalStudentId) modalStudentId.textContent = 'ID: ' + studentId;
+
+if (logoutForm) {
+    logoutForm.action = '/admin/sitin-logout/' + recordId;
+    logoutForm.reset();
+}
+
+updateEvaluationTotal();
+
+if (logoutModal) logoutModal.style.display = 'flex';
 }
 
 function closeLogoutModal() {
     const logoutModal = document.getElementById('logoutModal');
+    const labModal = document.getElementById('labModal');
     if (logoutModal) logoutModal.style.display = 'none';
 }
 
@@ -1108,6 +1737,7 @@ function openSitInForm(idNumber, studentName, remaining) {
 window.addEventListener('click', function(event) {
     const searchModal = document.getElementById('searchModal');
     const logoutModal = document.getElementById('logoutModal');
+    const labModal = document.getElementById('labModal');
 
     if (event.target === searchModal) {
         closeModal('searchModal');
@@ -1116,8 +1746,15 @@ window.addEventListener('click', function(event) {
     if (event.target === logoutModal) {
         closeLogoutModal();
     }
-});
-</script>
 
+    if (event.target === labModal) {
+        closeLabModal();
+    }
+});
+
+
+</script>
+{% include 'admin_modals.html' %}
+<script src="{{ url_for('static', filename='darkmode.js') }}"></script>
 </body>
 </html>

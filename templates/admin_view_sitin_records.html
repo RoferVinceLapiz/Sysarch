@@ -360,6 +360,84 @@
             font-size: 16px;
         }
 
+        .pagination-wrap {
+            margin: 0 24px 24px;
+            padding: 18px 20px;
+            border-radius: 18px;
+            background: #ffffff;
+            border: 1px solid #eef0f4;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .pagination-info {
+            color: #6b7280;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .pagination-info strong {
+            color: var(--uc-purple);
+            font-weight: 950;
+        }
+
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .pagination-btn,
+        .pagination-number {
+            min-width: 38px;
+            height: 38px;
+            padding: 0 12px;
+            border-radius: 12px;
+            border: 1.5px solid #e5e7eb;
+            background: #ffffff;
+            color: var(--uc-purple);
+            font-size: 13px;
+            font-weight: 950;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.22s ease;
+        }
+
+        .pagination-btn:hover,
+        .pagination-number:hover {
+            background: #f7f2ff;
+            border-color: var(--uc-purple);
+            transform: translateY(-1px);
+        }
+
+        .pagination-number.active {
+            background: var(--uc-purple);
+            border-color: var(--uc-purple);
+            color: #ffffff;
+            box-shadow: 0 10px 22px rgba(75, 44, 128, 0.22);
+        }
+
+        .pagination-btn.disabled {
+            color: #9ca3af;
+            background: #f3f4f6;
+            border-color: #e5e7eb;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .pagination-dots {
+            color: #9ca3af;
+            font-weight: 950;
+            padding: 0 4px;
+        }
+
         @media (max-width: 900px) {
             .records-header {
                 flex-direction: column;
@@ -368,6 +446,7 @@
 
             .summary-card {
                 width: 100%;
+                box-sizing: border-box;
             }
 
             .records-title {
@@ -384,6 +463,21 @@
 
             .search-box input {
                 width: 100%;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .pagination-wrap {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .pagination-controls {
+                justify-content: center;
+            }
+
+            .pagination-info {
+                text-align: center;
             }
         }
 
@@ -411,11 +505,19 @@
                 width: 100%;
                 justify-content: center;
             }
+
+            .pagination-btn,
+            .pagination-number {
+                min-width: 34px;
+                height: 34px;
+                padding: 0 9px;
+                font-size: 12px;
+            }
         }
     </style>
 </head>
 
-<body>
+<body class="admin-records-page">
 
 <!-- NAVBAR -->
 <div class="admin-navbar">
@@ -426,10 +528,13 @@
 
     <div class="admin-nav-links">
         <a href="/admin/dashboard"><i class="fas fa-home"></i>Home</a>
-        <a href="javascript:void(0)" onclick="openSearchModal()"><i class="fas fa-search"></i>Search</a>
+        <a href="javascript:void(0)" onclick="openSearchModal()">
+    <i class="fas fa-search"></i>Search
+</a>
         <a href="/admin/students"><i class="fas fa-user-graduate"></i>Students</a>
         <a href="/admin/sitin-records"><i class="fas fa-desktop"></i>Sit-in</a>
         <a href="/admin/view-sitin-records" class="active"><i class="fas fa-list"></i>View Sit-in Records</a>
+        <a href="/admin/sitin-report"><i class="fas fa-chart-pie"></i>Sit-in Report</a>
         <a href="/admin/feedback-reports"><i class="fas fa-comments"></i>Feedback Reports</a>
         <a href="/admin/reservations"><i class="fas fa-calendar-check"></i>Reservation</a>
         <a href="/admin/logout" class="admin-logout-btn">Log out</a>
@@ -459,13 +564,13 @@
             </div>
             <div>
                 <h1>View Sit-in Records</h1>
-                <p>Browse historical sit-in records and search by student ID number.</p>
+                <p>Browse historical sit-in records and search by student ID, name, lab, or purpose.</p>
             </div>
         </div>
 
         <div class="summary-card">
             <p>Total Records</p>
-            <div class="number">{{ records|length if records else 0 }}</div>
+            <div class="number">{{ total_records if total_records is defined else (records|length if records else 0) }}</div>
         </div>
     </div>
 
@@ -475,16 +580,16 @@
                 <i class="fas fa-clipboard-list"></i>
                 Sit-in Record History
             </span>
-            <small style="opacity:0.8; font-weight:700;">Use the filter below to find a student record</small>
+            <small style="opacity:0.8; font-weight:700;">Showing 10 records per page</small>
         </div>
 
         <div class="filter-bar">
-            <form method="GET" class="search-box">
+            <form method="GET" action="{{ url_for('view_sitin_records') }}" class="search-box">
                 <input
                     type="text"
                     name="search_id"
-                    placeholder="Search by ID Number"
-                    value="{{ request.args.get('search_id', '') }}"
+                    placeholder="Search by ID, name, lab, or purpose"
+                    value="{{ search_id if search_id is defined else request.args.get('search_id', '') }}"
                 >
 
                 <button class="btn btn-search" type="submit">
@@ -504,6 +609,7 @@
             <table>
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>ID Number</th>
                         <th>Name</th>
                         <th>Course</th>
@@ -517,7 +623,17 @@
                 <tbody>
                 {% for r in records %}
                     <tr>
-                        <td><span class="id-badge">{{ r.id_number }}</span></td>
+                        <td>
+                            {% if page is defined and per_page is defined %}
+                                {{ ((page - 1) * per_page) + loop.index }}
+                            {% else %}
+                                {{ loop.index }}
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <span class="id-badge">{{ r.id_number }}</span>
+                        </td>
 
                         <td>
                             <span class="student-name">
@@ -561,6 +677,70 @@
                 </tbody>
             </table>
         </div>
+
+        {% if total_pages is defined and total_pages > 1 %}
+        <div class="pagination-wrap">
+            <div class="pagination-info">
+                Showing
+                <strong>{{ ((page - 1) * per_page) + 1 }}</strong>
+                to
+                <strong>
+                    {{ page * per_page if page * per_page < total_records else total_records }}
+                </strong>
+                of
+                <strong>{{ total_records }}</strong>
+                records
+            </div>
+
+            <div class="pagination-controls">
+                {% if page > 1 %}
+                <a
+                    href="{{ url_for('view_sitin_records', page=page-1, search_id=search_id) }}"
+                    class="pagination-btn"
+                >
+                    <i class="fas fa-chevron-left"></i>
+                    Prev
+                </a>
+                {% else %}
+                <span class="pagination-btn disabled">
+                    <i class="fas fa-chevron-left"></i>
+                    Prev
+                </span>
+                {% endif %}
+
+                {% for p in range(1, total_pages + 1) %}
+                    {% if p == page %}
+                        <span class="pagination-number active">{{ p }}</span>
+                    {% elif p == 1 or p == total_pages or (p >= page - 2 and p <= page + 2) %}
+                        <a
+                            href="{{ url_for('view_sitin_records', page=p, search_id=search_id) }}"
+                            class="pagination-number"
+                        >
+                            {{ p }}
+                        </a>
+                    {% elif p == page - 3 or p == page + 3 %}
+                        <span class="pagination-dots">...</span>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page < total_pages %}
+                <a
+                    href="{{ url_for('view_sitin_records', page=page+1, search_id=search_id) }}"
+                    class="pagination-btn"
+                >
+                    Next
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                {% else %}
+                <span class="pagination-btn disabled">
+                    Next
+                    <i class="fas fa-chevron-right"></i>
+                </span>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
         {% else %}
         <div class="empty-state">
             <i class="fas fa-folder-open"></i>
@@ -603,77 +783,7 @@
     </div>
 </div>
 
-<!-- SIT-IN FORM MODAL -->
-<div id="sitInFormModal" class="modal-overlay">
-    <div class="modal-content">
 
-        <div class="modal-header">
-            <span>
-                <i class="fas fa-desktop" style="margin-right:8px;"></i>
-                Sit-In Form
-            </span>
-            <button type="button" onclick="closeModal('sitInFormModal')" style="background:none;border:none;color:white;font-size:24px;cursor:pointer;">&times;</button>
-        </div>
-
-        <form action="/admin/sit-in" method="POST">
-            <div class="modal-body">
-
-                <div style="margin-bottom: 15px;">
-                    <label>ID Number</label>
-                    <input type="text" name="id_number" id="display_id" readonly>
-                </div>
-
-                <div style="margin-bottom: 15px;">
-                    <label>Student Name</label>
-                    <input type="text" id="display_name" readonly>
-                </div>
-
-                <div style="display:flex; gap:15px; margin-bottom:15px;">
-                    <div style="flex:1;">
-                        <label>Purpose</label>
-                        <select name="purpose">
-                            <option value="C Programming">C Programming</option>
-                            <option value="Java">Java</option>
-                            <option value="PHP">PHP</option>
-                            <option value="Python">Python</option>
-                            <option value="Database">Database</option>
-                        </select>
-                    </div>
-
-                    <div style="flex:1;">
-                        <label>Lab</label>
-                        <select name="lab" required>
-                            <option value="" disabled selected>Select lab</option>
-                            <option value="524">524</option>
-                            <option value="526">526</option>
-                            <option value="528">528</option>
-                            <option value="530">530</option>
-                            <option value="542">542</option>
-                            <option value="544">544</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <label>Remaining Session</label>
-                    <input type="text" id="display_remaining" readonly>
-                </div>
-
-            </div>
-
-            <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:12px;">
-                <button type="button" class="btn btn-reset" onclick="closeModal('sitInFormModal')">
-                    Close
-                </button>
-
-                <button type="submit" class="btn btn-search">
-                    Sit In
-                </button>
-            </div>
-        </form>
-
-    </div>
-</div>
 
 <script>
 function openSearchModal() {
@@ -801,12 +911,18 @@ function openSitInForm(idNumber, studentName, remaining) {
 
 window.addEventListener('click', function(event) {
     const searchModal = document.getElementById('searchModal');
+    const sitInFormModal = document.getElementById('sitInFormModal');
 
     if (event.target === searchModal) {
         closeModal('searchModal');
     }
+
+    if (event.target === sitInFormModal) {
+        closeModal('sitInFormModal');
+    }
 });
 </script>
-
+{% include 'admin_modals.html' %}
+<script src="{{ url_for('static', filename='darkmode.js') }}"></script>
 </body>
 </html>

@@ -380,10 +380,13 @@
 
     <div class="admin-nav-links">
         <a href="/admin/dashboard"><i class="fas fa-home"></i>Home</a>
-        <a href="javascript:void(0)" onclick="openSearchModal()"><i class="fas fa-search"></i>Search</a>
+        <a href="javascript:void(0)" onclick="openSearchModal()">
+    <i class="fas fa-search"></i>Search
+</a>
         <a href="/admin/students"><i class="fas fa-user-graduate"></i>Students</a>
         <a href="/admin/sitin-records"><i class="fas fa-desktop"></i>Sit-in</a>
         <a href="/admin/view-sitin-records"><i class="fas fa-list"></i>View Sit-in Records</a>
+        <a href="/admin/sitin-report"><i class="fas fa-chart-pie"></i>Sit-in Report</a>
         <a href="/admin/feedback-reports"><i class="fas fa-comments"></i>Feedback Reports</a>
         <a href="/admin/reservations" class="active"><i class="fas fa-calendar-check"></i>Reservation</a>
         <a href="/admin/logout" class="admin-logout-btn">Log out</a>
@@ -526,77 +529,6 @@
     </div>
 </div>
 
-<!-- SIT-IN FORM MODAL -->
-<div id="sitInFormModal" class="modal-overlay">
-    <div class="modal-content">
-
-        <div class="modal-header">
-            <span>
-                <i class="fas fa-desktop" style="margin-right:8px;"></i>
-                Sit-In Form
-            </span>
-            <button type="button" onclick="closeModal('sitInFormModal')" style="background:none;border:none;color:white;font-size:24px;cursor:pointer;">&times;</button>
-        </div>
-
-        <form action="/admin/sit-in" method="POST">
-            <div class="modal-body">
-
-                <div style="margin-bottom: 15px;">
-                    <label>ID Number</label>
-                    <input type="text" name="id_number" id="display_id" readonly>
-                </div>
-
-                <div style="margin-bottom: 15px;">
-                    <label>Student Name</label>
-                    <input type="text" id="display_name" readonly>
-                </div>
-
-                <div style="display:flex; gap:15px; margin-bottom:15px;">
-                    <div style="flex:1;">
-                        <label>Purpose</label>
-                        <select name="purpose">
-                            <option value="C Programming">C Programming</option>
-                            <option value="Java">Java</option>
-                            <option value="PHP">PHP</option>
-                            <option value="Python">Python</option>
-                            <option value="Database">Database</option>
-                        </select>
-                    </div>
-
-                    <div style="flex:1;">
-                        <label>Lab</label>
-                        <select name="lab" required>
-                            <option value="" disabled selected>Select lab</option>
-                            <option value="524">524</option>
-                            <option value="526">526</option>
-                            <option value="528">528</option>
-                            <option value="530">530</option>
-                            <option value="542">542</option>
-                            <option value="544">544</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <label>Remaining Session</label>
-                    <input type="text" id="display_remaining" readonly>
-                </div>
-
-            </div>
-
-            <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:12px;">
-                <button type="button" class="btn btn-reset" onclick="closeModal('sitInFormModal')">
-                    Close
-                </button>
-
-                <button type="submit" class="btn btn-search">
-                    Sit In
-                </button>
-            </div>
-        </form>
-
-    </div>
-</div>
 
 <script>
 function openSearchModal() {
@@ -730,6 +662,7 @@ window.addEventListener('click', function(event) {
     }
 });
 </script>
-
+{% include 'admin_modals.html' %}
+<script src="{{ url_for('static', filename='darkmode.js') }}"></script>
 </body>
 </html>

@@ -3806,3 +3806,3754 @@ button[type="submit"]:hover {
         grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
     }
 }
+
+.student-dashboard-page .dropdown:hover .dropdown-menu,
+.student-profile-page .dropdown:hover .dropdown-menu,
+.student-history-page .dropdown:hover .dropdown-menu,
+.student-summary-page .dropdown:hover .dropdown-menu,
+.student-reservation-page .dropdown:hover .dropdown-menu {
+    display: none !important;
+}
+
+.student-dashboard-page .dropdown.show:hover .dropdown-menu,
+.student-profile-page .dropdown.show:hover .dropdown-menu,
+.student-history-page .dropdown.show:hover .dropdown-menu,
+.student-summary-page .dropdown.show:hover .dropdown-menu,
+.student-reservation-page .dropdown.show:hover .dropdown-menu {
+    display: block !important;
+}
+
+/* ================= GLOBAL THEME MODE ================= */
+
+:root {
+    --page-bg: #f6f3fb;
+    --card-bg: #ffffff;
+    --text-main: #111827;
+    --text-muted: #6b7280;
+    --border-soft: #e5e7eb;
+    --shadow-soft: rgba(31, 16, 70, 0.10);
+}
+
+html {
+    transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+body {
+    background-color: var(--page-bg);
+    color: var(--text-main);
+    transition:
+        background 0.45s ease,
+        background-color 0.45s ease,
+        color 0.35s ease;
+}
+
+body,
+div,
+section,
+main,
+article,
+form,
+input,
+select,
+textarea,
+button,
+table,
+td,
+th,
+a,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span {
+    transition:
+        background-color 0.35s ease,
+        color 0.35s ease,
+        border-color 0.35s ease,
+        box-shadow 0.35s ease,
+        transform 0.25s ease;
+}
+
+/* Theme button */
+.theme-toggle-btn {
+    min-width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+    transition: all 0.35s ease;
+}
+
+.theme-toggle-btn:hover {
+    transform: translateY(-2px) rotate(8deg);
+    background: rgba(253, 184, 19, 0.24);
+    color: #fdb813;
+}
+
+.theme-toggle-btn i {
+    transition: transform 0.45s ease, opacity 0.35s ease;
+}
+
+body.dark-mode .theme-toggle-btn i {
+    transform: rotate(180deg);
+}
+
+/* Dark mode base */
+body.dark-mode {
+    --page-bg: #11111a;
+    --card-bg: #1b1b29;
+    --text-main: #f9fafb;
+    --text-muted: #cbd5e1;
+    --border-soft: #34344a;
+    --shadow-soft: rgba(0, 0, 0, 0.35);
+
+    background:
+        radial-gradient(circle at top left, rgba(253, 184, 19, 0.10), transparent 30%),
+        radial-gradient(circle at top right, rgba(139, 92, 246, 0.18), transparent 34%),
+        linear-gradient(180deg, #11111a 0%, #181827 100%) !important;
+    color: var(--text-main) !important;
+}
+
+/* Common cards / containers */
+body.dark-mode .card,
+body.dark-mode .dashboard-card,
+body.dark-mode .profile-card,
+body.dark-mode .records-card,
+body.dark-mode .report-card,
+body.dark-mode .reservation-card,
+body.dark-mode .summary-card-box,
+body.dark-mode .modal-content,
+body.dark-mode .modal-box,
+body.dark-mode .admin-search-modal,
+body.dark-mode .ranking-modal,
+body.dark-mode .leaderboard-modal,
+body.dark-mode .login-box,
+body.dark-mode .register-box,
+body.dark-mode .form-container,
+body.dark-mode .content-card,
+body.dark-mode .table-wrap,
+body.dark-mode .report-table-scroll {
+    background: rgba(27, 27, 41, 0.96) !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-soft) !important;
+    box-shadow: 0 18px 45px var(--shadow-soft) !important;
+}
+
+/* Text */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode p,
+body.dark-mode label,
+body.dark-mode span,
+body.dark-mode td,
+body.dark-mode small {
+    color: var(--text-main);
+}
+
+body.dark-mode .text-muted,
+body.dark-mode .admin-muted,
+body.dark-mode .student-id,
+body.dark-mode .student-meta,
+body.dark-mode .report-title p,
+body.dark-mode .records-title p,
+body.dark-mode .rank-subtitle {
+    color: var(--text-muted) !important;
+}
+
+/* Inputs */
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+    background: #111827 !important;
+    color: #f9fafb !important;
+    border-color: #374151 !important;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #9ca3af !important;
+}
+
+body.dark-mode input:focus,
+body.dark-mode select:focus,
+body.dark-mode textarea:focus {
+    border-color: #fdb813 !important;
+    box-shadow: 0 0 0 4px rgba(253, 184, 19, 0.13) !important;
+}
+
+/* Tables */
+body.dark-mode tbody td {
+    background: #1b1b29 !important;
+    color: #f9fafb !important;
+    border-bottom-color: #34344a !important;
+}
+
+body.dark-mode tbody tr:nth-child(even) td {
+    background: #202033 !important;
+}
+
+body.dark-mode tbody tr:hover td {
+    background: #2b2140 !important;
+}
+
+/* Dropdowns */
+body.dark-mode .dropdown-menu,
+body.dark-mode .notification-menu {
+    background: #1b1b29 !important;
+    color: #f9fafb !important;
+    border-color: #34344a !important;
+}
+
+body.dark-mode .notif-message,
+body.dark-mode .notif-content small {
+    color: #f9fafb !important;
+}
+
+/* Login/Register pages */
+body.dark-mode .login-container,
+body.dark-mode .register-container {
+    background:
+        radial-gradient(circle at top left, rgba(253, 184, 19, 0.10), transparent 28%),
+        linear-gradient(135deg, #11111a, #1c1730) !important;
+}
+
+body.dark-mode .login-card,
+body.dark-mode .register-card,
+body.dark-mode .auth-card {
+    background: rgba(27, 27, 41, 0.96) !important;
+    color: #f9fafb !important;
+    border-color: #34344a !important;
+}
+
+/* Theme fade animation */
+.theme-switching {
+    animation: themePulse 0.45s ease;
+}
+
+@keyframes themePulse {
+    0% {
+        filter: brightness(1);
+        transform: scale(1);
+    }
+
+    45% {
+        filter: brightness(1.12);
+        transform: scale(0.995);
+    }
+
+    100% {
+        filter: brightness(1);
+        transform: scale(1);
+    }
+}
+.auth-theme-toggle {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 9999;
+    background: linear-gradient(135deg, #4b2c80, #6b3fa0) !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .auth-theme-toggle {
+    background: linear-gradient(135deg, #fdb813, #f59e0b) !important;
+    color: #2d1a4d !important;
+}
+
+/* =========================================================
+   GLOBAL DARK / LIGHT MODE - FINAL CLEAN VERSION
+   Put this at the VERY BOTTOM of static/style.css
+========================================================= */
+
+:root {
+    --light-bg: #f6f3fb;
+    --light-card: #ffffff;
+    --light-card-soft: #fafafa;
+    --light-text: #111827;
+    --light-muted: #6b7280;
+    --light-border: #e5e7eb;
+
+    --dark-bg: #0f1020;
+    --dark-bg-soft: #15162a;
+    --dark-card: #1b1c31;
+    --dark-card-soft: #23243b;
+    --dark-text: #f8fafc;
+    --dark-muted: #cbd5e1;
+    --dark-border: #35364f;
+
+    --uc-purple: #4b2c80;
+    --uc-purple-dark: #2d1a4d;
+    --uc-purple-light: #6b3fa0;
+    --uc-gold: #fdb813;
+}
+
+/* Smooth transition */
+html,
+body,
+body * {
+    transition:
+        background-color 0.30s ease,
+        background 0.30s ease,
+        color 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+/* Theme toggle button */
+.theme-toggle-btn {
+    min-width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+}
+
+.theme-toggle-btn:hover {
+    transform: translateY(-2px) rotate(8deg);
+    background: rgba(253, 184, 19, 0.24);
+    color: var(--uc-gold);
+}
+
+body.dark-mode .theme-toggle-btn {
+    background: rgba(253, 184, 19, 0.18) !important;
+    color: var(--uc-gold) !important;
+}
+
+body.dark-mode .theme-toggle-btn i {
+    transform: rotate(180deg);
+}
+
+/* Main dark background */
+body.dark-mode {
+    background:
+        radial-gradient(circle at top left, rgba(253, 184, 19, 0.10), transparent 28%),
+        radial-gradient(circle at top right, rgba(139, 92, 246, 0.18), transparent 32%),
+        linear-gradient(180deg, #0f1020 0%, #15162a 100%) !important;
+    color: var(--dark-text) !important;
+}
+
+/* Make all normal text readable */
+body.dark-mode,
+body.dark-mode p,
+body.dark-mode span,
+body.dark-mode label,
+body.dark-mode small,
+body.dark-mode strong,
+body.dark-mode div,
+body.dark-mode td,
+body.dark-mode th,
+body.dark-mode li {
+    color: var(--dark-text);
+}
+
+/* Headings */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+    color: #ffffff !important;
+}
+
+/* Muted/subtext */
+body.dark-mode .text-muted,
+body.dark-mode .student-id,
+body.dark-mode .student-meta,
+body.dark-mode .report-title p,
+body.dark-mode .records-title p,
+body.dark-mode .rank-subtitle,
+body.dark-mode .leaderboard-meta,
+body.dark-mode .ranking-meta,
+body.dark-mode .notif-content small,
+body.dark-mode .summary-label,
+body.dark-mode .admin-muted {
+    color: var(--dark-muted) !important;
+}
+
+/* Navbar stays nice */
+body.dark-mode .admin-navbar,
+body.dark-mode .student-navbar {
+    background: linear-gradient(135deg, #24143f, #3a2265) !important;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.dark-mode .admin-navbar a,
+body.dark-mode .student-navbar a,
+body.dark-mode .admin-navbar-title,
+body.dark-mode .student-navbar-title {
+    color: #ffffff !important;
+}
+
+body.dark-mode .admin-nav-links a.active,
+body.dark-mode .student-nav-links a.active {
+    color: var(--uc-gold) !important;
+    background: rgba(253, 184, 19, 0.16) !important;
+}
+
+/* Cards / containers */
+body.dark-mode .card,
+body.dark-mode .dashboard-card,
+body.dark-mode .profile-card,
+body.dark-mode .records-card,
+body.dark-mode .report-card,
+body.dark-mode .reservation-card,
+body.dark-mode .summary-card,
+body.dark-mode .summary-card-box,
+body.dark-mode .history-card,
+body.dark-mode .content-card,
+body.dark-mode .stat-card,
+body.dark-mode .admin-card,
+body.dark-mode .students-card,
+body.dark-mode .leaderboard-modal,
+body.dark-mode .ranking-modal,
+body.dark-mode .modal-content,
+body.dark-mode .modal-box,
+body.dark-mode .admin-search-modal,
+body.dark-mode .login-card,
+body.dark-mode .register-card,
+body.dark-mode .auth-card,
+body.dark-mode .form-container {
+    background: rgba(27, 28, 49, 0.96) !important;
+    color: var(--dark-text) !important;
+    border-color: var(--dark-border) !important;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Card headers keep purple/gold style */
+body.dark-mode .records-card-header,
+body.dark-mode .report-card-header,
+body.dark-mode .leaderboard-header,
+body.dark-mode .ranking-modal-header,
+body.dark-mode .modal-header,
+body.dark-mode .modal-box-header,
+body.dark-mode .admin-search-header {
+    background:
+        radial-gradient(circle at top right, rgba(253, 184, 19, 0.18), transparent 30%),
+        linear-gradient(135deg, #3a2265, #24143f) !important;
+    color: #ffffff !important;
+}
+
+/* White sections inside cards */
+body.dark-mode .filter-bar,
+body.dark-mode .table-wrap,
+body.dark-mode .report-table-scroll,
+body.dark-mode .leaderboard-body,
+body.dark-mode .ranking-modal-body,
+body.dark-mode .modal-body,
+body.dark-mode .modal-box-body,
+body.dark-mode .admin-search-body {
+    background: var(--dark-card) !important;
+    color: var(--dark-text) !important;
+    border-color: var(--dark-border) !important;
+}
+
+/* Tables */
+body.dark-mode table {
+    background: var(--dark-card) !important;
+    color: var(--dark-text) !important;
+}
+
+body.dark-mode thead th,
+body.dark-mode .report-table-scroll thead th {
+    background: #3a2265 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode tbody td,
+body.dark-mode .report-table-scroll tbody td {
+    background: var(--dark-card) !important;
+    color: var(--dark-text) !important;
+    border-bottom-color: var(--dark-border) !important;
+}
+
+body.dark-mode tbody tr:nth-child(even) td,
+body.dark-mode .report-table-scroll tbody tr:nth-child(even) td {
+    background: var(--dark-card-soft) !important;
+}
+
+body.dark-mode tbody tr:hover td,
+body.dark-mode .report-table-scroll tbody tr:hover td {
+    background: #2d2546 !important;
+}
+
+/* Forms */
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+    background: #111827 !important;
+    color: #f9fafb !important;
+    border-color: #374151 !important;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode input:focus,
+body.dark-mode select:focus,
+body.dark-mode textarea:focus {
+    border-color: var(--uc-gold) !important;
+    box-shadow: 0 0 0 4px rgba(253, 184, 19, 0.13) !important;
+}
+
+body.dark-mode .search-bar,
+body.dark-mode .search-box {
+    background: var(--dark-card) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .search-bar input,
+body.dark-mode .search-box input,
+body.dark-mode .dataTables_filter input {
+    background: #111827 !important;
+    color: #f9fafb !important;
+    border-color: #374151 !important;
+}
+
+body.dark-mode .search-bar input:focus,
+body.dark-mode .search-box input:focus,
+body.dark-mode .dataTables_filter input:focus {
+    border-color: var(--uc-gold) !important;
+    box-shadow: 0 0 0 4px rgba(253, 184, 19, 0.13) !important;
+}
+
+/* Buttons keep readable */
+body.dark-mode button,
+body.dark-mode .btn,
+body.dark-mode .download-btn {
+    color: #ffffff;
+}
+
+body.dark-mode .btn-cancel {
+    background: #374151 !important;
+    color: #f9fafb !important;
+}
+
+body.dark-mode .btn-confirm-logout,
+body.dark-mode .btn-search,
+body.dark-mode .download-btn {
+    background: linear-gradient(135deg, #4b2c80, #6b3fa0) !important;
+    color: #ffffff !important;
+}
+
+/* Badges */
+body.dark-mode .badge-purpose {
+    background: rgba(253, 184, 19, 0.18) !important;
+    color: #fde68a !important;
+}
+
+body.dark-mode .badge-lab {
+    background: rgba(139, 92, 246, 0.22) !important;
+    color: #ddd6fe !important;
+}
+
+body.dark-mode .badge-points {
+    background: rgba(34, 197, 94, 0.16) !important;
+    color: #86efac !important;
+}
+
+body.dark-mode .criteria {
+    background: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+/* Dropdown / notification */
+body.dark-mode .dropdown-menu,
+body.dark-mode .notification-menu {
+    background: var(--dark-card) !important;
+    border-color: var(--dark-border) !important;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.40) !important;
+}
+
+body.dark-mode .notif-item:hover {
+    background: #2d2546 !important;
+}
+
+body.dark-mode .notif-icon {
+    background: #31284c !important;
+    color: var(--uc-gold) !important;
+}
+
+body.dark-mode .notif-message {
+    color: #ffffff !important;
+}
+
+/* Flash messages */
+body.dark-mode .flash-msg {
+    background: var(--dark-card) !important;
+    color: #ffffff !important;
+    border-color: var(--uc-gold) !important;
+}
+
+/* Evaluation modal */
+body.dark-mode .evaluation-box {
+    background: #231f3a !important;
+    border-color: #3f3b5f !important;
+}
+
+body.dark-mode .evaluation-text,
+body.dark-mode .evaluation-note-wrap label {
+    color: #e5e7eb !important;
+}
+
+body.dark-mode .evaluation-option span {
+    background: #111827 !important;
+    color: #f9fafb !important;
+    border-color: #374151 !important;
+}
+
+body.dark-mode .evaluation-option span small {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .evaluation-option input:checked + span {
+    background: var(--uc-purple) !important;
+    border-color: var(--uc-gold) !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .evaluation-total {
+    background: rgba(253, 184, 19, 0.12) !important;
+    border-color: rgba(253, 184, 19, 0.35) !important;
+}
+
+body.dark-mode .evaluation-total span,
+body.dark-mode .evaluation-total strong {
+    color: #fde68a !important;
+}
+
+/* Login / register page */
+body.dark-mode .login-container,
+body.dark-mode .register-container,
+body.dark-mode .auth-container {
+    background:
+        radial-gradient(circle at top left, rgba(253, 184, 19, 0.10), transparent 28%),
+        linear-gradient(135deg, #0f1020, #1c1730) !important;
+}
+
+.auth-theme-toggle {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 9999;
+    background: linear-gradient(135deg, #4b2c80, #6b3fa0) !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .auth-theme-toggle {
+    background: linear-gradient(135deg, #fdb813, #f59e0b) !important;
+    color: #2d1a4d !important;
+}
+
+/* Scrollbars */
+body.dark-mode ::-webkit-scrollbar-track {
+    background: #111827;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+    background: #6b3fa0;
+    border-radius: 999px;
+}
+
+/* Switch animation */
+.theme-switching {
+    animation: themePulse 0.45s ease;
+}
+
+@keyframes themePulse {
+    0% {
+        filter: brightness(1);
+        transform: scale(1);
+    }
+
+    45% {
+        filter: brightness(1.12);
+        transform: scale(0.995);
+    }
+
+    100% {
+        filter: brightness(1);
+        transform: scale(1);
+    }
+}
+/* =========================================================
+   FINAL FORCE FIX: LOGIN / REGISTER DARK MODE TEXT
+   PASTE AT THE VERY BOTTOM OF style.css
+========================================================= */
+
+/* Force text inside login/register form areas to become readable */
+body.dark-mode form,
+body.dark-mode form *,
+body.dark-mode .login-container,
+body.dark-mode .login-container *,
+body.dark-mode .register-container,
+body.dark-mode .register-container *,
+body.dark-mode .login-wrapper,
+body.dark-mode .login-wrapper *,
+body.dark-mode .register-wrapper,
+body.dark-mode .register-wrapper *,
+body.dark-mode .login-page,
+body.dark-mode .login-page *,
+body.dark-mode .register-page,
+body.dark-mode .register-page *,
+body.dark-mode .auth-page,
+body.dark-mode .auth-page *,
+body.dark-mode .auth-container,
+body.dark-mode .auth-container *,
+body.dark-mode .auth-wrapper,
+body.dark-mode .auth-wrapper *,
+body.dark-mode .auth-card,
+body.dark-mode .auth-card *,
+body.dark-mode .login-card,
+body.dark-mode .login-card *,
+body.dark-mode .register-card,
+body.dark-mode .register-card *,
+body.dark-mode .login-box,
+body.dark-mode .login-box *,
+body.dark-mode .register-box,
+body.dark-mode .register-box *,
+body.dark-mode .form-card,
+body.dark-mode .form-card *,
+body.dark-mode .form-box,
+body.dark-mode .form-box *,
+body.dark-mode .form-panel,
+body.dark-mode .form-panel *,
+body.dark-mode .right-panel,
+body.dark-mode .right-panel *,
+body.dark-mode .login-panel,
+body.dark-mode .login-panel * {
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+}
+
+/* But keep placeholders muted */
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
+}
+
+/* Inputs */
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+    background: #111827 !important;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    border: 1.6px solid #475569 !important;
+}
+
+/* Login/register card background */
+body.dark-mode form,
+body.dark-mode .login-card,
+body.dark-mode .register-card,
+body.dark-mode .auth-card,
+body.dark-mode .login-box,
+body.dark-mode .register-box,
+body.dark-mode .form-card,
+body.dark-mode .form-box,
+body.dark-mode .form-panel,
+body.dark-mode .right-panel,
+body.dark-mode .login-panel {
+    background: rgba(27, 28, 49, 0.96) !important;
+    border-color: #35364f !important;
+}
+
+/* Links should be gold */
+body.dark-mode form a,
+body.dark-mode .login-container a,
+body.dark-mode .register-container a,
+body.dark-mode .auth-container a,
+body.dark-mode .login-card a,
+body.dark-mode .register-card a,
+body.dark-mode .auth-card a {
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+}
+
+/* Buttons should not become white text-fill problem */
+body.dark-mode button,
+body.dark-mode button *,
+body.dark-mode .btn,
+body.dark-mode .btn * {
+    -webkit-text-fill-color: inherit !important;
+}
+
+/* Login button */
+body.dark-mode button[type="submit"],
+body.dark-mode .login-btn,
+body.dark-mode .register-btn,
+body.dark-mode .submit-btn {
+    background: linear-gradient(135deg, #4b2c80, #6b3fa0) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Remember me checkbox should stay visible */
+body.dark-mode input[type="checkbox"] {
+    accent-color: #fdb813 !important;
+}
+
+/* =========================================================
+   DARK / LIGHT MODE TOGGLE BUTTON
+========================================================= */
+
+.dark-mode-toggle {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 58px;
+    height: 58px;
+    border: none;
+    border-radius: 50%;
+    z-index: 999999;
+    background: linear-gradient(135deg, #4b2c80, #2d1a4d);
+    color: #fdb813;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow:
+        0 14px 35px rgba(0, 0, 0, 0.35),
+        0 0 18px rgba(253, 184, 19, 0.25);
+    transition: all 0.25s ease;
+}
+
+.dark-mode-toggle:hover {
+    transform: translateY(-4px) scale(1.05);
+    background: linear-gradient(135deg, #fdb813, #f59e0b);
+    color: #2d1a4d;
+}
+
+/* =========================================================
+   LOGIN DARK MODE BEAUTIFUL FIX
+========================================================= */
+
+body.login-page.dark-mode {
+    background:
+        radial-gradient(circle at 20% 10%, rgba(253, 184, 19, 0.12), transparent 28%),
+        radial-gradient(circle at 80% 15%, rgba(124, 58, 237, 0.28), transparent 32%),
+        linear-gradient(135deg, #05030a 0%, #140820 45%, #020617 100%) !important;
+    color: #ffffff !important;
+}
+
+body.login-page.dark-mode .login-navbar {
+    background: linear-gradient(135deg, #160824, #08030f) !important;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65) !important;
+}
+
+body.login-page.dark-mode .login-navbar span,
+body.login-page.dark-mode .login-navbar a {
+    color: #ffffff !important;
+}
+
+body.login-page.dark-mode .login-navbar a:hover,
+body.login-page.dark-mode .login-navbar a.active-link {
+    color: #fdb813 !important;
+    background: rgba(253, 184, 19, 0.14) !important;
+}
+
+body.login-page.dark-mode .login-brand-card,
+body.login-page.dark-mode .login-box {
+    background:
+        linear-gradient(180deg, rgba(30, 41, 59, 0.96), rgba(15, 23, 42, 0.98)) !important;
+    border: 1px solid rgba(148, 163, 184, 0.25) !important;
+    box-shadow:
+        0 28px 90px rgba(0, 0, 0, 0.55),
+        0 0 35px rgba(124, 58, 237, 0.12) !important;
+    color: #ffffff !important;
+}
+
+body.login-page.dark-mode .login-title h2,
+body.login-page.dark-mode .login-brand-card h1 {
+    color: #ffffff !important;
+    text-shadow: 0 0 14px rgba(253, 184, 19, 0.18) !important;
+}
+
+body.login-page.dark-mode .login-title p,
+body.login-page.dark-mode .login-brand-card p,
+body.login-page.dark-mode .remember-me-container,
+body.login-page.dark-mode .remember-me-container label,
+body.login-page.dark-mode .register {
+    color: #e2e8f0 !important;
+}
+
+body.login-page.dark-mode .system-badge {
+    background: rgba(253, 184, 19, 0.18) !important;
+    color: #fde68a !important;
+    border: 1px solid rgba(253, 184, 19, 0.28) !important;
+}
+
+body.login-page.dark-mode .login-benefits span {
+    background: rgba(15, 23, 42, 0.90) !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.22) !important;
+}
+
+body.login-page.dark-mode .input-group-login input {
+    background: #eaf2ff !important;
+    color: #111827 !important;
+    border: 2px solid rgba(253, 184, 19, 0.65) !important;
+    box-shadow:
+        0 0 0 4px rgba(253, 184, 19, 0.10),
+        0 14px 28px rgba(0, 0, 0, 0.28) !important;
+}
+
+body.login-page.dark-mode .input-group-login input:focus {
+    border-color: #fdb813 !important;
+    box-shadow:
+        0 0 0 4px rgba(253, 184, 19, 0.22),
+        0 0 25px rgba(253, 184, 19, 0.20) !important;
+}
+
+body.login-page.dark-mode .input-group-login input::placeholder {
+    color: #334155 !important;
+    opacity: 1 !important;
+}
+
+body.login-page.dark-mode .input-group-login label {
+    color: #ffffff !important;
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.45) !important;
+}
+
+body.login-page.dark-mode .login-btn {
+    background: linear-gradient(135deg, #5b2fa0, #7c3aed) !important;
+    color: #ffffff !important;
+    box-shadow:
+        0 18px 34px rgba(124, 58, 237, 0.30),
+        0 0 20px rgba(124, 58, 237, 0.20) !important;
+}
+
+body.login-page.dark-mode .login-btn:hover {
+    background: linear-gradient(135deg, #fdb813, #f59e0b) !important;
+    color: #1e1038 !important;
+}
+
+body.login-page.dark-mode .register a,
+body.login-page.dark-mode .register a span {
+    color: #fdb813 !important;
+}
+
+body.login-page.dark-mode .flash.success {
+    background: rgba(22, 163, 74, 0.18) !important;
+    color: #bbf7d0 !important;
+    border: 1px solid rgba(134, 239, 172, 0.30) !important;
+}
+
+body.login-page.dark-mode .flash.error {
+    background: rgba(220, 38, 38, 0.20) !important;
+    color: #fecaca !important;
+    border: 1px solid rgba(252, 165, 165, 0.30) !important;
+}
+
+body.login-page.dark-mode .dark-mode-toggle {
+    background: linear-gradient(135deg, #fdb813, #f59e0b);
+    color: #1e1038;
+    box-shadow:
+        0 16px 40px rgba(0, 0, 0, 0.45),
+        0 0 28px rgba(253, 184, 19, 0.36);
+}
+
+/* Light mode extra polish */
+body.login-page:not(.dark-mode) .dark-mode-toggle {
+    background: linear-gradient(135deg, #4b2c80, #2d1a4d);
+    color: #fdb813;
+}
+
+@media (max-width: 600px) {
+    .dark-mode-toggle {
+        right: 15px;
+        bottom: 15px;
+        width: 50px;
+        height: 50px;
+        font-size: 19px;
+    }
+}
+
+/* =========================================================
+   DARK MODE FIX - LOGIN PAGE READABILITY + TOGGLE BUTTON
+========================================================= */
+
+body.login-page.dark-mode {
+    background:
+        radial-gradient(circle at 18% 18%, rgba(253, 184, 19, 0.12), transparent 28%),
+        radial-gradient(circle at 80% 10%, rgba(124, 58, 237, 0.28), transparent 34%),
+        linear-gradient(135deg, #07020d 0%, #160922 45%, #020617 100%) !important;
+    color: #f8fafc !important;
+}
+
+/* Navbar */
+body.login-page.dark-mode .login-navbar {
+    background: linear-gradient(135deg, #12051f, #06020c) !important;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65) !important;
+}
+
+body.login-page.dark-mode .login-navbar span,
+body.login-page.dark-mode .login-navbar .nav-menu a {
+    color: #ffffff !important;
+}
+
+body.login-page.dark-mode .login-navbar .nav-menu a:hover,
+body.login-page.dark-mode .login-navbar .nav-menu a.active-link {
+    background: rgba(253, 184, 19, 0.16) !important;
+    color: #fdb813 !important;
+}
+
+/* Cards */
+body.login-page.dark-mode .login-brand-card,
+body.login-page.dark-mode .login-box {
+    background: linear-gradient(180deg, #1e293b 0%, #111827 100%) !important;
+    border: 1px solid rgba(148, 163, 184, 0.28) !important;
+    color: #f8fafc !important;
+    box-shadow:
+        0 28px 90px rgba(0, 0, 0, 0.55),
+        0 0 35px rgba(124, 58, 237, 0.14) !important;
+}
+
+/* Main text */
+body.login-page.dark-mode .login-brand-card h1,
+body.login-page.dark-mode .login-title h2 {
+    color: #ffffff !important;
+    text-shadow: 0 0 14px rgba(253, 184, 19, 0.18) !important;
+}
+
+body.login-page.dark-mode .login-brand-card p,
+body.login-page.dark-mode .login-title p,
+body.login-page.dark-mode .remember-me-container,
+body.login-page.dark-mode .remember-me-container label {
+    color: #f1f5f9 !important;
+}
+
+/* Badge */
+body.login-page.dark-mode .system-badge {
+    background: rgba(253, 184, 19, 0.17) !important;
+    color: #fde68a !important;
+    border: 1px solid rgba(253, 184, 19, 0.35) !important;
+}
+
+/* Benefit pills */
+body.login-page.dark-mode .login-benefits span {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.30) !important;
+}
+
+/* Input wrapper dark background */
+body.login-page.dark-mode .input-group-login {
+    background: transparent !important;
+}
+
+/* Input field readable */
+body.login-page.dark-mode .input-group-login input {
+    background: #eaf2ff !important;
+    color: #111827 !important;
+    border: 2px solid rgba(253, 184, 19, 0.75) !important;
+    box-shadow:
+        0 0 0 4px rgba(253, 184, 19, 0.10),
+        0 14px 28px rgba(0, 0, 0, 0.28) !important;
+}
+
+/* Important: fix white label on light input */
+body.login-page.dark-mode .input-group-login label {
+    color: #1e293b !important;
+    text-shadow: none !important;
+    font-weight: 950 !important;
+}
+
+body.login-page.dark-mode .input-group-login input:focus + label,
+body.login-page.dark-mode .input-group-login input:not(:placeholder-shown) + label {
+    color: #4b2c80 !important;
+    text-shadow: none !important;
+}
+
+/* Placeholder/text visibility */
+body.login-page.dark-mode .input-group-login input::placeholder {
+    color: #334155 !important;
+    opacity: 1 !important;
+}
+
+body.login-page.dark-mode .input-group-login input:focus {
+    border-color: #fdb813 !important;
+    box-shadow:
+        0 0 0 4px rgba(253, 184, 19, 0.22),
+        0 0 25px rgba(253, 184, 19, 0.22) !important;
+}
+
+/* Login button */
+body.login-page.dark-mode .login-btn {
+    background: linear-gradient(135deg, #5b2fa0, #7c3aed) !important;
+    color: #ffffff !important;
+    box-shadow:
+        0 18px 34px rgba(124, 58, 237, 0.32),
+        0 0 20px rgba(124, 58, 237, 0.18) !important;
+}
+
+body.login-page.dark-mode .login-btn:hover {
+    background: linear-gradient(135deg, #fdb813, #f59e0b) !important;
+    color: #1e1038 !important;
+}
+
+/* Register link area */
+body.login-page.dark-mode .register {
+    background: rgba(15, 23, 42, 0.65) !important;
+    color: #f8fafc !important;
+    border-top: 1px solid rgba(148, 163, 184, 0.30) !important;
+}
+
+body.login-page.dark-mode .register a,
+body.login-page.dark-mode .register a span {
+    color: #fdb813 !important;
+    text-decoration: none !important;
+}
+
+body.login-page.dark-mode .register a:hover,
+body.login-page.dark-mode .register a:hover span {
+    color: #fde68a !important;
+    text-decoration: underline !important;
+}
+
+/* Checkbox */
+body.login-page.dark-mode #remember {
+    accent-color: #fdb813 !important;
+}
+
+/* Dark mode floating button */
+.dark-mode-toggle {
+    position: fixed !important;
+    right: 24px !important;
+    bottom: 24px !important;
+    width: 58px !important;
+    height: 58px !important;
+    border: none !important;
+    border-radius: 50% !important;
+    z-index: 999999 !important;
+    background: linear-gradient(135deg, #4b2c80, #2d1a4d) !important;
+    color: #fdb813 !important;
+    font-size: 25px !important;
+    line-height: 58px !important;
+    text-align: center !important;
+    cursor: pointer !important;
+    box-shadow:
+        0 14px 35px rgba(0, 0, 0, 0.35),
+        0 0 18px rgba(253, 184, 19, 0.25) !important;
+    transition: all 0.25s ease !important;
+}
+
+.dark-mode-toggle:hover {
+    transform: translateY(-4px) scale(1.05) !important;
+    background: linear-gradient(135deg, #fdb813, #f59e0b) !important;
+    color: #2d1a4d !important;
+}
+
+body.dark-mode .dark-mode-toggle {
+    background: linear-gradient(135deg, #fdb813, #f59e0b) !important;
+    color: #1e1038 !important;
+    box-shadow:
+        0 16px 40px rgba(0, 0, 0, 0.45),
+        0 0 28px rgba(253, 184, 19, 0.36) !important;
+}
+
+@media (max-width: 600px) {
+    .dark-mode-toggle {
+        right: 15px !important;
+        bottom: 15px !important;
+        width: 50px !important;
+        height: 50px !important;
+        line-height: 50px !important;
+        font-size: 21px !important;
+    }
+}
+/* =========================================================
+   FINAL DARK MODE LOGIN INPUT TEXT FIX
+   Put this at the VERY BOTTOM of style.css
+========================================================= */
+
+body.login-page.dark-mode #id_number,
+body.login-page.dark-mode #password,
+body.login-page.dark-mode .login-box input#id_number,
+body.login-page.dark-mode .login-box input#password,
+body.login-page.dark-mode .input-group-login input[type="text"],
+body.login-page.dark-mode .input-group-login input[type="password"] {
+    background: #eaf2ff !important;
+    color: #111827 !important;
+    -webkit-text-fill-color: #111827 !important;
+    caret-color: #111827 !important;
+    border: 2px solid #fdb813 !important;
+    font-weight: 900 !important;
+}
+
+/* Placeholder should also be dark/readable */
+body.login-page.dark-mode #id_number::placeholder,
+body.login-page.dark-mode #password::placeholder,
+body.login-page.dark-mode .input-group-login input::placeholder {
+    color: #334155 !important;
+    -webkit-text-fill-color: #334155 !important;
+    opacity: 1 !important;
+    font-weight: 900 !important;
+}
+
+/* Floating labels inside login input */
+body.login-page.dark-mode .input-group-login label,
+body.login-page.dark-mode .input-group-login input + label,
+body.login-page.dark-mode .input-group-login input:focus + label,
+body.login-page.dark-mode .input-group-login input:not(:placeholder-shown) + label {
+    color: #4b2c80 !important;
+    -webkit-text-fill-color: #4b2c80 !important;
+    text-shadow: none !important;
+    font-weight: 950 !important;
+}
+
+/* Browser autofill fix */
+body.login-page.dark-mode input:-webkit-autofill,
+body.login-page.dark-mode input:-webkit-autofill:hover,
+body.login-page.dark-mode input:-webkit-autofill:focus,
+body.login-page.dark-mode input:-webkit-autofill:active {
+    -webkit-text-fill-color: #111827 !important;
+    box-shadow: 0 0 0 1000px #eaf2ff inset !important;
+    caret-color: #111827 !important;
+}
+
+/* =========================================================
+   FINAL FIX - EDIT PROFILE DARK MODE CHOOSE PHOTO BUTTON
+========================================================= */
+
+body.dark-mode.student-edit-page .upload-label,
+body.dark-mode.student-edit-page label.upload-label {
+    background: #ffffff !important;
+    color: #4b2c80 !important;
+    -webkit-text-fill-color: #4b2c80 !important;
+    border: 2px dashed #8b5cf6 !important;
+    font-weight: 950 !important;
+    text-shadow: none !important;
+    opacity: 1 !important;
+}
+
+body.dark-mode.student-edit-page .upload-label *,
+body.dark-mode.student-edit-page label.upload-label *,
+body.dark-mode.student-edit-page .upload-label i,
+body.dark-mode.student-edit-page label.upload-label i {
+    color: #4b2c80 !important;
+    -webkit-text-fill-color: #4b2c80 !important;
+    text-shadow: none !important;
+    opacity: 1 !important;
+}
+
+body.dark-mode.student-edit-page .upload-label:hover,
+body.dark-mode.student-edit-page label.upload-label:hover {
+    background: #f7f2ff !important;
+    color: #2d1a4d !important;
+    -webkit-text-fill-color: #2d1a4d !important;
+    border-color: #fdb813 !important;
+}
+
+body.dark-mode.student-edit-page .upload-label:hover *,
+body.dark-mode.student-edit-page label.upload-label:hover * {
+    color: #2d1a4d !important;
+    -webkit-text-fill-color: #2d1a4d !important;
+}
+/* =========================================================
+   FINAL FIX - DASHBOARD DARK MODE NOTIFICATION ICONS
+========================================================= */
+
+body.dark-mode.student-dashboard-page .notification-menu,
+body.dark-mode.student-dashboard-page .dropdown-menu.notification-menu {
+    background: #0f172a !important;
+    border: 1px solid rgba(148, 163, 184, 0.28) !important;
+    box-shadow:
+        0 20px 45px rgba(0, 0, 0, 0.55),
+        0 0 20px rgba(253, 184, 19, 0.10) !important;
+}
+
+body.dark-mode.student-dashboard-page .notif-item {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    padding: 14px 12px !important;
+    background: #0f172a !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18) !important;
+    color: #f8fafc !important;
+}
+
+body.dark-mode.student-dashboard-page .notif-item:hover {
+    background: rgba(75, 44, 128, 0.38) !important;
+}
+
+body.dark-mode.student-dashboard-page .notif-icon {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    border-radius: 13px !important;
+    background: rgba(75, 44, 128, 0.95) !important;
+    color: #fdb813 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    box-shadow: 0 0 14px rgba(253, 184, 19, 0.16) !important;
+}
+
+body.dark-mode.student-dashboard-page .notif-icon i,
+body.dark-mode.student-dashboard-page .notif-item i,
+body.dark-mode.student-dashboard-page .notification-menu i {
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+    font-size: 15px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: inline-block !important;
+}
+
+body.dark-mode.student-dashboard-page .notif-content {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    min-width: 0 !important;
+}
+
+body.dark-mode.student-dashboard-page .notif-message,
+body.dark-mode.student-dashboard-page .notif-content span {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-weight: 900 !important;
+    line-height: 1.35 !important;
+    display: block !important;
+}
+
+body.dark-mode.student-dashboard-page .notif-content small,
+body.dark-mode.student-dashboard-page .notif-item small {
+    color: #dbeafe !important;
+    -webkit-text-fill-color: #dbeafe !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    display: block !important;
+}
+
+/* For dashboard notification markup that has icon and text directly inside notif-item */
+body.dark-mode.student-dashboard-page .notif-item > i:first-child {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    border-radius: 13px !important;
+    background: rgba(75, 44, 128, 0.95) !important;
+    color: #fdb813 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-right: 10px !important;
+}
+/* =========================================================
+   FINAL FIX - STUDENT NOTIFICATION DROPDOWN DARK MODE
+   Works for dashboard, edit profile, history, summary, reservation
+========================================================= */
+
+body.dark-mode .student-navbar .notification-menu,
+body.dark-mode .student-navbar .dropdown-menu,
+body.dark-mode.student-dashboard-page .notification-menu,
+body.dark-mode.student-edit-page .notification-menu,
+body.dark-mode.student-history-page .notification-menu,
+body.dark-mode.student-reservation-page .notification-menu,
+body.dark-mode.student-summary-page .notification-menu {
+    width: 300px !important;
+    min-width: 300px !important;
+    max-width: 300px !important;
+    max-height: 380px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 10px !important;
+    background: #0f172a !important;
+    border: 1px solid rgba(148, 163, 184, 0.28) !important;
+    border-radius: 18px !important;
+    box-shadow:
+        0 24px 55px rgba(0, 0, 0, 0.58),
+        0 0 22px rgba(253, 184, 19, 0.08) !important;
+}
+
+/* Notification item layout */
+body.dark-mode .student-navbar .notif-item,
+body.dark-mode.student-dashboard-page .notif-item,
+body.dark-mode.student-edit-page .notif-item,
+body.dark-mode.student-history-page .notif-item,
+body.dark-mode.student-reservation-page .notif-item,
+body.dark-mode.student-summary-page .notif-item {
+    display: grid !important;
+    grid-template-columns: 42px minmax(0, 1fr) !important;
+    align-items: start !important;
+    gap: 10px !important;
+    width: 100% !important;
+    padding: 14px 10px !important;
+    background: #0f172a !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18) !important;
+    border-radius: 0 !important;
+    color: #ffffff !important;
+    white-space: normal !important;
+    text-decoration: none !important;
+}
+
+body.dark-mode .student-navbar .notif-item:last-child,
+body.dark-mode.student-dashboard-page .notif-item:last-child,
+body.dark-mode.student-edit-page .notif-item:last-child,
+body.dark-mode.student-history-page .notif-item:last-child,
+body.dark-mode.student-reservation-page .notif-item:last-child,
+body.dark-mode.student-summary-page .notif-item:last-child {
+    border-bottom: none !important;
+}
+
+body.dark-mode .student-navbar .notif-item:hover,
+body.dark-mode.student-dashboard-page .notif-item:hover,
+body.dark-mode.student-edit-page .notif-item:hover,
+body.dark-mode.student-history-page .notif-item:hover,
+body.dark-mode.student-reservation-page .notif-item:hover,
+body.dark-mode.student-summary-page .notif-item:hover {
+    background: rgba(75, 44, 128, 0.38) !important;
+}
+
+/* Icon circle */
+body.dark-mode .student-navbar .notif-icon,
+body.dark-mode.student-dashboard-page .notif-icon,
+body.dark-mode.student-edit-page .notif-icon,
+body.dark-mode.student-history-page .notif-icon,
+body.dark-mode.student-reservation-page .notif-icon,
+body.dark-mode.student-summary-page .notif-icon {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    border-radius: 13px !important;
+    background: rgba(75, 44, 128, 0.98) !important;
+    color: #fdb813 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 0 14px rgba(253, 184, 19, 0.13) !important;
+}
+
+/* Icon itself */
+body.dark-mode .student-navbar .notif-icon i,
+body.dark-mode .student-navbar .notification-menu i,
+body.dark-mode.student-dashboard-page .notif-icon i,
+body.dark-mode.student-edit-page .notif-icon i,
+body.dark-mode.student-history-page .notif-icon i,
+body.dark-mode.student-reservation-page .notif-icon i,
+body.dark-mode.student-summary-page .notif-icon i {
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+    font-size: 15px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: inline-block !important;
+}
+
+/* Text column */
+body.dark-mode .student-navbar .notif-content,
+body.dark-mode.student-dashboard-page .notif-content,
+body.dark-mode.student-edit-page .notif-content,
+body.dark-mode.student-history-page .notif-content,
+body.dark-mode.student-reservation-page .notif-content,
+body.dark-mode.student-summary-page .notif-content {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Message text */
+body.dark-mode .student-navbar .notif-message,
+body.dark-mode .student-navbar .notif-content span,
+body.dark-mode.student-dashboard-page .notif-message,
+body.dark-mode.student-edit-page .notif-message,
+body.dark-mode.student-history-page .notif-message,
+body.dark-mode.student-reservation-page .notif-message,
+body.dark-mode.student-summary-page .notif-message {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-size: 13px !important;
+    font-weight: 950 !important;
+    line-height: 1.35 !important;
+    display: block !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+}
+
+/* Date text */
+body.dark-mode .student-navbar .notif-content small,
+body.dark-mode .student-navbar .notif-item small,
+body.dark-mode.student-dashboard-page .notif-content small,
+body.dark-mode.student-edit-page .notif-content small,
+body.dark-mode.student-history-page .notif-content small,
+body.dark-mode.student-reservation-page .notif-content small,
+body.dark-mode.student-summary-page .notif-content small {
+    color: #dbeafe !important;
+    -webkit-text-fill-color: #dbeafe !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+    display: block !important;
+    line-height: 1.25 !important;
+}
+
+/* Empty state */
+body.dark-mode .student-navbar .notif-empty,
+body.dark-mode.student-dashboard-page .notif-empty,
+body.dark-mode.student-edit-page .notif-empty,
+body.dark-mode.student-history-page .notif-empty,
+body.dark-mode.student-reservation-page .notif-empty,
+body.dark-mode.student-summary-page .notif-empty {
+    color: #dbeafe !important;
+    background: #0f172a !important;
+    text-align: center !important;
+    padding: 18px !important;
+}
+
+/* Scrollbar */
+body.dark-mode .student-navbar .notification-menu::-webkit-scrollbar,
+body.dark-mode.student-dashboard-page .notification-menu::-webkit-scrollbar,
+body.dark-mode.student-edit-page .notification-menu::-webkit-scrollbar,
+body.dark-mode.student-history-page .notification-menu::-webkit-scrollbar,
+body.dark-mode.student-reservation-page .notification-menu::-webkit-scrollbar,
+body.dark-mode.student-summary-page .notification-menu::-webkit-scrollbar {
+    width: 7px !important;
+}
+
+body.dark-mode .student-navbar .notification-menu::-webkit-scrollbar-track,
+body.dark-mode.student-dashboard-page .notification-menu::-webkit-scrollbar-track,
+body.dark-mode.student-edit-page .notification-menu::-webkit-scrollbar-track,
+body.dark-mode.student-history-page .notification-menu::-webkit-scrollbar-track,
+body.dark-mode.student-reservation-page .notification-menu::-webkit-scrollbar-track,
+body.dark-mode.student-summary-page .notification-menu::-webkit-scrollbar-track {
+    background: #111827 !important;
+    border-radius: 999px !important;
+}
+
+body.dark-mode .student-navbar .notification-menu::-webkit-scrollbar-thumb,
+body.dark-mode.student-dashboard-page .notification-menu::-webkit-scrollbar-thumb,
+body.dark-mode.student-edit-page .notification-menu::-webkit-scrollbar-thumb,
+body.dark-mode.student-history-page .notification-menu::-webkit-scrollbar-thumb,
+body.dark-mode.student-reservation-page .notification-menu::-webkit-scrollbar-thumb,
+body.dark-mode.student-summary-page .notification-menu::-webkit-scrollbar-thumb {
+    background: #4b2c80 !important;
+    border-radius: 999px !important;
+}
+
+/* Fix if some pages use direct icon inside notif-item instead of .notif-icon */
+body.dark-mode .student-navbar .notif-item > i:first-child,
+body.dark-mode.student-dashboard-page .notif-item > i:first-child,
+body.dark-mode.student-edit-page .notif-item > i:first-child,
+body.dark-mode.student-history-page .notif-item > i:first-child,
+body.dark-mode.student-reservation-page .notif-item > i:first-child,
+body.dark-mode.student-summary-page .notif-item > i:first-child {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    border-radius: 13px !important;
+    background: rgba(75, 44, 128, 0.98) !important;
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 15px !important;
+    margin: 0 !important;
+}
+/* =========================================================
+   FINAL FIX - DASHBOARD LEADERBOARD MODAL DARK MODE
+========================================================= */
+
+body.dark-mode.student-dashboard-page .ranking-modal-overlay,
+body.dark-mode.student-dashboard-page .leaderboard-modal-overlay,
+body.dark-mode.student-dashboard-page #rankingModal,
+body.dark-mode.student-dashboard-page #leaderboardModal {
+    background: rgba(0, 0, 0, 0.78) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+body.dark-mode.student-dashboard-page .ranking-modal,
+body.dark-mode.student-dashboard-page .leaderboard-modal,
+body.dark-mode.student-dashboard-page .ranking-modal-content,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content {
+    background: linear-gradient(180deg, #1e293b, #0f172a) !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.28) !important;
+    box-shadow:
+        0 30px 90px rgba(0, 0, 0, 0.62),
+        0 0 30px rgba(124, 58, 237, 0.16) !important;
+}
+
+body.dark-mode.student-dashboard-page .ranking-modal-header,
+body.dark-mode.student-dashboard-page .leaderboard-modal-header {
+    background:
+        radial-gradient(circle at top right, rgba(253, 184, 19, 0.18), transparent 32%),
+        linear-gradient(135deg, #2d1a4d, #08040f) !important;
+    color: #ffffff !important;
+    border-bottom: 1px solid rgba(253, 184, 19, 0.20) !important;
+}
+
+body.dark-mode.student-dashboard-page .ranking-modal-header h2,
+body.dark-mode.student-dashboard-page .leaderboard-modal-header h2,
+body.dark-mode.student-dashboard-page .ranking-modal-title,
+body.dark-mode.student-dashboard-page .leaderboard-modal-title {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    text-shadow: 0 0 14px rgba(253, 184, 19, 0.18) !important;
+}
+
+/* Close button */
+body.dark-mode.student-dashboard-page .ranking-modal-close,
+body.dark-mode.student-dashboard-page .leaderboard-modal-close,
+body.dark-mode.student-dashboard-page .ranking-close,
+body.dark-mode.student-dashboard-page .modal-close {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+body.dark-mode.student-dashboard-page .ranking-modal-close:hover,
+body.dark-mode.student-dashboard-page .leaderboard-modal-close:hover,
+body.dark-mode.student-dashboard-page .ranking-close:hover,
+body.dark-mode.student-dashboard-page .modal-close:hover {
+    background: #fdb813 !important;
+    color: #1e1038 !important;
+}
+
+/* Left and right cards */
+body.dark-mode.student-dashboard-page .my-place-card,
+body.dark-mode.student-dashboard-page .ranking-place-card,
+body.dark-mode.student-dashboard-page .top-students-card,
+body.dark-mode.student-dashboard-page .ranking-list-card,
+body.dark-mode.student-dashboard-page .leaderboard-list-card {
+    background: linear-gradient(180deg, #111827, #020617) !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.28) !important;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.38) !important;
+}
+
+/* Card headers */
+body.dark-mode.student-dashboard-page .my-place-card-header,
+body.dark-mode.student-dashboard-page .ranking-card-header,
+body.dark-mode.student-dashboard-page .top-students-header,
+body.dark-mode.student-dashboard-page .leaderboard-card-header {
+    background: rgba(124, 58, 237, 0.18) !important;
+    color: #ffffff !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.20) !important;
+}
+
+body.dark-mode.student-dashboard-page .my-place-card-header *,
+body.dark-mode.student-dashboard-page .ranking-card-header *,
+body.dark-mode.student-dashboard-page .top-students-header *,
+body.dark-mode.student-dashboard-page .leaderboard-card-header * {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Rank circle */
+body.dark-mode.student-dashboard-page .rank-circle,
+body.dark-mode.student-dashboard-page .ranking-circle,
+body.dark-mode.student-dashboard-page .my-rank-circle {
+    background: linear-gradient(135deg, #fdb813, #f59e0b) !important;
+    color: #1e1038 !important;
+    box-shadow:
+        0 0 28px rgba(253, 184, 19, 0.35),
+        0 16px 32px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.dark-mode.student-dashboard-page .rank-circle *,
+body.dark-mode.student-dashboard-page .ranking-circle *,
+body.dark-mode.student-dashboard-page .my-rank-circle * {
+    color: #1e1038 !important;
+    -webkit-text-fill-color: #1e1038 !important;
+}
+
+/* Ranking text */
+body.dark-mode.student-dashboard-page .ranking-text,
+body.dark-mode.student-dashboard-page .my-ranking-text,
+body.dark-mode.student-dashboard-page .ranking-description,
+body.dark-mode.student-dashboard-page .leaderboard-note {
+    color: #dbeafe !important;
+    -webkit-text-fill-color: #dbeafe !important;
+}
+
+body.dark-mode.student-dashboard-page .ranking-text strong,
+body.dark-mode.student-dashboard-page .my-ranking-text strong {
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+}
+
+/* Small stats boxes under rank */
+body.dark-mode.student-dashboard-page .ranking-stat-box,
+body.dark-mode.student-dashboard-page .rank-stat-box,
+body.dark-mode.student-dashboard-page .my-place-stat,
+body.dark-mode.student-dashboard-page .ranking-stats .stat-box {
+    background: rgba(15, 23, 42, 0.95) !important;
+    border: 1px solid rgba(148, 163, 184, 0.24) !important;
+    color: #f8fafc !important;
+}
+
+body.dark-mode.student-dashboard-page .ranking-stat-box *,
+body.dark-mode.student-dashboard-page .rank-stat-box *,
+body.dark-mode.student-dashboard-page .my-place-stat *,
+body.dark-mode.student-dashboard-page .ranking-stats .stat-box * {
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+}
+
+/* Student list rows */
+body.dark-mode.student-dashboard-page .leaderboard-student,
+body.dark-mode.student-dashboard-page .ranking-student,
+body.dark-mode.student-dashboard-page .top-student-item,
+body.dark-mode.student-dashboard-page .leaderboard-row,
+body.dark-mode.student-dashboard-page .ranking-row {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.22) !important;
+    box-shadow: none !important;
+}
+
+body.dark-mode.student-dashboard-page .leaderboard-student:hover,
+body.dark-mode.student-dashboard-page .ranking-student:hover,
+body.dark-mode.student-dashboard-page .top-student-item:hover,
+body.dark-mode.student-dashboard-page .leaderboard-row:hover,
+body.dark-mode.student-dashboard-page .ranking-row:hover {
+    background: rgba(75, 44, 128, 0.38) !important;
+    border-color: rgba(253, 184, 19, 0.30) !important;
+}
+
+/* Current user row */
+body.dark-mode.student-dashboard-page .leaderboard-student.current-user,
+body.dark-mode.student-dashboard-page .ranking-student.current-user,
+body.dark-mode.student-dashboard-page .top-student-item.current-user,
+body.dark-mode.student-dashboard-page .leaderboard-row.current-user,
+body.dark-mode.student-dashboard-page .ranking-row.current-user,
+body.dark-mode.student-dashboard-page .you-row {
+    background: rgba(253, 184, 19, 0.12) !important;
+    border: 1px solid rgba(253, 184, 19, 0.60) !important;
+    box-shadow: 0 0 18px rgba(253, 184, 19, 0.12) !important;
+}
+
+/* Student names and details */
+body.dark-mode.student-dashboard-page .leaderboard-student-name,
+body.dark-mode.student-dashboard-page .ranking-student-name,
+body.dark-mode.student-dashboard-page .top-student-name,
+body.dark-mode.student-dashboard-page .leaderboard-name,
+body.dark-mode.student-dashboard-page .ranking-name {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-weight: 950 !important;
+}
+
+body.dark-mode.student-dashboard-page .leaderboard-student-meta,
+body.dark-mode.student-dashboard-page .ranking-student-meta,
+body.dark-mode.student-dashboard-page .top-student-meta,
+body.dark-mode.student-dashboard-page .leaderboard-meta,
+body.dark-mode.student-dashboard-page .ranking-meta {
+    color: #cbd5e1 !important;
+    -webkit-text-fill-color: #cbd5e1 !important;
+}
+
+/* Crown icon circle */
+body.dark-mode.student-dashboard-page .crown-icon,
+body.dark-mode.student-dashboard-page .rank-icon,
+body.dark-mode.student-dashboard-page .student-rank-icon,
+body.dark-mode.student-dashboard-page .leaderboard-icon {
+    background: linear-gradient(135deg, #fdb813, #f59e0b) !important;
+    color: #1e1038 !important;
+    box-shadow: 0 0 18px rgba(253, 184, 19, 0.25) !important;
+}
+
+body.dark-mode.student-dashboard-page .crown-icon *,
+body.dark-mode.student-dashboard-page .rank-icon *,
+body.dark-mode.student-dashboard-page .student-rank-icon *,
+body.dark-mode.student-dashboard-page .leaderboard-icon * {
+    color: #1e1038 !important;
+    -webkit-text-fill-color: #1e1038 !important;
+}
+
+/* Points badge */
+body.dark-mode.student-dashboard-page .points-badge,
+body.dark-mode.student-dashboard-page .leaderboard-points,
+body.dark-mode.student-dashboard-page .ranking-points {
+    background: rgba(253, 184, 19, 0.16) !important;
+    color: #fde68a !important;
+    border: 1px solid rgba(253, 184, 19, 0.30) !important;
+}
+
+body.dark-mode.student-dashboard-page .points-badge *,
+body.dark-mode.student-dashboard-page .leaderboard-points *,
+body.dark-mode.student-dashboard-page .ranking-points * {
+    color: #fde68a !important;
+    -webkit-text-fill-color: #fde68a !important;
+}
+
+/* Scrollbar inside leaderboard */
+body.dark-mode.student-dashboard-page .top-students-list::-webkit-scrollbar,
+body.dark-mode.student-dashboard-page .leaderboard-list::-webkit-scrollbar,
+body.dark-mode.student-dashboard-page .ranking-list::-webkit-scrollbar {
+    width: 8px !important;
+}
+
+body.dark-mode.student-dashboard-page .top-students-list::-webkit-scrollbar-track,
+body.dark-mode.student-dashboard-page .leaderboard-list::-webkit-scrollbar-track,
+body.dark-mode.student-dashboard-page .ranking-list::-webkit-scrollbar-track {
+    background: #111827 !important;
+    border-radius: 999px !important;
+}
+
+body.dark-mode.student-dashboard-page .top-students-list::-webkit-scrollbar-thumb,
+body.dark-mode.student-dashboard-page .leaderboard-list::-webkit-scrollbar-thumb,
+body.dark-mode.student-dashboard-page .ranking-list::-webkit-scrollbar-thumb {
+    background: #fdb813 !important;
+    border-radius: 999px !important;
+}
+
+/* =========================================================
+   FINAL FIX - LEADERBOARD MODAL INNER BACKGROUND DARK
+========================================================= */
+
+body.dark-mode.student-dashboard-page .ranking-modal *,
+body.dark-mode.student-dashboard-page .leaderboard-modal *,
+body.dark-mode.student-dashboard-page .ranking-modal-content *,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content * {
+    scrollbar-color: #fdb813 #111827 !important;
+}
+
+/* Main white left/right panels */
+body.dark-mode.student-dashboard-page .ranking-modal .ranking-card,
+body.dark-mode.student-dashboard-page .ranking-modal .my-place-card,
+body.dark-mode.student-dashboard-page .ranking-modal .top-students-card,
+body.dark-mode.student-dashboard-page .ranking-modal .ranking-left-card,
+body.dark-mode.student-dashboard-page .ranking-modal .ranking-right-card,
+body.dark-mode.student-dashboard-page .ranking-modal .leaderboard-panel,
+body.dark-mode.student-dashboard-page .ranking-modal .leaderboard-box,
+body.dark-mode.student-dashboard-page .leaderboard-modal .ranking-card,
+body.dark-mode.student-dashboard-page .leaderboard-modal .my-place-card,
+body.dark-mode.student-dashboard-page .leaderboard-modal .top-students-card,
+body.dark-mode.student-dashboard-page .leaderboard-modal .ranking-left-card,
+body.dark-mode.student-dashboard-page .leaderboard-modal .ranking-right-card,
+body.dark-mode.student-dashboard-page .leaderboard-modal .leaderboard-panel,
+body.dark-mode.student-dashboard-page .leaderboard-modal .leaderboard-box {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.28) !important;
+}
+
+/* White card bodies */
+body.dark-mode.student-dashboard-page .ranking-modal .ranking-card-body,
+body.dark-mode.student-dashboard-page .ranking-modal .my-place-body,
+body.dark-mode.student-dashboard-page .ranking-modal .top-students-body,
+body.dark-mode.student-dashboard-page .ranking-modal .leaderboard-body,
+body.dark-mode.student-dashboard-page .leaderboard-modal .ranking-card-body,
+body.dark-mode.student-dashboard-page .leaderboard-modal .my-place-body,
+body.dark-mode.student-dashboard-page .leaderboard-modal .top-students-body,
+body.dark-mode.student-dashboard-page .leaderboard-modal .leaderboard-body {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+/* Catch remaining white divs inside modal */
+body.dark-mode.student-dashboard-page .ranking-modal-content div,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content div {
+    border-color: rgba(148, 163, 184, 0.24) !important;
+}
+
+/* Keep headers purple/dark */
+body.dark-mode.student-dashboard-page .ranking-modal-content .ranking-card-header,
+body.dark-mode.student-dashboard-page .ranking-modal-content .my-place-header,
+body.dark-mode.student-dashboard-page .ranking-modal-content .top-students-header,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .ranking-card-header,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .my-place-header,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .top-students-header {
+    background: rgba(124, 58, 237, 0.20) !important;
+    color: #ffffff !important;
+}
+
+/* Left ranking text */
+body.dark-mode.student-dashboard-page .ranking-modal-content .my-place-card,
+body.dark-mode.student-dashboard-page .ranking-modal-content .my-place-card p,
+body.dark-mode.student-dashboard-page .ranking-modal-content .my-place-card span,
+body.dark-mode.student-dashboard-page .ranking-modal-content .my-place-card strong,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .my-place-card,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .my-place-card p,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .my-place-card span,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .my-place-card strong {
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+}
+
+/* Ranking description */
+body.dark-mode.student-dashboard-page .ranking-modal-content .ranking-description,
+body.dark-mode.student-dashboard-page .ranking-modal-content .ranking-note,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .ranking-description,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .ranking-note {
+    color: #cbd5e1 !important;
+    -webkit-text-fill-color: #cbd5e1 !important;
+}
+
+/* Stats boxes */
+body.dark-mode.student-dashboard-page .ranking-modal-content .ranking-stat,
+body.dark-mode.student-dashboard-page .ranking-modal-content .rank-stat,
+body.dark-mode.student-dashboard-page .ranking-modal-content .stat-box,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .ranking-stat,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .rank-stat,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .stat-box {
+    background: #111827 !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(148, 163, 184, 0.28) !important;
+}
+
+/* Top 10 container background */
+body.dark-mode.student-dashboard-page .ranking-modal-content .top-students-list,
+body.dark-mode.student-dashboard-page .ranking-modal-content .leaderboard-list,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .top-students-list,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .leaderboard-list {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+/* Student rows */
+body.dark-mode.student-dashboard-page .ranking-modal-content .top-student-item,
+body.dark-mode.student-dashboard-page .ranking-modal-content .leaderboard-item,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .top-student-item,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .leaderboard-item {
+    background: #111827 !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(148, 163, 184, 0.24) !important;
+}
+
+body.dark-mode.student-dashboard-page .ranking-modal-content .top-student-item:hover,
+body.dark-mode.student-dashboard-page .ranking-modal-content .leaderboard-item:hover,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .top-student-item:hover,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .leaderboard-item:hover {
+    background: rgba(75, 44, 128, 0.42) !important;
+}
+
+/* Current user row */
+body.dark-mode.student-dashboard-page .ranking-modal-content .top-student-item.current-user,
+body.dark-mode.student-dashboard-page .ranking-modal-content .leaderboard-item.current-user,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .top-student-item.current-user,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .leaderboard-item.current-user {
+    background: rgba(253, 184, 19, 0.12) !important;
+    border: 1px solid rgba(253, 184, 19, 0.55) !important;
+}
+
+/* Student row text */
+body.dark-mode.student-dashboard-page .ranking-modal-content .top-student-item *,
+body.dark-mode.student-dashboard-page .ranking-modal-content .leaderboard-item *,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .top-student-item *,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .leaderboard-item * {
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+}
+
+/* Points badge remains gold */
+body.dark-mode.student-dashboard-page .ranking-modal-content .points-badge,
+body.dark-mode.student-dashboard-page .ranking-modal-content .leaderboard-points,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .points-badge,
+body.dark-mode.student-dashboard-page .leaderboard-modal-content .leaderboard-points {
+    background: rgba(253, 184, 19, 0.18) !important;
+    color: #fde68a !important;
+    -webkit-text-fill-color: #fde68a !important;
+}
+/* =========================================================
+   TRUE FINAL FIX - DASHBOARD RANKING MODAL DARK MODE
+   Actual classes from dashboard.html:
+   my-ranking-card, my-ranking-body, top-ranking-card,
+   top-ranking-list, ranking-row, ranking-score
+========================================================= */
+
+/* Entire modal body/grid */
+body.dark-mode.student-dashboard-page #rankingModal .ranking-modal-body,
+body.dark-mode.student-dashboard-page #rankingModal .ranking-grid {
+    background: #111827 !important;
+    color: #f8fafc !important;
+}
+
+/* Left and right ranking cards */
+body.dark-mode.student-dashboard-page #rankingModal .my-ranking-card,
+body.dark-mode.student-dashboard-page #rankingModal .top-ranking-card {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.28) !important;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.38) !important;
+}
+
+/* Card headers: My Place / Top 10 Students */
+body.dark-mode.student-dashboard-page #rankingModal .my-ranking-card-header,
+body.dark-mode.student-dashboard-page #rankingModal .top-ranking-card-header {
+    background: rgba(124, 58, 237, 0.18) !important;
+    color: #ffffff !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.20) !important;
+}
+
+body.dark-mode.student-dashboard-page #rankingModal .my-ranking-card-header *,
+body.dark-mode.student-dashboard-page #rankingModal .top-ranking-card-header * {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+/* White body inside My Place */
+body.dark-mode.student-dashboard-page #rankingModal .my-ranking-body {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+/* Top 10 white list area */
+body.dark-mode.student-dashboard-page #rankingModal .top-ranking-list {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+/* My place title/subtitle */
+body.dark-mode.student-dashboard-page #rankingModal .rank-title {
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+    text-shadow: 0 0 14px rgba(253, 184, 19, 0.18) !important;
+}
+
+body.dark-mode.student-dashboard-page #rankingModal .rank-subtitle {
+    color: #cbd5e1 !important;
+    -webkit-text-fill-color: #cbd5e1 !important;
+}
+
+/* Rank circle */
+body.dark-mode.student-dashboard-page #rankingModal .rank-circle {
+    background: linear-gradient(135deg, #fdb813, #f59e0b) !important;
+    color: #1e1038 !important;
+    box-shadow:
+        0 0 28px rgba(253, 184, 19, 0.35),
+        0 16px 32px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.dark-mode.student-dashboard-page #rankingModal .rank-circle small,
+body.dark-mode.student-dashboard-page #rankingModal .rank-circle strong {
+    color: #1e1038 !important;
+    -webkit-text-fill-color: #1e1038 !important;
+}
+
+/* Raw points / extra / remaining boxes */
+body.dark-mode.student-dashboard-page #rankingModal .rank-mini-stats {
+    background: transparent !important;
+}
+
+body.dark-mode.student-dashboard-page #rankingModal .rank-mini-stat {
+    background: #111827 !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.28) !important;
+}
+
+body.dark-mode.student-dashboard-page #rankingModal .rank-mini-stat small {
+    color: #cbd5e1 !important;
+    -webkit-text-fill-color: #cbd5e1 !important;
+}
+
+body.dark-mode.student-dashboard-page #rankingModal .rank-mini-stat strong {
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+}
+
+/* Student rows */
+body.dark-mode.student-dashboard-page #rankingModal .ranking-row {
+    background: #111827 !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(148, 163, 184, 0.24) !important;
+    box-shadow: none !important;
+}
+
+body.dark-mode.student-dashboard-page #rankingModal .ranking-row:hover {
+    background: rgba(75, 44, 128, 0.42) !important;
+    border-color: rgba(253, 184, 19, 0.30) !important;
+}
+
+/* Current user row */
+body.dark-mode.student-dashboard-page #rankingModal .ranking-row.me {
+    background: rgba(253, 184, 19, 0.12) !important;
+    border: 1px solid rgba(253, 184, 19, 0.55) !important;
+    box-shadow: 0 0 18px rgba(253, 184, 19, 0.12) !important;
+}
+
+/* Student name/meta */
+body.dark-mode.student-dashboard-page #rankingModal .ranking-name {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-weight: 950 !important;
+}
+
+body.dark-mode.student-dashboard-page #rankingModal .ranking-meta {
+    color: #cbd5e1 !important;
+    -webkit-text-fill-color: #cbd5e1 !important;
+}
+
+/* The inline "(You)" text */
+body.dark-mode.student-dashboard-page #rankingModal .ranking-name span {
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+}
+
+/* Crown / rank badge */
+body.dark-mode.student-dashboard-page #rankingModal .ranking-rank-badge {
+    background: linear-gradient(135deg, #fdb813, #f59e0b) !important;
+    color: #1e1038 !important;
+    box-shadow: 0 0 18px rgba(253, 184, 19, 0.25) !important;
+}
+
+body.dark-mode.student-dashboard-page #rankingModal .ranking-rank-badge *,
+body.dark-mode.student-dashboard-page #rankingModal .ranking-rank-badge i {
+    color: #1e1038 !important;
+    -webkit-text-fill-color: #1e1038 !important;
+}
+
+/* Score badge on the right */
+body.dark-mode.student-dashboard-page #rankingModal .ranking-score {
+    background: rgba(253, 184, 19, 0.16) !important;
+    color: #fde68a !important;
+    border: 1px solid rgba(253, 184, 19, 0.30) !important;
+}
+
+body.dark-mode.student-dashboard-page #rankingModal .ranking-score *,
+body.dark-mode.student-dashboard-page #rankingModal .ranking-score i {
+    color: #fde68a !important;
+    -webkit-text-fill-color: #fde68a !important;
+}
+
+/* Scrollbar */
+body.dark-mode.student-dashboard-page #rankingModal .top-ranking-list::-webkit-scrollbar {
+    width: 8px !important;
+}
+
+body.dark-mode.student-dashboard-page #rankingModal .top-ranking-list::-webkit-scrollbar-track {
+    background: #111827 !important;
+    border-radius: 999px !important;
+}
+
+body.dark-mode.student-dashboard-page #rankingModal .top-ranking-list::-webkit-scrollbar-thumb {
+    background: #fdb813 !important;
+    border-radius: 999px !important;
+}
+/* =========================================================
+   FINAL FIX - HISTORY FEEDBACK MODAL DARK MODE
+========================================================= */
+
+body.dark-mode.student-history-page #feedbackModal .modal-content {
+    background: linear-gradient(180deg, #1e293b, #0f172a) !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.30) !important;
+    box-shadow:
+        0 30px 90px rgba(0, 0, 0, 0.62),
+        0 0 30px rgba(124, 58, 237, 0.16) !important;
+}
+
+body.dark-mode.student-history-page #feedbackModal .modal-header {
+    background:
+        radial-gradient(circle at top right, rgba(253, 184, 19, 0.18), transparent 32%),
+        linear-gradient(135deg, #2d1a4d, #08040f) !important;
+    color: #ffffff !important;
+    border-bottom: 1px solid rgba(253, 184, 19, 0.20) !important;
+}
+
+body.dark-mode.student-history-page #feedbackModal .modal-title,
+body.dark-mode.student-history-page #feedbackModal .modal-title * {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+body.dark-mode.student-history-page #feedbackModal .modal-body {
+    background: #111827 !important;
+    color: #f8fafc !important;
+}
+
+/* Student info box */
+body.dark-mode.student-history-page #feedbackModal .feedback-info {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.30) !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24) !important;
+}
+
+body.dark-mode.student-history-page #feedbackModal .feedback-info p,
+body.dark-mode.student-history-page #feedbackModal .feedback-info strong,
+body.dark-mode.student-history-page #feedbackModal .feedback-info span {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    text-shadow: none !important;
+}
+
+/* Labels */
+body.dark-mode.student-history-page #feedbackModal .feedback-label {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    text-shadow: 0 0 8px rgba(253, 184, 19, 0.14) !important;
+    font-weight: 950 !important;
+}
+
+/* Rating buttons */
+body.dark-mode.student-history-page #feedbackModal .star-rating {
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 10px !important;
+}
+
+body.dark-mode.student-history-page #feedbackModal .star-rating label {
+    background: #0f172a !important;
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+    border: 1.5px solid rgba(253, 184, 19, 0.32) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22) !important;
+    font-weight: 950 !important;
+}
+
+body.dark-mode.student-history-page #feedbackModal .star-rating label:hover {
+    background: rgba(253, 184, 19, 0.15) !important;
+    border-color: #fdb813 !important;
+}
+
+body.dark-mode.student-history-page #feedbackModal .star-rating input {
+    accent-color: #fdb813 !important;
+}
+
+/* Feedback textarea */
+body.dark-mode.student-history-page #feedbackModal textarea,
+body.dark-mode.student-history-page #feedbackModal #feedback {
+    background: #020617 !important;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    caret-color: #f8fafc !important;
+    border: 1.8px solid rgba(148, 163, 184, 0.42) !important;
+    box-shadow: none !important;
+}
+
+body.dark-mode.student-history-page #feedbackModal textarea::placeholder,
+body.dark-mode.student-history-page #feedbackModal #feedback::placeholder {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
+    opacity: 1 !important;
+}
+
+body.dark-mode.student-history-page #feedbackModal textarea:focus,
+body.dark-mode.student-history-page #feedbackModal #feedback:focus {
+    border-color: #fdb813 !important;
+    box-shadow:
+        0 0 0 4px rgba(253, 184, 19, 0.12),
+        0 0 20px rgba(253, 184, 19, 0.12) !important;
+}
+
+/* Submit button */
+body.dark-mode.student-history-page #feedbackModal .submit-btn {
+    background: linear-gradient(135deg, #7c3aed, #4b2c80) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 14px 30px rgba(124, 58, 237, 0.28) !important;
+}
+
+body.dark-mode.student-history-page #feedbackModal .submit-btn:hover {
+    background: linear-gradient(135deg, #fdb813, #f59e0b) !important;
+    color: #1e1038 !important;
+    -webkit-text-fill-color: #1e1038 !important;
+}
+
+/* Close button */
+body.dark-mode.student-history-page #feedbackModal .close-btn {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+body.dark-mode.student-history-page #feedbackModal .close-btn:hover {
+    background: #fdb813 !important;
+    color: #1e1038 !important;
+    -webkit-text-fill-color: #1e1038 !important;
+}
+
+/* =========================================================
+   FINAL FIX - RESERVATION MODAL FOOTER DARK MODE
+========================================================= */
+
+body.dark-mode.student-reservation-page .reservation-modal .modal-footer-actions,
+body.dark-mode.student-reservation-page #reservationModal .modal-footer-actions,
+body.dark-mode.student-reservation-page .modal-footer-actions {
+    background: #111827 !important;
+    color: #f8fafc !important;
+    border-top: 1px solid rgba(148, 163, 184, 0.24) !important;
+    box-shadow: inset 0 1px 0 rgba(253, 184, 19, 0.08) !important;
+}
+
+/* Fix if the form itself is creating a white block */
+body.dark-mode.student-reservation-page #reservationForm,
+body.dark-mode.student-reservation-page #reservationModal form,
+body.dark-mode.student-reservation-page .reservation-modal form {
+    background: transparent !important;
+}
+
+/* Back / Next / Confirm buttons */
+body.dark-mode.student-reservation-page #backStepBtn,
+body.dark-mode.student-reservation-page #nextStepBtn,
+body.dark-mode.student-reservation-page #submitReservationBtn,
+body.dark-mode.student-reservation-page .btn-back-step,
+body.dark-mode.student-reservation-page .btn-next-step,
+body.dark-mode.student-reservation-page .btn-submit-reservation {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 12px 26px rgba(124, 58, 237, 0.24) !important;
+}
+
+body.dark-mode.student-reservation-page #backStepBtn,
+body.dark-mode.student-reservation-page .btn-back-step {
+    background: #334155 !important;
+}
+
+body.dark-mode.student-reservation-page #nextStepBtn,
+body.dark-mode.student-reservation-page .btn-next-step,
+body.dark-mode.student-reservation-page #submitReservationBtn,
+body.dark-mode.student-reservation-page .btn-submit-reservation {
+    background: linear-gradient(135deg, #7c3aed, #4b2c80) !important;
+}
+
+body.dark-mode.student-reservation-page #backStepBtn:hover,
+body.dark-mode.student-reservation-page #nextStepBtn:hover,
+body.dark-mode.student-reservation-page #submitReservationBtn:hover,
+body.dark-mode.student-reservation-page .btn-back-step:hover,
+body.dark-mode.student-reservation-page .btn-next-step:hover,
+body.dark-mode.student-reservation-page .btn-submit-reservation:hover {
+    background: linear-gradient(135deg, #fdb813, #f59e0b) !important;
+    color: #1e1038 !important;
+    -webkit-text-fill-color: #1e1038 !important;
+}
+
+/* Button icons */
+body.dark-mode.student-reservation-page #backStepBtn i,
+body.dark-mode.student-reservation-page #nextStepBtn i,
+body.dark-mode.student-reservation-page #submitReservationBtn i,
+body.dark-mode.student-reservation-page .btn-back-step i,
+body.dark-mode.student-reservation-page .btn-next-step i,
+body.dark-mode.student-reservation-page .btn-submit-reservation i {
+    color: inherit !important;
+    -webkit-text-fill-color: inherit !important;
+}
+
+/* Step tab inactive buttons: Where / What / PC */
+body.dark-mode.student-reservation-page .step-pill,
+body.dark-mode.student-reservation-page .step-item,
+body.dark-mode.student-reservation-page .reservation-step {
+    background: #0f172a !important;
+    color: #cbd5e1 !important;
+    -webkit-text-fill-color: #cbd5e1 !important;
+    border: 1px solid rgba(148, 163, 184, 0.24) !important;
+}
+
+body.dark-mode.student-reservation-page .step-pill.active,
+body.dark-mode.student-reservation-page .step-item.active,
+body.dark-mode.student-reservation-page .reservation-step.active {
+    background: linear-gradient(135deg, #7c3aed, #4b2c80) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Fix the white calendar/time icon inside inputs */
+body.dark-mode.student-reservation-page input[type="date"],
+body.dark-mode.student-reservation-page input[type="time"] {
+    color-scheme: dark !important;
+}
+/* =========================================================
+   FINAL FIX - RESERVATION WHERE STEP APPLICATION PILLS
+========================================================= */
+
+body.dark-mode.student-reservation-page .lab-apps-preview,
+body.dark-mode.student-reservation-page #labAppsPreview,
+body.dark-mode.student-reservation-page .available-applications-box,
+body.dark-mode.student-reservation-page .available-apps-box {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.28) !important;
+}
+
+body.dark-mode.student-reservation-page .lab-apps-preview strong,
+body.dark-mode.student-reservation-page #labAppsPreview strong,
+body.dark-mode.student-reservation-page .lab-apps-preview span,
+body.dark-mode.student-reservation-page #labAppsPreview span {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+/* App pills/chips */
+body.dark-mode.student-reservation-page .lab-app-chip,
+body.dark-mode.student-reservation-page .app-chip,
+body.dark-mode.student-reservation-page .application-chip,
+body.dark-mode.student-reservation-page #labAppsList span,
+body.dark-mode.student-reservation-page #labAppsList .lab-app-chip {
+    background: rgba(253, 184, 19, 0.16) !important;
+    color: #fde68a !important;
+    -webkit-text-fill-color: #fde68a !important;
+    border: 1px solid rgba(253, 184, 19, 0.35) !important;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22) !important;
+    opacity: 1 !important;
+    font-weight: 900 !important;
+}
+
+/* Icons inside app pills */
+body.dark-mode.student-reservation-page .lab-app-chip i,
+body.dark-mode.student-reservation-page .app-chip i,
+body.dark-mode.student-reservation-page .application-chip i,
+body.dark-mode.student-reservation-page #labAppsList span i {
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+    opacity: 1 !important;
+}
+
+/* If your app pills are buttons/labels */
+body.dark-mode.student-reservation-page #labAppsList button,
+body.dark-mode.student-reservation-page #labAppsList label {
+    background: rgba(253, 184, 19, 0.16) !important;
+    color: #fde68a !important;
+    -webkit-text-fill-color: #fde68a !important;
+    border: 1px solid rgba(253, 184, 19, 0.35) !important;
+    opacity: 1 !important;
+    font-weight: 900 !important;
+}
+
+/* Disabled-looking app pills should still be readable */
+body.dark-mode.student-reservation-page #labAppsList .disabled,
+body.dark-mode.student-reservation-page #labAppsList [disabled] {
+    background: rgba(148, 163, 184, 0.16) !important;
+    color: #cbd5e1 !important;
+    -webkit-text-fill-color: #cbd5e1 !important;
+    border: 1px solid rgba(148, 163, 184, 0.30) !important;
+    opacity: 1 !important;
+}
+
+/* =========================================================
+   FINAL FIX - RESERVATION PC GRID DARK MODE READABILITY
+========================================================= */
+
+/* PC section background */
+body.dark-mode.student-reservation-page .pc-selection-section,
+body.dark-mode.student-reservation-page .pc-grid-wrap,
+body.dark-mode.student-reservation-page .pc-grid-container,
+body.dark-mode.student-reservation-page #pcGrid {
+    background: transparent !important;
+    color: #f8fafc !important;
+}
+
+/* Available PCs */
+body.dark-mode.student-reservation-page .pc-btn.available,
+body.dark-mode.student-reservation-page .pc-card.available,
+body.dark-mode.student-reservation-page #pcGrid .pc-btn:not(.unavailable):not(.selected) {
+    background: rgba(34, 197, 94, 0.18) !important;
+    color: #bbf7d0 !important;
+    -webkit-text-fill-color: #bbf7d0 !important;
+    border: 2px solid #22c55e !important;
+    box-shadow:
+        0 10px 22px rgba(0, 0, 0, 0.24),
+        0 0 14px rgba(34, 197, 94, 0.18) !important;
+    opacity: 1 !important;
+}
+
+/* Text/icon inside available PCs */
+body.dark-mode.student-reservation-page .pc-btn.available *,
+body.dark-mode.student-reservation-page .pc-card.available *,
+body.dark-mode.student-reservation-page #pcGrid .pc-btn:not(.unavailable):not(.selected) *,
+body.dark-mode.student-reservation-page #pcGrid .pc-btn:not(.unavailable):not(.selected) i {
+    color: #bbf7d0 !important;
+    -webkit-text-fill-color: #bbf7d0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Available hover */
+body.dark-mode.student-reservation-page .pc-btn.available:hover,
+body.dark-mode.student-reservation-page .pc-card.available:hover,
+body.dark-mode.student-reservation-page #pcGrid .pc-btn:not(.unavailable):not(.selected):hover {
+    background: rgba(34, 197, 94, 0.28) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    transform: translateY(-2px) !important;
+    box-shadow:
+        0 14px 28px rgba(0, 0, 0, 0.30),
+        0 0 20px rgba(34, 197, 94, 0.30) !important;
+}
+
+/* Not available PCs */
+body.dark-mode.student-reservation-page .pc-btn.unavailable,
+body.dark-mode.student-reservation-page .pc-card.unavailable,
+body.dark-mode.student-reservation-page #pcGrid .pc-btn.unavailable {
+    background: rgba(220, 38, 38, 0.22) !important;
+    color: #fecaca !important;
+    -webkit-text-fill-color: #fecaca !important;
+    border: 2px solid #ef4444 !important;
+    box-shadow:
+        0 10px 22px rgba(0, 0, 0, 0.24),
+        0 0 14px rgba(239, 68, 68, 0.16) !important;
+    opacity: 1 !important;
+    cursor: not-allowed !important;
+}
+
+/* Text/icon inside unavailable PCs */
+body.dark-mode.student-reservation-page .pc-btn.unavailable *,
+body.dark-mode.student-reservation-page .pc-card.unavailable *,
+body.dark-mode.student-reservation-page #pcGrid .pc-btn.unavailable *,
+body.dark-mode.student-reservation-page #pcGrid .pc-btn.unavailable i {
+    color: #fecaca !important;
+    -webkit-text-fill-color: #fecaca !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Selected PC */
+body.dark-mode.student-reservation-page .pc-btn.selected,
+body.dark-mode.student-reservation-page .pc-card.selected,
+body.dark-mode.student-reservation-page #pcGrid .pc-btn.selected {
+    background: linear-gradient(135deg, #7c3aed, #4b2c80) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: 2px solid #fdb813 !important;
+    box-shadow:
+        0 14px 30px rgba(124, 58, 237, 0.34),
+        0 0 24px rgba(253, 184, 19, 0.28) !important;
+    opacity: 1 !important;
+}
+
+/* Text/icon inside selected PC */
+body.dark-mode.student-reservation-page .pc-btn.selected *,
+body.dark-mode.student-reservation-page .pc-card.selected *,
+body.dark-mode.student-reservation-page #pcGrid .pc-btn.selected *,
+body.dark-mode.student-reservation-page #pcGrid .pc-btn.selected i {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Force readable PC text if your HTML uses spans */
+body.dark-mode.student-reservation-page .pc-btn span,
+body.dark-mode.student-reservation-page .pc-btn strong,
+body.dark-mode.student-reservation-page .pc-btn small,
+body.dark-mode.student-reservation-page .pc-card span,
+body.dark-mode.student-reservation-page .pc-card strong,
+body.dark-mode.student-reservation-page .pc-card small {
+    opacity: 1 !important;
+    visibility: visible !important;
+    font-weight: 950 !important;
+}
+
+/* Legend colors */
+body.dark-mode.student-reservation-page .pc-legend,
+body.dark-mode.student-reservation-page .pc-legend * {
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+}
+
+/* Selected PC confirmation box */
+body.dark-mode.student-reservation-page #selectedPcBox,
+body.dark-mode.student-reservation-page .selected-pc-box {
+    background: rgba(253, 184, 19, 0.16) !important;
+    color: #fde68a !important;
+    -webkit-text-fill-color: #fde68a !important;
+    border: 1px solid rgba(253, 184, 19, 0.35) !important;
+}
+
+/* EMERGENCY FIX - SIT-IN WHITE STRIP */
+body.dark-mode.admin-sitin-page .records-card .filter-bar,
+body.dark-mode.admin-sitin-page .records-card .filter-bar *,
+body.dark-mode.admin-sitin-page .records-card > div:nth-child(2) {
+    background-color: #111827 !important;
+}
+
+body.dark-mode.admin-sitin-page .records-card .filter-bar input,
+body.dark-mode.admin-sitin-page .records-card .filter-bar i {
+    background-color: transparent !important;
+}
+
+/* ================= TOP STUDENTS MODAL BUTTON ================= */
+
+.report-card-header-between {
+    justify-content: space-between;
+}
+
+.report-card-header-between span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.top-students-modal-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 10px 15px;
+    background: linear-gradient(135deg, var(--uc-gold), #f59e0b);
+    color: var(--uc-purple-dark);
+    font-size: 12px;
+    font-weight: 950;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    box-shadow: 0 10px 22px rgba(253, 184, 19, 0.22);
+}
+
+.top-students-modal-btn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #ffffff, #fef3c7);
+}
+
+/* ================= TOP STUDENTS MODAL ================= */
+
+.top-students-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    background: rgba(15, 15, 20, 0.72);
+    backdrop-filter: blur(9px);
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.top-students-modal-card {
+    width: min(980px, 100%);
+    max-height: 86vh;
+    overflow: hidden;
+    border-radius: 24px;
+    background: #ffffff;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.38);
+    display: flex;
+    flex-direction: column;
+}
+
+.top-students-modal-header {
+    background:
+        radial-gradient(circle at top right, rgba(253, 184, 19, 0.22), transparent 28%),
+        linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark));
+    color: #ffffff;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.top-students-modal-header h2 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 950;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.top-students-modal-close {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.top-students-modal-close:hover {
+    background: var(--uc-gold);
+    color: var(--uc-purple-dark);
+}
+
+.top-students-modal-body {
+    padding: 22px;
+    overflow-y: auto;
+}
+
+.top-students-table-wrap {
+    overflow-x: auto;
+}
+
+.top-students-table {
+    width: 100%;
+    min-width: 860px;
+}
+
+.rank-pill {
+    width: 42px;
+    height: 42px;
+    border-radius: 999px;
+    background: #ede9fe;
+    color: var(--uc-purple);
+    font-weight: 950;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.top-students-table tbody tr:first-child .rank-pill {
+    background: linear-gradient(135deg, var(--uc-gold), #f59e0b);
+    color: var(--uc-purple-dark);
+}
+
+.extra-session-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    padding: 6px 12px;
+    background: #ede9fe;
+    color: var(--uc-purple);
+    font-size: 12px;
+    font-weight: 950;
+}
+
+/* Dark mode modal */
+body.dark-mode.admin-sitin-report-page .top-students-modal-overlay {
+    background: rgba(0, 0, 0, 0.78) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+body.dark-mode.admin-sitin-report-page .top-students-modal-card {
+    background: linear-gradient(180deg, #1e293b, #0f172a) !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.30) !important;
+}
+
+body.dark-mode.admin-sitin-report-page .top-students-modal-body {
+    background: #111827 !important;
+}
+
+body.dark-mode.admin-sitin-report-page .top-students-table thead th {
+    background: #1e1038 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode.admin-sitin-report-page .top-students-table tbody td {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18) !important;
+}
+
+body.dark-mode.admin-sitin-report-page .top-students-table tbody tr:nth-child(even) td {
+    background: #1e293b !important;
+}
+
+body.dark-mode.admin-sitin-report-page .top-students-table small {
+    color: #dbeafe !important;
+    -webkit-text-fill-color: #dbeafe !important;
+    font-weight: 800 !important;
+}
+
+body.dark-mode.admin-sitin-report-page .rank-pill {
+    background: rgba(124, 58, 237, 0.20) !important;
+    color: #ddd6fe !important;
+    -webkit-text-fill-color: #ddd6fe !important;
+}
+
+body.dark-mode.admin-sitin-report-page .top-students-table tbody tr:first-child .rank-pill {
+    background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+    color: var(--uc-purple-dark) !important;
+    -webkit-text-fill-color: var(--uc-purple-dark) !important;
+}
+
+body.dark-mode.admin-sitin-report-page .extra-session-pill {
+    background: linear-gradient(135deg, var(--uc-gold), #f59e0b) !important;
+    color: var(--uc-purple-dark) !important;
+    -webkit-text-fill-color: var(--uc-purple-dark) !important;
+}
+/* ================= ADMIN SEARCH MODAL ================= */
+
+.admin-search-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    background: rgba(15, 15, 20, 0.72);
+    backdrop-filter: blur(9px);
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.admin-search-modal {
+    width: min(720px, 100%);
+    max-height: 86vh;
+    overflow: hidden;
+    border-radius: 24px;
+    background: #ffffff;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.38);
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-search-header {
+    background:
+        radial-gradient(circle at top right, rgba(253, 184, 19, 0.22), transparent 28%),
+        linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark));
+    color: #ffffff;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.admin-search-header h2 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 950;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.admin-search-close {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.admin-search-close:hover {
+    background: var(--uc-gold);
+    color: var(--uc-purple-dark);
+}
+
+.admin-search-body {
+    padding: 22px;
+    overflow-y: auto;
+}
+
+.admin-search-label {
+    display: block;
+    margin-bottom: 9px;
+    color: var(--uc-purple);
+    font-size: 12px;
+    font-weight: 950;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+.admin-search-input {
+    width: 100%;
+    min-height: 54px;
+    padding: 12px 15px;
+    border: 1.8px solid #e5e7eb;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 800;
+    outline: none;
+    margin-bottom: 18px;
+}
+
+.admin-search-input:focus {
+    border-color: var(--uc-purple);
+    box-shadow: 0 0 0 4px rgba(75, 44, 128, 0.12);
+}
+
+.admin-search-results {
+    display: grid;
+    gap: 12px;
+}
+
+.admin-search-student-card {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 18px;
+    background: #f8f5ff;
+    border: 1px solid #ede9fe;
+}
+
+.admin-search-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--uc-purple), var(--uc-purple-light));
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 950;
+}
+
+.admin-search-info strong {
+    display: block;
+    color: var(--admin-text);
+    font-size: 14px;
+    font-weight: 950;
+}
+
+.admin-search-info span {
+    display: block;
+    margin-top: 4px;
+    color: var(--admin-muted);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.admin-select-student-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, var(--uc-purple), var(--uc-purple-light));
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 950;
+}
+
+.admin-no-results {
+    text-align: center;
+    padding: 28px;
+    color: #9ca3af;
+    font-weight: 850;
+}
+/* =========================================================
+   GLOBAL ADMIN SEARCH MODAL DESIGN FIX
+   Applies to admin_dashboard, admin_students, sit-in, reports,
+   feedback, reservations, and view sit-in records
+========================================================= */
+
+.admin-search-overlay {
+    display: none;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 100000 !important;
+    background: rgba(15, 15, 20, 0.72) !important;
+    backdrop-filter: blur(9px) !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 24px !important;
+}
+
+.admin-search-modal {
+    width: min(820px, 100%) !important;
+    max-height: 86vh !important;
+    overflow: hidden !important;
+    border-radius: 24px !important;
+    background: #ffffff !important;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.38) !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.admin-search-header {
+    background:
+        radial-gradient(circle at top right, rgba(253, 184, 19, 0.22), transparent 28%),
+        linear-gradient(135deg, #4b2c80, #2d1a4d) !important;
+    color: #ffffff !important;
+    padding: 22px 26px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+.admin-search-header span,
+.admin-search-header h2,
+.admin-search-header i {
+    color: #ffffff !important;
+}
+
+.admin-search-close {
+    width: 42px !important;
+    height: 42px !important;
+    border: none !important;
+    border-radius: 999px !important;
+    background: rgba(255, 255, 255, 0.16) !important;
+    color: #ffffff !important;
+    font-size: 25px !important;
+    cursor: pointer !important;
+    font-weight: 900 !important;
+}
+
+.admin-search-close:hover {
+    background: #fdb813 !important;
+    color: #2d1a4d !important;
+}
+
+.admin-search-body {
+    padding: 24px 26px 28px !important;
+    overflow-y: auto !important;
+    background: #ffffff !important;
+}
+
+.admin-search-label {
+    display: block !important;
+    margin-bottom: 10px !important;
+    color: #4b2c80 !important;
+    font-size: 12px !important;
+    font-weight: 950 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+}
+
+#idSearchInput {
+    width: 100% !important;
+    min-height: 54px !important;
+    padding: 12px 16px !important;
+    border: 2px solid #4b2c80 !important;
+    border-radius: 18px !important;
+    font-size: 15px !important;
+    font-weight: 750 !important;
+    outline: none !important;
+    margin-bottom: 28px !important;
+    color: #111827 !important;
+    background: #ffffff !important;
+    box-shadow: 0 0 0 5px rgba(75, 44, 128, 0.10) !important;
+}
+
+#idSearchInput:focus {
+    border-color: #4b2c80 !important;
+    box-shadow:
+        0 0 0 5px rgba(75, 44, 128, 0.14),
+        0 12px 26px rgba(75, 44, 128, 0.10) !important;
+}
+
+/* The generated student grid */
+#studentsList {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 20px !important;
+}
+
+/* Cards generated by your existing JS */
+.admin-student-card {
+    background: #ffffff !important;
+    border: 1px solid #ede9fe !important;
+    border-radius: 18px !important;
+    padding: 20px 14px 18px !important;
+    text-align: center !important;
+    box-shadow: 0 18px 40px rgba(31, 16, 70, 0.08) !important;
+    transition: all 0.22s ease !important;
+}
+
+.admin-student-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 22px 48px rgba(31, 16, 70, 0.14) !important;
+}
+
+.admin-student-avatar {
+    width: 76px !important;
+    height: 76px !important;
+    margin: 0 auto 14px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #4b2c80, #fdb813) !important;
+    border: 3px solid #fdb813 !important;
+    color: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 26px !important;
+    font-weight: 950 !important;
+    overflow: hidden !important;
+}
+
+.admin-student-avatar img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
+
+.admin-student-name {
+    margin: 0 0 12px !important;
+    color: #111827 !important;
+    font-size: 14px !important;
+    font-weight: 950 !important;
+    min-height: 34px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.admin-student-id {
+    width: 100% !important;
+    min-height: 28px !important;
+    border-radius: 10px !important;
+    background: #eef2ff !important;
+    color: #4b2c80 !important;
+    font-size: 12px !important;
+    font-weight: 950 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-bottom: 10px !important;
+}
+
+.admin-student-remaining {
+    margin: 0 0 14px !important;
+    color: #64748b !important;
+    font-size: 12px !important;
+    font-weight: 850 !important;
+}
+
+.admin-select-student-btn {
+    width: 100% !important;
+    min-height: 36px !important;
+    border: none !important;
+    border-radius: 11px !important;
+    background: linear-gradient(135deg, #4b2c80, #6b3fa0) !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-size: 12px !important;
+    font-weight: 950 !important;
+    text-transform: uppercase !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+}
+
+.admin-select-student-btn:hover {
+    background: linear-gradient(135deg, #fdb813, #f59e0b) !important;
+    color: #2d1a4d !important;
+}
+
+.admin-no-results {
+    grid-column: 1 / -1 !important;
+    text-align: center !important;
+    padding: 40px !important;
+    color: #9ca3af !important;
+    font-weight: 850 !important;
+}
+
+/* =========================================================
+   DARK MODE VERSION
+========================================================= */
+
+body.dark-mode .admin-search-modal {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.30) !important;
+}
+
+body.dark-mode .admin-search-body {
+    background: #111827 !important;
+    color: #f8fafc !important;
+    scrollbar-color: #fdb813 #0f172a !important;
+}
+
+body.dark-mode #studentsList {
+    background: #111827 !important;
+    color: #f8fafc !important;
+}
+
+body.dark-mode #idSearchInput {
+    background: #020617 !important;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    caret-color: #f8fafc !important;
+    border-color: rgba(253, 184, 19, 0.60) !important;
+}
+
+body.dark-mode #idSearchInput::placeholder {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
+    opacity: 1 !important;
+}
+
+body.dark-mode .admin-student-card {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.28) !important;
+    box-shadow:
+        0 18px 38px rgba(0, 0, 0, 0.35),
+        0 0 18px rgba(124, 58, 237, 0.10) !important;
+}
+
+body.dark-mode .admin-student-name {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+body.dark-mode .admin-student-id {
+    background: rgba(253, 184, 19, 0.16) !important;
+    color: #fde68a !important;
+    -webkit-text-fill-color: #fde68a !important;
+    border: 1px solid rgba(253, 184, 19, 0.32) !important;
+}
+
+body.dark-mode .admin-student-remaining {
+    color: #cbd5e1 !important;
+    -webkit-text-fill-color: #cbd5e1 !important;
+}
+
+body.dark-mode .admin-select-student-btn {
+    background: linear-gradient(135deg, #7c3aed, #4b2c80) !important;
+    color: #fdb813 !important;
+    -webkit-text-fill-color: #fdb813 !important;
+}
+
+body.dark-mode .admin-select-student-btn:hover {
+    background: linear-gradient(135deg, #fdb813, #f59e0b) !important;
+    color: #1e1038 !important;
+    -webkit-text-fill-color: #1e1038 !important;
+}
+
+/* Fix white scrollbar/white strip */
+body.dark-mode .admin-search-body::-webkit-scrollbar,
+body.dark-mode #studentsList::-webkit-scrollbar {
+    width: 9px !important;
+    height: 9px !important;
+}
+
+body.dark-mode .admin-search-body::-webkit-scrollbar-track,
+body.dark-mode #studentsList::-webkit-scrollbar-track {
+    background: #0f172a !important;
+    border-radius: 999px !important;
+}
+
+body.dark-mode .admin-search-body::-webkit-scrollbar-thumb,
+body.dark-mode #studentsList::-webkit-scrollbar-thumb {
+    background: #fdb813 !important;
+    border-radius: 999px !important;
+    border: 2px solid #0f172a !important;
+}
+
+@media (max-width: 900px) {
+    #studentsList {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+@media (max-width: 520px) {
+    #studentsList {
+        grid-template-columns: 1fr !important;
+    }
+}
+/* =========================================================
+   FIX - ADMIN SIT-IN FORM MODAL DARK MODE READABILITY
+========================================================= */
+
+body.dark-mode #sitInModal,
+body.dark-mode .sitin-modal-overlay {
+    background: rgba(0, 0, 0, 0.78) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+body.dark-mode #sitInModal .modal-content,
+body.dark-mode #sitInModal .modal-box,
+body.dark-mode .sitin-modal,
+body.dark-mode .sitin-form-modal {
+    background: linear-gradient(180deg, #1e293b, #0f172a) !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.30) !important;
+    box-shadow:
+        0 30px 90px rgba(0, 0, 0, 0.62),
+        0 0 30px rgba(124, 58, 237, 0.16) !important;
+}
+
+body.dark-mode #sitInModal .modal-header,
+body.dark-mode #sitInModal .modal-title,
+body.dark-mode .sitin-modal-header {
+    background:
+        radial-gradient(circle at top right, rgba(253, 184, 19, 0.18), transparent 32%),
+        linear-gradient(135deg, #4b2c80, #2d1a4d) !important;
+    color: #ffffff !important;
+    border-bottom: 1px solid rgba(253, 184, 19, 0.20) !important;
+}
+
+body.dark-mode #sitInModal .modal-header *,
+body.dark-mode .sitin-modal-header * {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+body.dark-mode #sitInModal label,
+body.dark-mode .sitin-form-modal label,
+body.dark-mode .sitin-modal label {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-weight: 950 !important;
+}
+
+/* Inputs and selects */
+body.dark-mode #sitInModal input,
+body.dark-mode #sitInModal select,
+body.dark-mode #sitInModal textarea,
+body.dark-mode .sitin-form-modal input,
+body.dark-mode .sitin-form-modal select,
+body.dark-mode .sitin-form-modal textarea,
+body.dark-mode .sitin-modal input,
+body.dark-mode .sitin-modal select,
+body.dark-mode .sitin-modal textarea {
+    background: #020617 !important;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    caret-color: #f8fafc !important;
+    border: 1.8px solid rgba(148, 163, 184, 0.42) !important;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24) !important;
+}
+
+/* Placeholder text */
+body.dark-mode #sitInModal input::placeholder,
+body.dark-mode #sitInModal textarea::placeholder,
+body.dark-mode .sitin-form-modal input::placeholder,
+body.dark-mode .sitin-form-modal textarea::placeholder,
+body.dark-mode .sitin-modal input::placeholder,
+body.dark-mode .sitin-modal textarea::placeholder {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
+    opacity: 1 !important;
+}
+
+/* Disabled or readonly fields */
+body.dark-mode #sitInModal input[readonly],
+body.dark-mode #sitInModal input:disabled,
+body.dark-mode #sitInModal select:disabled,
+body.dark-mode .sitin-form-modal input[readonly],
+body.dark-mode .sitin-form-modal input:disabled,
+body.dark-mode .sitin-form-modal select:disabled {
+    background: #111827 !important;
+    color: #dbeafe !important;
+    -webkit-text-fill-color: #dbeafe !important;
+    opacity: 1 !important;
+    border: 1.8px solid rgba(253, 184, 19, 0.35) !important;
+}
+
+/* Select dropdown options */
+body.dark-mode #sitInModal option,
+body.dark-mode .sitin-form-modal option,
+body.dark-mode .sitin-modal option {
+    background: #020617 !important;
+    color: #f8fafc !important;
+}
+
+/* Focus state */
+body.dark-mode #sitInModal input:focus,
+body.dark-mode #sitInModal select:focus,
+body.dark-mode #sitInModal textarea:focus,
+body.dark-mode .sitin-form-modal input:focus,
+body.dark-mode .sitin-form-modal select:focus,
+body.dark-mode .sitin-form-modal textarea:focus {
+    border-color: #fdb813 !important;
+    box-shadow:
+        0 0 0 4px rgba(253, 184, 19, 0.14),
+        0 0 24px rgba(253, 184, 19, 0.14) !important;
+    outline: none !important;
+}
+
+/* Buttons */
+body.dark-mode #sitInModal .btn-close,
+body.dark-mode #sitInModal .close-btn,
+body.dark-mode #sitInModal .modal-close,
+body.dark-mode .sitin-modal .close-btn {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+body.dark-mode #sitInModal .btn-close:hover,
+body.dark-mode #sitInModal .close-btn:hover,
+body.dark-mode #sitInModal .modal-close:hover,
+body.dark-mode .sitin-modal .close-btn:hover {
+    background: #fdb813 !important;
+    color: #1e1038 !important;
+    -webkit-text-fill-color: #1e1038 !important;
+}
+
+body.dark-mode #sitInModal .btn-submit,
+body.dark-mode #sitInModal .sit-in-btn,
+body.dark-mode #sitInModal button[type="submit"],
+body.dark-mode .sitin-form-modal button[type="submit"] {
+    background: linear-gradient(135deg, #7c3aed, #4b2c80) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 12px 26px rgba(124, 58, 237, 0.26) !important;
+}
+
+body.dark-mode #sitInModal .btn-submit:hover,
+body.dark-mode #sitInModal .sit-in-btn:hover,
+body.dark-mode #sitInModal button[type="submit"]:hover,
+body.dark-mode .sitin-form-modal button[type="submit"]:hover {
+    background: linear-gradient(135deg, #fdb813, #f59e0b) !important;
+    color: #1e1038 !important;
+    -webkit-text-fill-color: #1e1038 !important;
+}
+
+body.dark-mode #sitInModal .btn-cancel,
+body.dark-mode #sitInModal .btn-close-form,
+body.dark-mode #sitInModal button[type="button"] {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+/* =========================================================
+   FIX - ADMIN LOGOUT / EVALUATION MODAL SCROLLABLE
+========================================================= */
+
+/* The dark overlay should allow the modal to scroll if needed */
+.logout-modal-overlay,
+.delete-alert-overlay,
+#logoutModal,
+#evaluationModal {
+    align-items: flex-start !important;
+    overflow-y: auto !important;
+    padding: 30px 16px !important;
+}
+
+/* Main logout modal/card */
+.logout-modal,
+.delete-alert-modal,
+.logout-confirm-modal,
+.evaluation-modal,
+#logoutModal .modal-content,
+#evaluationModal .modal-content {
+    width: min(520px, 100%) !important;
+    max-height: calc(100vh - 60px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    margin: 0 auto !important;
+    border-radius: 22px !important;
+}
+
+/* Modal body should scroll instead of occupying whole screen */
+.logout-modal-body,
+.delete-alert-body,
+.evaluation-modal-body,
+#logoutModal .modal-body,
+#evaluationModal .modal-body {
+    max-height: calc(100vh - 190px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding-right: 14px !important;
+}
+
+/* Keep footer visible and clean */
+.logout-modal-footer,
+.delete-alert-footer,
+.evaluation-modal-footer,
+#logoutModal .modal-footer,
+#evaluationModal .modal-footer {
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 5 !important;
+}
+
+/* Nice scrollbar */
+.logout-modal::-webkit-scrollbar,
+.logout-modal-body::-webkit-scrollbar,
+.delete-alert-modal::-webkit-scrollbar,
+.delete-alert-body::-webkit-scrollbar,
+.evaluation-modal::-webkit-scrollbar,
+.evaluation-modal-body::-webkit-scrollbar,
+#logoutModal .modal-content::-webkit-scrollbar,
+#logoutModal .modal-body::-webkit-scrollbar,
+#evaluationModal .modal-content::-webkit-scrollbar,
+#evaluationModal .modal-body::-webkit-scrollbar {
+    width: 8px !important;
+}
+
+.logout-modal::-webkit-scrollbar-track,
+.logout-modal-body::-webkit-scrollbar-track,
+.delete-alert-modal::-webkit-scrollbar-track,
+.delete-alert-body::-webkit-scrollbar-track,
+.evaluation-modal::-webkit-scrollbar-track,
+.evaluation-modal-body::-webkit-scrollbar-track,
+#logoutModal .modal-content::-webkit-scrollbar-track,
+#logoutModal .modal-body::-webkit-scrollbar-track,
+#evaluationModal .modal-content::-webkit-scrollbar-track,
+#evaluationModal .modal-body::-webkit-scrollbar-track {
+    background: #111827 !important;
+    border-radius: 999px !important;
+}
+
+.logout-modal::-webkit-scrollbar-thumb,
+.logout-modal-body::-webkit-scrollbar-thumb,
+.delete-alert-modal::-webkit-scrollbar-thumb,
+.delete-alert-body::-webkit-scrollbar-thumb,
+.evaluation-modal::-webkit-scrollbar-thumb,
+.evaluation-modal-body::-webkit-scrollbar-thumb,
+#logoutModal .modal-content::-webkit-scrollbar-thumb,
+#logoutModal .modal-body::-webkit-scrollbar-thumb,
+#evaluationModal .modal-content::-webkit-scrollbar-thumb,
+#evaluationModal .modal-body::-webkit-scrollbar-thumb {
+    background: #fdb813 !important;
+    border-radius: 999px !important;
+}
+
+/* Mobile adjustment */
+@media (max-height: 720px) {
+    .logout-modal,
+    .delete-alert-modal,
+    .logout-confirm-modal,
+    .evaluation-modal,
+    #logoutModal .modal-content,
+    #evaluationModal .modal-content {
+        max-height: calc(100vh - 30px) !important;
+    }
+
+    .logout-modal-body,
+    .delete-alert-body,
+    .evaluation-modal-body,
+    #logoutModal .modal-body,
+    #evaluationModal .modal-body {
+        max-height: calc(100vh - 160px) !important;
+    }
+}
+/* =========================================================
+   OVERRIDE OLD LOGOUT MODAL CSS - LIGHT + DARK SAFE
+   Put this at the VERY BOTTOM of static/style.css
+========================================================= */
+
+/* ---------- LIGHT MODE ---------- */
+
+body:not(.dark-mode) #logoutModal .modal-box,
+body:not(.dark-mode) #logoutModal .logout-evaluation-modal,
+body:not(.dark-mode) #logoutModal .modal-box-body,
+body:not(.dark-mode) #logoutModal .logout-evaluation-body {
+    background: #ffffff !important;
+    color: #111827 !important;
+    -webkit-text-fill-color: #111827 !important;
+}
+
+body:not(.dark-mode) #logoutModal .logout-text,
+body:not(.dark-mode) #logoutModal .student-highlight,
+body:not(.dark-mode) #logoutModal .modal-student-id,
+body:not(.dark-mode) #logoutModal .evaluation-title,
+body:not(.dark-mode) #logoutModal .evaluation-title *,
+body:not(.dark-mode) #logoutModal .evaluation-text,
+body:not(.dark-mode) #logoutModal .evaluation-text *,
+body:not(.dark-mode) #logoutModal .evaluation-note-wrap label,
+body:not(.dark-mode) #logoutModal .evaluation-note-wrap small {
+    color: #111827 !important;
+    -webkit-text-fill-color: #111827 !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+body:not(.dark-mode) #logoutModal .evaluation-box {
+    background: #f8f5ff !important;
+    color: #111827 !important;
+    -webkit-text-fill-color: #111827 !important;
+    border: 1px solid #ede9fe !important;
+}
+
+body:not(.dark-mode) #logoutModal .evaluation-option {
+    background: #ffffff !important;
+    color: #111827 !important;
+    -webkit-text-fill-color: #111827 !important;
+    border: 1.5px solid #e5e7eb !important;
+}
+
+body:not(.dark-mode) #logoutModal .evaluation-option span,
+body:not(.dark-mode) #logoutModal .evaluation-option i,
+body:not(.dark-mode) #logoutModal .evaluation-option small,
+body:not(.dark-mode) #logoutModal .evaluation-option strong {
+    color: #111827 !important;
+    -webkit-text-fill-color: #111827 !important;
+    opacity: 1 !important;
+}
+
+body:not(.dark-mode) #logoutModal .evaluation-option:has(input:checked) {
+    background: linear-gradient(135deg, #4b2c80, #6b3fa0) !important;
+    border-color: #fdb813 !important;
+}
+
+body:not(.dark-mode) #logoutModal .evaluation-option:has(input:checked) span,
+body:not(.dark-mode) #logoutModal .evaluation-option:has(input:checked) i,
+body:not(.dark-mode) #logoutModal .evaluation-option:has(input:checked) small,
+body:not(.dark-mode) #logoutModal .evaluation-option:has(input:checked) strong {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+body:not(.dark-mode) #logoutModal .evaluation-option-disabled,
+body:not(.dark-mode) #logoutModal .evaluation-option-disabled:hover {
+    background: #f1f5f9 !important;
+    border: 1.5px dashed #94a3b8 !important;
+    opacity: 0.75 !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+body:not(.dark-mode) #logoutModal .evaluation-option-disabled span,
+body:not(.dark-mode) #logoutModal .evaluation-option-disabled i,
+body:not(.dark-mode) #logoutModal .evaluation-option-disabled small,
+body:not(.dark-mode) #logoutModal .evaluation-option-disabled strong {
+    color: #64748b !important;
+    -webkit-text-fill-color: #64748b !important;
+}
+
+body:not(.dark-mode) #logoutModal .evaluation-total {
+    background: #fff7ed !important;
+    border: 1.5px solid #fdb813 !important;
+}
+
+body:not(.dark-mode) #logoutModal .evaluation-total span {
+    color: #111827 !important;
+    -webkit-text-fill-color: #111827 !important;
+}
+
+body:not(.dark-mode) #logoutModal .evaluation-total strong,
+body:not(.dark-mode) #logoutModal #evaluationTotal {
+    color: #b45309 !important;
+    -webkit-text-fill-color: #b45309 !important;
+}
+
+body:not(.dark-mode) #logoutModal textarea {
+    background: #ffffff !important;
+    color: #111827 !important;
+    -webkit-text-fill-color: #111827 !important;
+    border: 1.8px solid #cbd5e1 !important;
+}
+
+body:not(.dark-mode) #logoutModal textarea::placeholder {
+    color: #64748b !important;
+    -webkit-text-fill-color: #64748b !important;
+    opacity: 1 !important;
+}
+
+body:not(.dark-mode) #logoutModal .modal-warning,
+body:not(.dark-mode) #logoutModal .modal-warning * {
+    background: #fef3c7 !important;
+    color: #78350f !important;
+    -webkit-text-fill-color: #78350f !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+body:not(.dark-mode) #logoutModal .modal-warning {
+    border-left: 5px solid #f59e0b !important;
+}
+
+body:not(.dark-mode) #logoutModal .modal-box-footer,
+body:not(.dark-mode) #logoutModal .logout-evaluation-footer {
+    background: #f8fafc !important;
+    border-top: 1px solid #e5e7eb !important;
+}
+
+/* ---------- DARK MODE ---------- */
+
+body.dark-mode #logoutModal .modal-box,
+body.dark-mode #logoutModal .logout-evaluation-modal,
+body.dark-mode #logoutModal .modal-box-body,
+body.dark-mode #logoutModal .logout-evaluation-body {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+}
+
+body.dark-mode #logoutModal .logout-text,
+body.dark-mode #logoutModal .student-highlight,
+body.dark-mode #logoutModal .modal-student-id,
+body.dark-mode #logoutModal .evaluation-title,
+body.dark-mode #logoutModal .evaluation-title *,
+body.dark-mode #logoutModal .evaluation-text,
+body.dark-mode #logoutModal .evaluation-text *,
+body.dark-mode #logoutModal .evaluation-note-wrap label,
+body.dark-mode #logoutModal .evaluation-note-wrap small {
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+body.dark-mode #logoutModal .evaluation-box {
+    background: #111827 !important;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.28) !important;
+}
+
+body.dark-mode #logoutModal .evaluation-option {
+    background: #1e293b !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: 1.5px solid rgba(253, 184, 19, 0.55) !important;
+}
+
+body.dark-mode #logoutModal .evaluation-option span,
+body.dark-mode #logoutModal .evaluation-option i,
+body.dark-mode #logoutModal .evaluation-option small,
+body.dark-mode #logoutModal .evaluation-option strong {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+body.dark-mode #logoutModal .evaluation-option-disabled,
+body.dark-mode #logoutModal .evaluation-option-disabled:hover {
+    background: #1e293b !important;
+    border: 1.5px dashed rgba(148, 163, 184, 0.55) !important;
+    opacity: 0.58 !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+body.dark-mode #logoutModal .evaluation-option-disabled span,
+body.dark-mode #logoutModal .evaluation-option-disabled i,
+body.dark-mode #logoutModal .evaluation-option-disabled small,
+body.dark-mode #logoutModal .evaluation-option-disabled strong {
+    color: #cbd5e1 !important;
+    -webkit-text-fill-color: #cbd5e1 !important;
+}
+
+body.dark-mode #logoutModal .evaluation-total {
+    background: #0f172a !important;
+    border: 1.5px solid rgba(253, 184, 19, 0.55) !important;
+}
+
+body.dark-mode #logoutModal .evaluation-total span {
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+}
+
+body.dark-mode #logoutModal .evaluation-total strong,
+body.dark-mode #logoutModal #evaluationTotal {
+    color: #fef3c7 !important;
+    -webkit-text-fill-color: #fef3c7 !important;
+}
+
+body.dark-mode #logoutModal textarea {
+    background: #020617 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: 1.8px solid rgba(253, 184, 19, 0.45) !important;
+}
+
+body.dark-mode #logoutModal textarea::placeholder {
+    color: #cbd5e1 !important;
+    -webkit-text-fill-color: #cbd5e1 !important;
+    opacity: 1 !important;
+}
+
+body.dark-mode #logoutModal .modal-warning,
+body.dark-mode #logoutModal .modal-warning * {
+    background: #fef3c7 !important;
+    color: #78350f !important;
+    -webkit-text-fill-color: #78350f !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+body.dark-mode #logoutModal .modal-warning {
+    border-left: 5px solid #f59e0b !important;
+}
+
+body.dark-mode #logoutModal .modal-box-footer,
+body.dark-mode #logoutModal .logout-evaluation-footer {
+    background: #111827 !important;
+    border-top: 1px solid rgba(148, 163, 184, 0.28) !important;
+}
