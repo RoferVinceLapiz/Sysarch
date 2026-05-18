@@ -1280,20 +1280,30 @@
                 <strong>{{ reservations|length if reservations else 0 }}</strong>
             </div>
 
-            {% if remaining > 0 %}
-                <button type="button" class="add-reservation-btn" onclick="openReservationModal()">
-                    <i class="fas fa-plus-circle"></i>
-                    Add Reservation
-                </button>
-                {% else %}
-                <button type="button" class="add-reservation-btn" disabled title="No remaining sessions">
-                    <i class="fas fa-plus-circle"></i>
+            {% if reservations_enabled %}
+                {% if remaining > 0 %}
+                    <button type="button" class="add-reservation-btn" onclick="openReservationModal()">
+                        <i class="fas fa-plus-circle"></i>
+                        Add Reservation
+                    </button>
+                    {% else %}
+                    <button type="button" class="add-reservation-btn" disabled title="No remaining sessions">
+                        <i class="fas fa-plus-circle"></i>
+                        Add Reservation
+                    </button>
+                    <p style="color:red; font-weight:800; margin-top:5px;">
+                        You have no remaining sessions. Cannot make a reservation.
+                    </p>
+                    {% endif %}
+            {% else %}
+                <button type="button" class="add-reservation-btn" disabled title="Reservations are currently disabled">
+                    <i class="fas fa-lock"></i>
                     Add Reservation
                 </button>
                 <p style="color:red; font-weight:800; margin-top:5px;">
-                    You have no remaining sessions. Cannot make a reservation.
+                    <i class="fas fa-exclamation-circle"></i> Reservations are currently disabled by admin.
                 </p>
-                {% endif %}
+            {% endif %}
         </div>
     </section>
 
@@ -1947,7 +1957,13 @@ backStepBtn.addEventListener('click', function() {
 });
 
 submitReservationBtn.addEventListener('click', function() {
+    const reservationsEnabled = {{ 'true' if reservations_enabled else 'false' }};
     const remainingSessions = {{ remaining | default(0) }};
+    
+    if (!reservationsEnabled) {
+        alert('Reservations are currently disabled by admin. Cannot submit reservation.');
+        return;
+    }
     
     if (remainingSessions <= 0) {
         alert('You have no remaining sessions. Cannot submit reservation.');

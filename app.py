@@ -185,6 +185,37 @@ def get_student_notifications(id_number):
     return notifications, notification_count
 
 
+def is_reservation_enabled(conn):
+    """Check if reservations are currently enabled for students."""
+    setting = conn.execute('''
+        SELECT setting_value
+        FROM settings
+        WHERE setting_key = ?
+    ''', ('reservations_enabled',)).fetchone()
+    
+    return setting and setting['setting_value'] == '1' if setting else True
+
+
+def toggle_reservation_status(conn):
+    """Toggle the reservation status between enabled and disabled."""
+    current_status = conn.execute('''
+        SELECT setting_value
+        FROM settings
+        WHERE setting_key = ?
+    ''', ('reservations_enabled',)).fetchone()
+    
+    new_status = '0' if (current_status and current_status['setting_value'] == '1') else '1'
+    
+    conn.execute('''
+        UPDATE settings
+        SET setting_value = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE setting_key = ?
+    ''', (new_status, 'reservations_enabled'))
+    
+    conn.commit()
+    return new_status == '1'
+
+
 # =============================================================
 # DATABASE
 # =============================================================
@@ -304,6 +335,22 @@ def init_db():
 
     if 'pc_number' not in reservation_columns:
         cursor.execute('ALTER TABLE reservations ADD COLUMN pc_number INTEGER')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS settings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            setting_key TEXT UNIQUE NOT NULL,
+            setting_value TEXT NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+
+    # Initialize default reservation status if not exists
+    cursor.execute('''
+        INSERT OR IGNORE INTO settings (setting_key, setting_value)
+        VALUES (?, ?)
+    ''', ('reservations_enabled', '1'))
 
     cursor.execute('''
         INSERT OR IGNORE INTO admins (username, password)
@@ -735,6 +782,12 @@ def reservation():
         })
 
     if request.method == 'POST':
+        # Check if reservations are enabled
+        if not is_reservation_enabled(conn):
+            flash('Reservations are currently disabled. Please try again later.', 'error')
+            conn.close()
+            return redirect(url_for('reservation'))
+
         purpose = request.form.get('purpose', '').strip()
         lab = request.form.get('lab', '').strip()
         time_in = request.form.get('time_in', '').strip()
@@ -824,6 +877,8 @@ def reservation():
         (session['student_id'],)
     ).fetchall()
 
+    reservations_enabled = is_reservation_enabled(conn)
+
     conn.close()
 
     notifications, notification_count = get_student_notifications(session['student_id'])
@@ -836,6 +891,7 @@ def reservation():
         bonus_sessions=session_info['bonus_sessions'],
         reservations=reservations,
         lab_applications=lab_applications,
+        reservations_enabled=reservations_enabled,
         notifications=notifications,
         notification_count=notification_count
     )
@@ -1824,13 +1880,30 @@ def admin_reservations():
         ORDER BY r.created_at DESC
     ''').fetchall()
 
+    reservations_enabled = is_reservation_enabled(conn)
+    
     conn.close()
 
     return render_template(
         'admin_reservations.html',
         reservations=reservations,
+        reservations_enabled=reservations_enabled,
         admin_user=session['admin_user']
     )
+
+
+@app.route('/admin/reservation/toggle', methods=['POST'])
+def toggle_reservation():
+    if 'admin_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db()
+    is_now_enabled = toggle_reservation_status(conn)
+    conn.close()
+
+    status_text = "enabled" if is_now_enabled else "disabled"
+    flash(f'Reservations have been {status_text}.', 'success')
+    return redirect(url_for('admin_reservations'))
 
 
 @app.route('/admin/reservation/approve/<int:res_id>', methods=['POST'])

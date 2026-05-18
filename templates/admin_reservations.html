@@ -122,6 +122,76 @@
             z-index: 1;
         }
 
+        .toggle-button-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .toggle-button-section label {
+            color: var(--admin-text);
+            font-weight: 800;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .toggle-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 950;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toggle-btn.enabled {
+            background: linear-gradient(135deg, var(--danger), #ef4444);
+            color: white;
+            box-shadow: 0 10px 24px rgba(220, 38, 38, 0.25);
+        }
+
+        .toggle-btn.enabled:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(220, 38, 38, 0.35);
+        }
+
+        .toggle-btn.disabled {
+            background: linear-gradient(135deg, var(--success), #22c55e);
+            color: white;
+            box-shadow: 0 10px 24px rgba(22, 163, 74, 0.25);
+        }
+
+        .toggle-btn.disabled:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(22, 163, 74, 0.35);
+        }
+
+        .status-badge-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .status-badge-toggle.enabled {
+            background: linear-gradient(135deg, var(--success), #22c55e);
+            color: white;
+        }
+
+        .status-badge-toggle.disabled {
+            background: linear-gradient(135deg, var(--danger), #ef4444);
+            color: white;
+        }
+
         .reservation-card {
             background: rgba(255, 255, 255, 0.96);
             border: 1px solid rgba(255, 255, 255, 0.75);
@@ -333,6 +403,10 @@
                 width: 100%;
             }
 
+            .toggle-button-section {
+                width: 100%;
+            }
+
             .reservation-title {
                 align-items: flex-start;
             }
@@ -409,6 +483,25 @@
         <div class="summary-card">
             <p>Total Reservations</p>
             <div class="number">{{ reservations|length if reservations else 0 }}</div>
+        </div>
+
+        <div class="toggle-button-section">
+            <label>Reservation Status:</label>
+            <span class="status-badge-toggle {% if reservations_enabled %}enabled{% else %}disabled{% endif %}">
+                <i class="fas fa-circle" style="font-size: 8px;"></i>
+                {% if reservations_enabled %}ENABLED{% else %}DISABLED{% endif %}
+            </span>
+            <form method="POST" action="/admin/reservation/toggle" style="display:inline;">
+                <button type="submit" class="toggle-btn {% if reservations_enabled %}enabled{% else %}disabled{% endif %}">
+                    {% if reservations_enabled %}
+                    <i class="fas fa-times-circle"></i>
+                    Disable Reservations
+                    {% else %}
+                    <i class="fas fa-check-circle"></i>
+                    Enable Reservations
+                    {% endif %}
+                </button>
+            </form>
         </div>
     </div>
 
