@@ -721,6 +721,79 @@ def logout():
     return redirect(url_for('login'))
 
 
+@app.route('/api/leaderboard')
+def api_leaderboard():
+    conn = get_db()
+
+    last_reset = get_last_session_reset(conn)
+
+    if last_reset:
+        rows = conn.execute('''
+            SELECT
+                s.id_number,
+                s.first_name,
+                s.last_name,
+                s.course,
+                s.course_level,
+                COUNT(sr.id) AS completed_sitins,
+                COALESCE(SUM(sr.evaluation_points), 0) AS raw_points
+            FROM students s
+            LEFT JOIN sitin_records sr
+                ON s.id_number = sr.id_number
+               AND sr.logout_time IS NOT NULL
+               AND sr.login_time >= ?
+            GROUP BY s.id_number
+            ORDER BY raw_points DESC, completed_sitins DESC, s.last_name ASC, s.first_name ASC
+            LIMIT 50
+        ''', (last_reset,)).fetchall()
+    else:
+        rows = conn.execute('''
+            SELECT
+                s.id_number,
+                s.first_name,
+                s.last_name,
+                s.course,
+                s.course_level,
+                COUNT(sr.id) AS completed_sitins,
+                COALESCE(SUM(sr.evaluation_points), 0) AS raw_points
+            FROM students s
+            LEFT JOIN sitin_records sr
+                ON s.id_number = sr.id_number
+               AND sr.logout_time IS NOT NULL
+            GROUP BY s.id_number
+            ORDER BY raw_points DESC, completed_sitins DESC, s.last_name ASC, s.first_name ASC
+            LIMIT 50
+        ''').fetchall()
+
+    leaderboard = []
+    previous_score = None
+    displayed_rank = 0
+
+    for index, row in enumerate(rows, start=1):
+        raw_points = float(row['raw_points'] or 0)
+        completed_sitins = int(row['completed_sitins'] or 0)
+
+        if previous_score is None or raw_points != previous_score:
+            displayed_rank = index
+
+        leaderboard.append({
+            'rank': displayed_rank,
+            'id_number': row['id_number'],
+            'first_name': row['first_name'],
+            'last_name': row['last_name'],
+            'course': row['course'],
+            'course_level': row['course_level'],
+            'completed_sitins': completed_sitins,
+            'raw_points': raw_points
+        })
+
+        previous_score = raw_points
+
+    conn.close()
+
+    return jsonify({'leaderboard': leaderboard[:10]})
+
+
 @app.route('/students')
 def students():
     if 'student_id' not in session:
@@ -1561,6 +1634,34 @@ def admin_sitin():
             INSERT INTO sitin_records (id_number, purpose, lab, pc_number, login_time)
             VALUES (?, ?, ?, ?, ?)
         ''', (id_number, purpose, lab, int(pc_number), login_time))
+
+        # If the student had a pending reservation that matches this sit-in, mark it as Approved
+        try:
+            pending_res = conn.execute('''
+                SELECT id FROM reservations
+                WHERE id_number = ?
+                  AND lab = ?
+                  AND date = ?
+                  AND time_in = ?
+                  AND pc_number = ?
+                  AND status = 'Pending'
+                LIMIT 1
+            ''', (id_number, lab, sitin_date, sitin_time, int(pc_number))).fetchone()
+
+            if pending_res:
+                conn.execute('''
+                    UPDATE reservations
+                    SET status = 'Approved'
+                    WHERE id = ?
+                ''', (pending_res['id'],))
+                # notify student about reservation approval
+                add_notification(
+                    id_number,
+                    f"Your reservation for Lab {lab}, PC {pc_number} on {sitin_date} {sitin_time} has been approved and converted to an active sit-in."
+                )
+        except Exception:
+            # if anything goes wrong with reservation update, continue without blocking sit-in
+            pass
 
         student = conn.execute(
             'SELECT first_name, last_name FROM students WHERE id_number = ?',

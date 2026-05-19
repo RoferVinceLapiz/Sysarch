@@ -18,9 +18,14 @@
     z-index: 100000;
     background: rgba(15, 15, 20, 0.72);
     backdrop-filter: blur(9px);
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    padding: 24px;
+    padding: 40px 24px;
+    overflow-y: auto;
+}
+
+#sitInFormModal {
+    -webkit-overflow-scrolling: touch;
 }
 
 .admin-search-modal {
@@ -535,6 +540,50 @@ body.dark-mode #sitInFormModal select:-webkit-autofill {
 }
 </style>
 
+<style>
+/* Ensure sit-in modal action buttons are always visible */
+#sitInFormModal .admin-sitin-form-footer .admin-modal-btn-submit {
+    display: inline-flex !important;
+    z-index: 99999;
+}
+
+#sitInFormModal .admin-sitin-form-footer .admin-modal-btn {
+    display: inline-flex !important;
+}
+</style>
+
+<style>
+/* Make sit-in modal content scrollable and keep footer visible */
+#sitInFormModal .admin-sitin-form-card {
+    display: flex !important;
+    flex-direction: column !important;
+    max-height: 93vh !important;
+    width: min(540px, 100%) !important;
+    margin: 20px auto !important;
+    overflow: hidden !important;
+}
+
+#sitInFormModal .admin-sitin-form-body {
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    padding: 18px 20px 140px !important;
+}
+
+#sitInFormModal .admin-sitin-form-footer {
+    position: sticky !important;
+    bottom: 0 !important;
+    padding: 14px 22px !important;
+    background: #f8fafc !important;
+    border-top: 1px solid #e5e7eb !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
+    flex-shrink: 0 !important;
+}
+</style>
+
 <!-- SEARCH MODAL -->
 <div id="searchModal" class="admin-search-overlay">
     <div class="admin-search-modal">
@@ -897,7 +946,6 @@ function adminOpenSitInForm(idNumber, studentName, remaining) {
 
     if (sitInModal) {
         sitInModal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
     }
 }
 

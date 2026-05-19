@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <title>CCS Sit-in Monitoring System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -688,6 +686,185 @@ body.dark-mode.login-page input:-webkit-autofill:focus,
     -webkit-text-fill-color: #f8fafc !important;
     caret-color: #f8fafc !important;
 }
+
+        /* Leaderboard modal & button styles */
+        .nav-menu-link {
+            color: rgba(255, 255, 255, 0.92) !important;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 800;
+            padding: 10px 12px;
+            border-radius: 999px;
+            transition: all 0.18s ease;
+            background: transparent;
+        }
+
+        .nav-menu-link:hover {
+            background: rgba(255,255,255,0.10);
+            color: var(--uc-gold) !important;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(2,6,23,0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 28px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-card {
+            width: 100%;
+            max-width: 720px;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 18px 20px;
+            box-shadow: 0 26px 80px rgba(15, 23, 42, 0.32);
+            max-height: 80vh;
+            overflow: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .modal-title {
+            font-weight: 900;
+            color: var(--uc-purple);
+            font-size: 18px;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            font-weight: 800;
+            font-size: 18px;
+            cursor: pointer;
+            color: #334155;
+        }
+
+        .leaderboard-list {
+            display: grid;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .leaderboard-item {
+            display: grid;
+            grid-template-columns: 48px 1fr 110px;
+            gap: 12px;
+            align-items: center;
+            padding: 12px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, #fff, #fbfafc);
+            border: 1px solid rgba(232,226,255,0.8);
+        }
+
+        .leader-rank {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: var(--uc-purple);
+            background: #fff7ed;
+            border: 2px solid rgba(253,184,19,0.18);
+        }
+
+        .leader-meta {
+            display:flex;
+            flex-direction:column;
+            gap:2px;
+        }
+
+        .leader-name { font-weight:900; color:var(--text-dark); }
+        .leader-course { font-size:12px; color:var(--text-muted); font-weight:800; }
+
+        .leader-points { font-weight:900; color:var(--uc-purple); text-align:right; }
+        /* Dark mode for leaderboard modal - follow admin modal styles */
+        body.dark-mode .modal-overlay {
+            background: rgba(0, 0, 0, 0.78);
+            backdrop-filter: blur(10px);
+        }
+
+        body.dark-mode .modal-card {
+            background: #0f172a !important;
+            color: #f8fafc !important;
+            border: 1px solid rgba(148, 163, 184, 0.30) !important;
+            box-shadow: 0 30px 90px rgba(0,0,0,0.38) !important;
+        }
+
+        body.dark-mode .modal-header {
+            background:
+                radial-gradient(circle at top right, rgba(253, 184, 19, 0.22), transparent 28%),
+                linear-gradient(135deg, #4b2c80, #2d1a4d) !important;
+            color: #ffffff !important;
+            padding: 18px 20px !important;
+            border-radius: 12px 12px 0 0 !important;
+        }
+
+        body.dark-mode .modal-close {
+            width:42px;
+            height:42px;
+            border-radius:999px;
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+        }
+
+        body.dark-mode .modal-close:hover {
+            background: #fdb813 !important;
+            color: #2d1a4d !important;
+        }
+
+        body.dark-mode .modal-body {
+            background: #111827 !important;
+            color: #f8fafc !important;
+            padding: 18px 20px !important;
+        }
+
+        body.dark-mode .leaderboard-item {
+            background: #0f172a !important;
+            border: 1px solid rgba(148,163,184,0.18) !important;
+            box-shadow: 0 18px 38px rgba(0,0,0,0.35) !important;
+        }
+
+        body.dark-mode .leader-rank {
+            background: linear-gradient(135deg, #4b2c80, #6b3fa0) !important;
+            color: #fdb813 !important;
+            border: 1px solid rgba(124,58,237,0.10) !important;
+        }
+
+        body.dark-mode .leader-name { color: #f8fafc !important; }
+        body.dark-mode .leader-course { color: #cbd5e1 !important; }
+        body.dark-mode .leader-points { color: #fdb813 !important; }
+
+        body.dark-mode .modal-body::-webkit-scrollbar {
+            width: 9px;
+            height: 9px;
+        }
+
+        body.dark-mode .modal-body::-webkit-scrollbar-track {
+            background: #0f172a;
+            border-radius: 999px;
+        }
+
+        body.dark-mode .modal-body::-webkit-scrollbar-thumb {
+            background: #fdb813;
+            border-radius: 999px;
+            border: 2px solid #0f172a;
+        }
     </style>
 </head>
 
@@ -702,6 +879,7 @@ body.dark-mode.login-page input:-webkit-autofill:focus,
         <a href="#">About</a>
         <a href="/" class="active-link">Login</a>
         <a href="/register">Register</a>
+        <a href="#" id="leaderboardBtn" class="nav-menu-link">Leaderboard</a>
     </div>
 </div>
 
@@ -776,6 +954,35 @@ body.dark-mode.login-page input:-webkit-autofill:focus,
     </section>
 
 </main>
+ 
+<!-- Leaderboard modal -->
+<div class="modal-overlay" id="leaderboardModal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="leaderboardTitle">
+        <div class="modal-header" style="padding:18px 20px; background: linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark)); border-radius:12px 12px 0 0; color:#fff;">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <div style="width:44px; height:44px; border-radius:10px; background: linear-gradient(135deg, var(--uc-gold), #f59e0b); display:flex; align-items:center; justify-content:center; font-weight:900; color:var(--uc-purple-dark);">🏆</div>
+                <div>
+                    <div class="modal-title" id="leaderboardTitle" style="color:#fff; font-size:18px; font-weight:900;">Leaderboard</div>
+                    <div style="font-size:12px; opacity:0.9;">Top students by awarded points</div>
+                </div>
+            </div>
+            <button id="leaderboardClose" class="modal-close" aria-label="Close leaderboard">✕</button>
+        </div>
+
+        <div class="modal-body" style="padding:18px 20px;">
+            <div style="display:flex; justify-content:space-between; gap:12px; align-items:center; margin-bottom:12px;">
+                <div style="font-weight:800; color:var(--text-muted);">Rank</div>
+                <div style="flex:1; text-align:left; margin-left:12px; font-weight:800; color:var(--text-muted);">Student</div>
+                <div style="text-align:right; width:110px; font-weight:800; color:var(--text-muted);">Points</div>
+            </div>
+
+            <div class="leaderboard-list" id="leaderboardList">
+                <!-- populated by script -->
+            </div>
+
+            <div id="leaderboardFooter" style="margin-top:12px; font-size:13px; color:var(--text-muted);"></div>
+        </div>
+</div>
 
 <script>
 function validateLogin() {
@@ -805,6 +1012,55 @@ function validateLogin() {
 
     return valid;
 }
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    const btn = document.getElementById('leaderboardBtn');
+    const modal = document.getElementById('leaderboardModal');
+    const closeBtn = document.getElementById('leaderboardClose');
+
+    function openModal(){
+        if(modal){ modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); }
+    }
+
+    function closeModal(){
+        if(modal){ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); }
+    }
+
+    if(btn){ btn.addEventListener('click', function(e){ e.preventDefault(); openModal(); }); }
+    if(closeBtn){ closeBtn.addEventListener('click', closeModal); }
+    if(modal){ modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); }); }
+
+    // sample leaderboard entries (replace or fetch from server as needed)
+    const list = document.getElementById('leaderboardList');
+    if(list){
+        // Fetch leaderboard from server
+        fetch('/api/leaderboard')
+            .then(r => r.json())
+            .then(data => {
+                const lb = data.leaderboard || [];
+                if(lb.length === 0){
+                    list.innerHTML = '<div style="color:var(--text-muted);">No leaderboard data yet.</div>';
+                } else {
+                    list.innerHTML = lb.map(item => `\n                        <div class="leaderboard-item">\n                            <div class="leader-rank">${item.rank}</div>\n                            <div class="leader-meta">\n                                <div class="leader-name">${item.first_name} ${item.last_name}</div>\n                                <div class="leader-course">${item.course} • ${item.course_level}</div>\n                            </div>\n                            <div class="leader-points">${parseFloat(item.raw_points).toFixed(2)}</div>\n                        </div>\n                    `).join('');
+                }
+                const footer = document.getElementById('leaderboardFooter');
+                if(footer) footer.textContent = `Showing top ${Math.min(lb.length,10)} students`;
+            })
+            .catch(err => {
+                console.error('Leaderboard fetch failed', err);
+                // fallback sample
+                const sample = [
+                    {rank:1, first_name:'Alice', last_name:'Santos', course:'BSCS', course_level:'3', raw_points:120},
+                    {rank:2, first_name:'John', last_name:'Cruz', course:'BSIT', course_level:'2', raw_points:110},
+                    {rank:3, first_name:'Maria', last_name:'Lopez', course:'BSCS', course_level:'4', raw_points:95}
+                ];
+                list.innerHTML = sample.map(item => `\n                    <div class="leaderboard-item">\n                        <div class="leader-rank">${item.rank}</div>\n                        <div class="leader-meta">\n                            <div class="leader-name">${item.first_name} ${item.last_name}</div>\n                            <div class="leader-course">${item.course} • ${item.course_level}</div>\n                        </div>\n                        <div class="leader-points">${parseFloat(item.raw_points).toFixed(2)}</div>\n                    </div>\n                `).join('');
+                const footer = document.getElementById('leaderboardFooter');
+                if(footer) footer.textContent = 'Offline: showing sample entries';
+            });
+    }
+});
 </script>
 <script src="{{ url_for('static', filename='darkmode.js') }}"></script>
 </body>
