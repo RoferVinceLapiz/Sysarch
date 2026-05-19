@@ -1,4 +1,4 @@
-<head>
+11<head>
     <title>CCS Sit-in Monitoring System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
@@ -164,6 +164,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .login-layout .leaderboard-card {
+            grid-column: 1 / -1;
         }
 
         .login-box {
@@ -840,6 +844,34 @@ body.dark-mode.login-page input:-webkit-autofill:focus,
             box-shadow: 0 18px 38px rgba(0,0,0,0.35) !important;
         }
 
+        body.dark-mode .leaderboard-card {
+            background: #0f172a !important;
+            border: 1px solid rgba(148,163,184,0.20) !important;
+        }
+
+        body.dark-mode #leaderboardTable {
+            background: transparent !important;
+        }
+
+        body.dark-mode #leaderboardTable thead th {
+            background: #4b2c80 !important;
+            color: #ffffff !important;
+            border-bottom: none !important;
+        }
+
+        body.dark-mode #leaderboardTable tbody td {
+            color: #f8fafc !important;
+            border-bottom: 1px solid rgba(148,163,184,0.22) !important;
+        }
+
+        body.dark-mode #leaderboardTable tbody tr:nth-child(even) td {
+            background: #111827 !important;
+        }
+
+        body.dark-mode #leaderboardTable tbody tr:hover td {
+            background: #1f2937 !important;
+        }
+
         body.dark-mode .leader-rank {
             background: linear-gradient(135deg, #4b2c80, #6b3fa0) !important;
             color: #fdb813 !important;
@@ -874,12 +906,8 @@ body.dark-mode.login-page input:-webkit-autofill:focus,
     <span>College of Computer Studies Sit-in Monitoring System</span>
 
     <div class="nav-menu">
-        <a href="#">Home</a>
-        <a href="#">Community</a>
-        <a href="#">About</a>
         <a href="/" class="active-link">Login</a>
         <a href="/register">Register</a>
-        <a href="#" id="leaderboardBtn" class="nav-menu-link">Leaderboard</a>
     </div>
 </div>
 
@@ -953,37 +981,34 @@ body.dark-mode.login-page input:-webkit-autofill:focus,
         </div>
     </section>
 
+    <div class="leaderboard-card" style="margin:24px auto 0; max-width:860px; width:100%; background:rgba(255,255,255,0.96); border-radius:20px; box-shadow:0 18px 40px rgba(15, 23, 42, 0.08); padding:24px;">
+            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; align-items:center; margin-bottom:18px;">
+                <div>
+                    <h3 style="margin:0; font-size:1.2rem;">Leaderboard</h3>
+                    <p style="margin:6px 0 0; color:var(--text-muted); font-size:0.95rem;">Top students by awarded points</p>
+                </div>
+                <div id="leaderboardFooter" style="color:var(--text-muted); font-size:0.95rem;"></div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table id="leaderboardTable" style="width:100%; border-collapse:collapse; min-width:680px;">
+                    <thead>
+                        <tr style="background:rgba(243,244,246,1); text-align:left;">
+                            <th style="padding:14px 16px; border-bottom:1px solid #e5e7eb;">Rank</th>
+                            <th style="padding:14px 16px; border-bottom:1px solid #e5e7eb;">Student</th>
+                            <th style="padding:14px 16px; border-bottom:1px solid #e5e7eb;">Course / Level</th>
+                            <th style="padding:14px 16px; border-bottom:1px solid #e5e7eb;">Raw Points</th>
+                            <th style="padding:14px 16px; border-bottom:1px solid #e5e7eb;">Completed Sit-ins</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <tr><td colspan="5" style="padding:18px 16px; color:var(--text-muted); text-align:center;">Loading leaderboard…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
 </main>
  
-<!-- Leaderboard modal -->
-<div class="modal-overlay" id="leaderboardModal" aria-hidden="true">
-    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="leaderboardTitle">
-        <div class="modal-header" style="padding:18px 20px; background: linear-gradient(135deg, var(--uc-purple), var(--uc-purple-dark)); border-radius:12px 12px 0 0; color:#fff;">
-            <div style="display:flex; align-items:center; gap:12px;">
-                <div style="width:44px; height:44px; border-radius:10px; background: linear-gradient(135deg, var(--uc-gold), #f59e0b); display:flex; align-items:center; justify-content:center; font-weight:900; color:var(--uc-purple-dark);">🏆</div>
-                <div>
-                    <div class="modal-title" id="leaderboardTitle" style="color:#fff; font-size:18px; font-weight:900;">Leaderboard</div>
-                    <div style="font-size:12px; opacity:0.9;">Top students by awarded points</div>
-                </div>
-            </div>
-            <button id="leaderboardClose" class="modal-close" aria-label="Close leaderboard">✕</button>
-        </div>
-
-        <div class="modal-body" style="padding:18px 20px;">
-            <div style="display:flex; justify-content:space-between; gap:12px; align-items:center; margin-bottom:12px;">
-                <div style="font-weight:800; color:var(--text-muted);">Rank</div>
-                <div style="flex:1; text-align:left; margin-left:12px; font-weight:800; color:var(--text-muted);">Student</div>
-                <div style="text-align:right; width:110px; font-weight:800; color:var(--text-muted);">Points</div>
-            </div>
-
-            <div class="leaderboard-list" id="leaderboardList">
-                <!-- populated by script -->
-            </div>
-
-            <div id="leaderboardFooter" style="margin-top:12px; font-size:13px; color:var(--text-muted);"></div>
-        </div>
-</div>
-
 <script>
 function validateLogin() {
     let valid = true;
@@ -1015,49 +1040,48 @@ function validateLogin() {
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-    const btn = document.getElementById('leaderboardBtn');
-    const modal = document.getElementById('leaderboardModal');
-    const closeBtn = document.getElementById('leaderboardClose');
+    const body = document.getElementById('leaderboardBody');
+    const footer = document.getElementById('leaderboardFooter');
 
-    function openModal(){
-        if(modal){ modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); }
+    function renderLeaderboard(rows) {
+        if (!body) return;
+        if (!rows || rows.length === 0) {
+            body.innerHTML = '<tr><td colspan="5" style="padding:18px 16px; color:var(--text-muted); text-align:center;">No leaderboard data yet.</td></tr>';
+            if (footer) footer.textContent = 'No data available.';
+            return;
+        }
+
+        body.innerHTML = rows.map(item => `
+            <tr>
+                <td style="padding:14px 16px; border-bottom:1px solid #e5e7eb; font-weight:600;">${item.rank}</td>
+                <td style="padding:14px 16px; border-bottom:1px solid #e5e7eb;">
+                    <div style="font-weight:700;">${item.first_name} ${item.last_name}</div>
+                    <div style="font-size:0.95rem; color:var(--text-muted);">${item.id_number}</div>
+                </td>
+                <td style="padding:14px 16px; border-bottom:1px solid #e5e7eb;">${item.course} • ${item.course_level}</td>
+                <td style="padding:14px 16px; border-bottom:1px solid #e5e7eb;">${parseFloat(item.raw_points).toFixed(2)}</td>
+                <td style="padding:14px 16px; border-bottom:1px solid #e5e7eb;">${item.completed_sitins}</td>
+            </tr>
+        `).join('');
+
+        if (footer) footer.textContent = `Showing top ${Math.min(rows.length, 10)} students`;
     }
 
-    function closeModal(){
-        if(modal){ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); }
-    }
-
-    if(btn){ btn.addEventListener('click', function(e){ e.preventDefault(); openModal(); }); }
-    if(closeBtn){ closeBtn.addEventListener('click', closeModal); }
-    if(modal){ modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); }); }
-
-    // sample leaderboard entries (replace or fetch from server as needed)
-    const list = document.getElementById('leaderboardList');
-    if(list){
-        // Fetch leaderboard from server
+    if (body) {
         fetch('/api/leaderboard')
             .then(r => r.json())
             .then(data => {
-                const lb = data.leaderboard || [];
-                if(lb.length === 0){
-                    list.innerHTML = '<div style="color:var(--text-muted);">No leaderboard data yet.</div>';
-                } else {
-                    list.innerHTML = lb.map(item => `\n                        <div class="leaderboard-item">\n                            <div class="leader-rank">${item.rank}</div>\n                            <div class="leader-meta">\n                                <div class="leader-name">${item.first_name} ${item.last_name}</div>\n                                <div class="leader-course">${item.course} • ${item.course_level}</div>\n                            </div>\n                            <div class="leader-points">${parseFloat(item.raw_points).toFixed(2)}</div>\n                        </div>\n                    `).join('');
-                }
-                const footer = document.getElementById('leaderboardFooter');
-                if(footer) footer.textContent = `Showing top ${Math.min(lb.length,10)} students`;
+                renderLeaderboard(data.leaderboard || []);
             })
             .catch(err => {
                 console.error('Leaderboard fetch failed', err);
-                // fallback sample
                 const sample = [
-                    {rank:1, first_name:'Alice', last_name:'Santos', course:'BSCS', course_level:'3', raw_points:120},
-                    {rank:2, first_name:'John', last_name:'Cruz', course:'BSIT', course_level:'2', raw_points:110},
-                    {rank:3, first_name:'Maria', last_name:'Lopez', course:'BSCS', course_level:'4', raw_points:95}
+                    {rank:1, id_number:'2023001', first_name:'Alice', last_name:'Santos', course:'BSCS', course_level:'3', completed_sitins:12, raw_points:120},
+                    {rank:2, id_number:'2023002', first_name:'John', last_name:'Cruz', course:'BSIT', course_level:'2', completed_sitins:10, raw_points:110},
+                    {rank:3, id_number:'2023003', first_name:'Maria', last_name:'Lopez', course:'BSCS', course_level:'4', completed_sitins:8, raw_points:95}
                 ];
-                list.innerHTML = sample.map(item => `\n                    <div class="leaderboard-item">\n                        <div class="leader-rank">${item.rank}</div>\n                        <div class="leader-meta">\n                            <div class="leader-name">${item.first_name} ${item.last_name}</div>\n                            <div class="leader-course">${item.course} • ${item.course_level}</div>\n                        </div>\n                        <div class="leader-points">${parseFloat(item.raw_points).toFixed(2)}</div>\n                    </div>\n                `).join('');
-                const footer = document.getElementById('leaderboardFooter');
-                if(footer) footer.textContent = 'Offline: showing sample entries';
+                renderLeaderboard(sample);
+                if (footer) footer.textContent = 'Offline: showing sample entries';
             });
     }
 });
