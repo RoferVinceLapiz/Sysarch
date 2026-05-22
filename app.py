@@ -5,7 +5,38 @@ from datetime import date, datetime
 from io import BytesIO, StringIO
 import csv
 from docx import Document
+from docx.shared import Inches, Pt, RGBColor
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
+from docx.oxml import parse_xml, OxmlElement
+from docx.oxml.ns import nsdecls, qn
 from openpyxl import Workbook
+from flask import request, jsonify
+
+lab_maintenance = {}
+
+
+def normalize_lab(lab):
+    if lab is None:
+        return ''
+    return str(lab).replace('Lab', '').strip()
+
+
+def is_pc_under_maintenance(lab, pc_number):
+    lab = normalize_lab(lab)
+
+    try:
+        pc_number = int(pc_number)
+    except (TypeError, ValueError):
+        return False
+
+    maintenance_pcs = lab_maintenance.get(lab, [])
+
+    return pc_number in [int(pc) for pc in maintenance_pcs]
+
+
+def block_if_pc_maintenance(lab, pc_number):
+    return is_pc_under_maintenance(lab, pc_number)
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
@@ -17,6 +48,60 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+# =============================================================
+# DOCX CUSTOM VISUAL FORMATTING HELPERS
+# =============================================================
+
+def apply_cell_background(cell, hex_color):
+    """Applies a modern background fill color to an individual table cell."""
+    tcPr = cell._tc.get_or_add_tcPr()
+    shading = parse_xml(f'<w:shd {nsdecls("w")} w:fill="{hex_color}"/>')
+    tcPr.append(shading)
+
+def apply_cell_padding(cell, top=100, bottom=100, left=150, right=150):
+    """Optional: Adds clean internal spacing/padding inside a table cell (in twentieths of a point)."""
+    tcPr = cell._tc.get_or_add_tcPr()
+    tcMar = parse_xml(
+        f'<w:tcMar {nsdecls("w")}>'
+        f'  <w:top w:w="{top}" w:type="dxa"/>'
+        f'  <w:bottom w:w="{bottom}" w:type="dxa"/>'
+        f'  <w:left w:w="{left}" w:type="dxa"/>'
+        f'  <w:right w:w="{right}" w:type="dxa"/>'
+        f'</w:tcMar>'
+    )
+    tcPr.append(tcMar)
+
+def docx_cell_background(cell, hex_color):
+    """Sets background shading tint for individual cell containers."""
+    shading_xml = parse_xml(f'<w:shd {nsdecls("w")} w:fill="{hex_color}"/>')
+    cell._tc.get_or_add_tcPr().append(shading_xml)
+
+def docx_cell_padding(cell, top=100, bottom=100, left=120, right=120):
+    """Configures cell buffer padding heights/widths in dxa units."""
+    tcPr = cell._tc.get_or_add_tcPr()
+    tcMar = OxmlElement('w:tcMar')
+    for margin_side, spacing_val in [('top', top), ('bottom', bottom), ('left', left), ('right', right)]:
+        node = OxmlElement(f'w:{margin_side}')
+        node.set(qn('w:w'), str(spacing_val))
+        node.set(qn('w:type'), 'dxa')
+        tcMar.append(node)
+    tcPr.append(tcMar)
+
+def docx_clean_borders(table):
+    """Replaces default box lines with subtle, modern light-gray row dividers."""
+    tblPr = table._tbl.tblPr
+    borders_str = (
+        f'<w:tblBorders {nsdecls("w")}>'
+        f'  <w:top w:val="single" w:sz="4" w:space="0" w:color="E5E7EB"/>'
+        f'  <w:bottom w:val="single" w:sz="6" w:space="0" w:color="CCCCCC"/>'
+        f'  <w:insideH w:val="single" w:sz="4" w:space="0" w:color="E5E7EB"/>'
+        f'  <w:insideV w:val="none"/>'
+        f'  <w:left w:val="none"/>'
+        f'  <w:right w:val="none"/>'
+        f'</w:tblBorders>'
+    )
+    borders_xml = parse_xml(borders_str)
+    tblPr.append(borders_xml)
 
 
 # =============================================================
@@ -365,11 +450,38 @@ def init_db():
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
+    conn = get_db()
+
+    leaderboard_rows = conn.execute("""
+        SELECT
+            s.id_number,
+            s.first_name,
+            s.last_name,
+            s.course,
+            s.course_level,
+            COUNT(sr.id) AS completed_sitins,
+            COALESCE(SUM(sr.evaluation_points), 0) AS raw_points
+        FROM students s
+        LEFT JOIN sitin_records sr
+            ON s.id_number = sr.id_number
+           AND sr.logout_time IS NOT NULL
+        GROUP BY
+            s.id_number,
+            s.first_name,
+            s.last_name,
+            s.course,
+            s.course_level
+        ORDER BY
+            raw_points DESC,
+            completed_sitins DESC,
+            s.last_name ASC,
+            s.first_name ASC
+        LIMIT 3
+    """).fetchall()
+
     if request.method == 'POST':
         id_number = request.form['id_number']
         password = request.form['password']
-
-        conn = get_db()
 
         admin = conn.execute(
             'SELECT * FROM admins WHERE username = ? AND password = ?',
@@ -388,18 +500,20 @@ def login():
             (id_number, password)
         ).fetchone()
 
-        conn.close()
-
         if student:
             session['student_id'] = student['id_number']
             session['student_name'] = student['first_name']
 
+            conn.close()
             flash(f"Welcome! {student['first_name']} {student['last_name']}", 'success')
             return redirect(url_for('dashboard'))
 
+        conn.close()
         flash('Invalid ID number or password.', 'error')
+        return render_template('login.html', top_students=leaderboard_rows)
 
-    return render_template('login.html')
+    conn.close()
+    return render_template('login.html', top_students=leaderboard_rows)
 
 
 @app.route('/check-pc-availability')
@@ -438,6 +552,9 @@ def check_pc_availability():
     conn.close()
 
     unavailable_pcs = [row['pc_number'] for row in reserved_pcs if row['pc_number'] is not None]
+
+    maintenance_pcs = lab_maintenance.get(str(lab), [])
+    unavailable_pcs = list(set(unavailable_pcs + maintenance_pcs))
 
     return jsonify({'unavailable_pcs': unavailable_pcs})
 
@@ -735,6 +852,8 @@ def api_leaderboard():
                 s.last_name,
                 s.course,
                 s.course_level,
+                s.email,
+                s.address,
                 COUNT(sr.id) AS completed_sitins,
                 COALESCE(SUM(sr.evaluation_points), 0) AS raw_points
             FROM students s
@@ -754,6 +873,8 @@ def api_leaderboard():
                 s.last_name,
                 s.course,
                 s.course_level,
+                s.email,
+                s.address,
                 COUNT(sr.id) AS completed_sitins,
                 COALESCE(SUM(sr.evaluation_points), 0) AS raw_points
             FROM students s
@@ -776,6 +897,13 @@ def api_leaderboard():
         if previous_score is None or raw_points != previous_score:
             displayed_rank = index
 
+        profile_picture_url = None
+        for ext in ('png', 'jpg', 'jpeg', 'webp'):
+            profile_pic_path = os.path.join(app.root_path, 'static', 'uploads', f"{row['id_number']}.{ext}")
+            if os.path.exists(profile_pic_path):
+                profile_picture_url = f"/static/uploads/{row['id_number']}.{ext}"
+                break
+
         leaderboard.append({
             'rank': displayed_rank,
             'id_number': row['id_number'],
@@ -783,15 +911,18 @@ def api_leaderboard():
             'last_name': row['last_name'],
             'course': row['course'],
             'course_level': row['course_level'],
+            'email': row['email'],
+            'address': row['address'],
             'completed_sitins': completed_sitins,
-            'raw_points': raw_points
+            'raw_points': raw_points,
+            'profile_picture': profile_picture_url
         })
 
         previous_score = raw_points
 
     conn.close()
 
-    return jsonify({'leaderboard': leaderboard[:10]})
+    return jsonify({'leaderboard': leaderboard[:3]})
 
 
 @app.route('/students')
@@ -872,6 +1003,23 @@ def reservation():
             conn.close()
             return redirect(url_for('reservation'))
 
+        # Block past date and past time
+        try:
+            selected_datetime = datetime.strptime(
+                f"{reservation_date} {time_in}",
+                "%Y-%m-%d %H:%M"
+            )
+
+            if selected_datetime < datetime.now():
+                flash('You cannot reserve using a past date or past time.', 'error')
+                conn.close()
+                return redirect(url_for('reservation'))
+
+        except ValueError:
+            flash('Invalid reservation date or time.', 'error')
+            conn.close()
+            return redirect(url_for('reservation'))
+
         if lab not in labs:
             flash('Invalid laboratory selected.', 'error')
             conn.close()
@@ -898,6 +1046,11 @@ def reservation():
 
         if pc_number_int < 1 or pc_number_int > 50:
             flash('PC number must be between 1 and 50.', 'error')
+            conn.close()
+            return redirect(url_for('reservation'))
+
+        if is_pc_under_maintenance(lab, pc_number_int):
+            flash(f'PC {pc_number_int} is currently under maintenance.', 'error')
             conn.close()
             return redirect(url_for('reservation'))
 
@@ -969,7 +1122,6 @@ def reservation():
         notification_count=notification_count
     )
 
-
 @app.route('/reservation/pc-status')
 def reservation_pc_status():
     if 'student_id' not in session:
@@ -980,11 +1132,15 @@ def reservation_pc_status():
     time_in = request.args.get('time_in', '').strip()
 
     if not lab or not reservation_date or not time_in:
-        return jsonify({"success": True, "unavailable": []})
+        return jsonify({
+            "success": True,
+            "unavailable": [],
+            "maintenance": [],
+            "reserved": []
+        })
 
     conn = get_db()
 
-    # PCs reserved for the requested lab/date/time (pending or approved)
     reservation_rows = conn.execute('''
         SELECT pc_number
         FROM reservations
@@ -995,7 +1151,6 @@ def reservation_pc_status():
           AND status IN ('Pending', 'Approved')
     ''', (lab, reservation_date, time_in)).fetchall()
 
-    # PCs currently in use by active sit-ins (logout_time IS NULL)
     sitin_rows = conn.execute('''
         SELECT pc_number
         FROM sitin_records
@@ -1006,24 +1161,30 @@ def reservation_pc_status():
 
     conn.close()
 
-    unavailable_set = set()
+    reserved_set = set()
 
     for row in reservation_rows:
         if row['pc_number'] is not None:
-            unavailable_set.add(int(row['pc_number']))
+            reserved_set.add(int(row['pc_number']))
 
     for row in sitin_rows:
         if row['pc_number'] is not None:
-            unavailable_set.add(int(row['pc_number']))
+            reserved_set.add(int(row['pc_number']))
 
-    unavailable = sorted(list(unavailable_set))
+    maintenance_set = set()
+
+    for pc in lab_maintenance.get(str(lab), []):
+        maintenance_set.add(int(pc))
+
+    unavailable_set = reserved_set.union(maintenance_set)
 
     return jsonify({
         "success": True,
-        "unavailable": unavailable
+        "unavailable": sorted(list(unavailable_set)),
+        "maintenance": sorted(list(maintenance_set)),
+        "reserved": sorted(list(reserved_set))
     })
-
-
+    
 @app.route('/sit-summary')
 def sit_summary():
     if 'student_id' not in session:
@@ -1158,6 +1319,27 @@ def admin_dashboard():
         current_sitin=current_sitin,
         admin_user=session['admin_user']
     )
+
+
+from flask import request, jsonify
+
+@app.route('/admin/save-maintenance', methods=['POST'])
+def save_maintenance():
+    data = request.json
+    lab = data['lab']
+    pcs = data['pcs']
+
+    # save to DB or memory
+    save_to_database(lab, pcs)
+
+    return jsonify({"status": "success"})
+
+@app.route('/admin/lab-maintenance/status')
+def lab_maintenance_status():
+    if 'admin_id' not in session and 'student_id' not in session:
+        return jsonify({}), 401
+
+    return jsonify(lab_maintenance)
 
 @app.route('/admin/add-student', methods=['POST'])
 def admin_add_student():
@@ -1325,6 +1507,39 @@ def admin_sitin_report():
         admin_user=session['admin_user']
     )
 
+@app.route('/admin/lab-maintenance/save', methods=['POST'])
+def save_lab_maintenance():
+    if 'admin_id' not in session:
+        return jsonify({
+            "status": "error",
+            "message": "Unauthorized"
+        }), 401
+
+    data = request.get_json() or {}
+
+    lab = str(data.get('lab', '')).replace('Lab', '').strip()
+    pcs = data.get('pcs', [])
+
+    clean_pcs = []
+
+    for pc in pcs:
+        try:
+            pc_int = int(pc)
+            if 1 <= pc_int <= 50:
+                clean_pcs.append(pc_int)
+        except:
+            pass
+
+    lab_maintenance[lab] = sorted(set(clean_pcs))
+
+    return jsonify({
+        "status": "success",
+        "message": f"Maintenance saved for Lab {lab}.",
+        "lab": lab,
+        "maintenance": lab_maintenance[lab]
+    })
+
+
 @app.route('/admin/sitin-report/download/<file_type>')
 def download_sitin_report(file_type):
     if 'admin_id' not in session:
@@ -1336,46 +1551,48 @@ def download_sitin_report(file_type):
 
     headers = [
         'ID Number',
-        'Student Name',
-        'Course',
-        'Year Level',
+        'Name',
         'Purpose',
-        'Lab',
-        'Time In',
-        'Time Out',
-        'Duration',
-        'Cleanliness',
-        '1 Hour Sit-in',
-        'Task Completed',
-        'Raw Points',
-        'Admin Note'
+        'Laboratory',
+        'Login',
+        'Logout',
+        'Date'
     ]
 
     data = []
 
     for row in rows:
-        if row['duration_minutes'] is not None:
-            hours = row['duration_minutes'] // 60
-            minutes = row['duration_minutes'] % 60
-            duration = f'{hours} hr {minutes} min'
-        else:
-            duration = 'Active'
+        login_value = row['login_time'] or ''
+        logout_value = row['logout_time'] or ''
+
+        login_date = ''
+        login_time = ''
+        logout_time = '—'
+
+        if login_value:
+            try:
+                login_dt = datetime.strptime(login_value, '%Y-%m-%d %H:%M:%S')
+                login_date = login_dt.strftime('%Y-%m-%d')
+                login_time = login_dt.strftime('%H:%M:%S')
+            except:
+                login_date = login_value[:10]
+                login_time = login_value[11:19] if len(login_value) >= 19 else login_value
+
+        if logout_value:
+            try:
+                logout_dt = datetime.strptime(logout_value, '%Y-%m-%d %H:%M:%S')
+                logout_time = logout_dt.strftime('%H:%M:%S')
+            except:
+                logout_time = logout_value[11:19] if len(logout_value) >= 19 else logout_value
 
         data.append([
             row['id_number'],
             f"{row['first_name']} {row['last_name']}",
-            row['course'],
-            row['course_level'],
             row['purpose'],
-            row['lab'],
-            row['login_time'],
-            row['logout_time'] if row['logout_time'] else 'Active',
-            duration,
-            'Yes' if row['evaluation_cleanliness'] else 'No',
-            'Yes' if row['evaluation_hours'] else 'No',
-            'Yes' if row['evaluation_task'] else 'No',
-            f"{row['evaluation_points'] or 0:.2f}",
-            row['evaluation_note'] or ''
+            f"Lab {row['lab']}",
+            login_time,
+            logout_time,
+            login_date
         ])
 
     if file_type == 'csv':
@@ -1389,27 +1606,98 @@ def download_sitin_report(file_type):
             output.getvalue(),
             mimetype='text/csv',
             headers={
-                'Content-Disposition': 'attachment; filename=sitin_report.csv'
+                'Content-Disposition': 'attachment; filename=ccs_sitin_report.csv'
             }
         )
 
-    if file_type == 'docx':
+    elif file_type == 'docx':
         document = Document()
-        document.add_heading('Sit-in Report', 0)
+
+        for section in document.sections:
+            section.top_margin = Inches(0.45)
+            section.bottom_margin = Inches(0.45)
+            section.left_margin = Inches(0.55)
+            section.right_margin = Inches(0.55)
+
+        normal_style = document.styles['Normal']
+        normal_style.font.name = 'Arial'
+        normal_style.font.size = Pt(9)
+
+        top_line = document.add_paragraph()
+        top_line.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+        top_run = top_line.add_run('University of Cebu-Main Campus System Monitoring Reports')
+        top_run.font.name = 'Arial'
+        top_run.font.size = Pt(8)
+        top_run.font.bold = True
+
+        title = document.add_paragraph()
+        title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+        title_run = title.add_run('College Of Computer Studies Reports')
+        title_run.font.name = 'Times New Roman'
+        title_run.font.size = Pt(20)
+        title_run.font.bold = True
+        title_run.font.color.rgb = RGBColor(0x22, 0x22, 0x22)
+
+        document.add_paragraph('')
+
+        info_table = document.add_table(rows=1, cols=2)
+        info_table.alignment = WD_TABLE_ALIGNMENT.CENTER
+        info_table.autofit = False
+
+        info_table.cell(0, 0).text = datetime.now().strftime('%d/%m/%Y, %H:%M')
+        info_table.cell(0, 1).text = f'Total Records: {len(data)}'
+
+        for cell in info_table.rows[0].cells:
+            for paragraph in cell.paragraphs:
+                for run in paragraph.runs:
+                    run.font.name = 'Arial'
+                    run.font.size = Pt(8)
+                    run.font.bold = True
+
+        document.add_paragraph('')
 
         table = document.add_table(rows=1, cols=len(headers))
+        table.alignment = WD_TABLE_ALIGNMENT.CENTER
+        table.autofit = True
         table.style = 'Table Grid'
 
         header_cells = table.rows[0].cells
 
         for index, header in enumerate(headers):
             header_cells[index].text = header
+            header_cells[index].vertical_alignment = WD_ALIGN_VERTICAL.CENTER
+
+            apply_cell_background(header_cells[index], 'F8F8F8')
+            apply_cell_padding(header_cells[index], top=90, bottom=90, left=80, right=80)
+
+            paragraph = header_cells[index].paragraphs[0]
+            paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+            for run in paragraph.runs:
+                run.font.name = 'Arial'
+                run.font.size = Pt(8)
+                run.font.bold = True
+                run.font.color.rgb = RGBColor(0x55, 0x55, 0x55)
 
         for row_data in data:
             row_cells = table.add_row().cells
 
             for index, value in enumerate(row_data):
                 row_cells[index].text = str(value)
+                row_cells[index].vertical_alignment = WD_ALIGN_VERTICAL.CENTER
+
+                apply_cell_background(row_cells[index], 'FFFFFF')
+                apply_cell_padding(row_cells[index], top=80, bottom=80, left=80, right=80)
+
+                paragraph = row_cells[index].paragraphs[0]
+                paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+                for run in paragraph.runs:
+                    run.font.name = 'Arial'
+                    run.font.size = Pt(8)
+                    run.font.color.rgb = RGBColor(0x44, 0x44, 0x44)
 
         file_stream = BytesIO()
         document.save(file_stream)
@@ -1418,19 +1706,30 @@ def download_sitin_report(file_type):
         return send_file(
             file_stream,
             as_attachment=True,
-            download_name='sitin_report.docx',
+            download_name=f"ccs_sitin_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.docx",
             mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
 
-    if file_type == 'xlsx':
+    elif file_type == 'xlsx':
         workbook = Workbook()
         sheet = workbook.active
-        sheet.title = 'Sit-in Report'
+        sheet.title = 'CCS Sit-in Report'
 
         sheet.append(headers)
 
         for row_data in data:
             sheet.append(row_data)
+
+        for column_cells in sheet.columns:
+            max_length = 0
+            column_letter = column_cells[0].column_letter
+
+            for cell in column_cells:
+                value = str(cell.value) if cell.value is not None else ''
+                if len(value) > max_length:
+                    max_length = len(value)
+
+            sheet.column_dimensions[column_letter].width = min(max_length + 4, 35)
 
         file_stream = BytesIO()
         workbook.save(file_stream)
@@ -1439,32 +1738,13 @@ def download_sitin_report(file_type):
         return send_file(
             file_stream,
             as_attachment=True,
-            download_name='sitin_report.xlsx',
+            download_name=f"ccs_sitin_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
             mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         )
 
-    flash('Invalid download file type.', 'error')
-    return redirect(url_for('admin_sitin_report'))
-
-@app.route('/admin/announce', methods=['POST'])
-def admin_announce():
-    if 'admin_id' not in session:
-        return redirect(url_for('login'))
-
-    message = request.form['message']
-
-    conn = get_db()
-    conn.execute(
-        "INSERT INTO announcements (message, posted_at) VALUES (?, datetime('now'))",
-        (message,)
-    )
-    conn.commit()
-    conn.close()
-
-    notify_all_students(f'New announcement posted by admin: {message}')
-
-    flash("Announcement posted!", "success")
-    return redirect(url_for('admin_dashboard'))
+    else:
+        flash('Invalid download file type.', 'error')
+        return redirect(url_for('admin_sitin_report'))
 
 
 @app.route('/admin/delete-announcement/<int:ann_id>', methods=['POST'])
@@ -1608,78 +1888,111 @@ def admin_sitin():
     sitin_date = request.form.get('date')
     sitin_time = request.form.get('time')
 
-    if id_number and purpose and lab and pc_number and sitin_date and sitin_time:
-        conn = get_db()
+    # Auto-fill date/time if empty
+    if not sitin_date:
+        sitin_date = datetime.now().strftime('%Y-%m-%d')
 
-        session_info = get_student_session_info(conn, id_number)
+    if not sitin_time:
+        sitin_time = datetime.now().strftime('%H:%M')
 
-        if session_info['remaining_sessions'] <= 0:
-            conn.close()
-            flash(f'Student {id_number} has no remaining sessions.', 'error')
-            return redirect(url_for('admin_sitin_records'))
-
-        existing = conn.execute(
-            'SELECT id FROM sitin_records WHERE id_number = ? AND logout_time IS NULL',
-            (id_number,)
-        ).fetchone()
-
-        if existing:
-            conn.close()
-            flash(f'Student {id_number} is already sitting in! Log them out first.', 'error')
-            return redirect(url_for('admin_sitin_records'))
-
-        login_time = f"{sitin_date} {sitin_time}:00"
-
-        conn.execute('''
-            INSERT INTO sitin_records (id_number, purpose, lab, pc_number, login_time)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (id_number, purpose, lab, int(pc_number), login_time))
-
-        # If the student had a pending reservation that matches this sit-in, mark it as Approved
-        try:
-            pending_res = conn.execute('''
-                SELECT id FROM reservations
-                WHERE id_number = ?
-                  AND lab = ?
-                  AND date = ?
-                  AND time_in = ?
-                  AND pc_number = ?
-                  AND status = 'Pending'
-                LIMIT 1
-            ''', (id_number, lab, sitin_date, sitin_time, int(pc_number))).fetchone()
-
-            if pending_res:
-                conn.execute('''
-                    UPDATE reservations
-                    SET status = 'Approved'
-                    WHERE id = ?
-                ''', (pending_res['id'],))
-                # notify student about reservation approval
-                add_notification(
-                    id_number,
-                    f"Your reservation for Lab {lab}, PC {pc_number} on {sitin_date} {sitin_time} has been approved and converted to an active sit-in."
-                )
-        except Exception:
-            # if anything goes wrong with reservation update, continue without blocking sit-in
-            pass
-
-        student = conn.execute(
-            'SELECT first_name, last_name FROM students WHERE id_number = ?',
-            (id_number,)
-        ).fetchone()
-
-        conn.commit()
-        conn.close()
-
-        if student:
-            add_notification(
-                id_number,
-                f"You have been logged in for sit-in by admin. Purpose: {purpose}, Lab: {lab}, PC {pc_number}, Date {sitin_date}, Time {sitin_time}."
-            )
-
-        flash(f'Student {id_number} successfully sat-in for {sitin_date} {sitin_time} at Lab {lab}, PC {pc_number}.', 'success')
-    else:
+    # Required fields, but date/time are already auto-filled above
+    if not id_number or not purpose or not lab or not pc_number:
         flash('Please complete all Sit-In fields.', 'error')
+        return redirect(url_for('admin_sitin_records'))
+
+    try:
+        pc_number_int = int(pc_number)
+    except ValueError:
+        flash('Invalid PC number selected.', 'error')
+        return redirect(url_for('admin_sitin_records'))
+
+    conn = get_db()
+
+    session_info = get_student_session_info(conn, id_number)
+
+    if block_if_pc_maintenance(lab, pc_number_int):
+        conn.close()
+        flash(f'PC {pc_number_int} in Lab {lab} is currently UNDER MAINTENANCE.', 'error')
+        return redirect(url_for('admin_sitin_records'))
+
+    if session_info['remaining_sessions'] <= 0:
+        conn.close()
+        flash(f'Student {id_number} has no remaining sessions.', 'error')
+        return redirect(url_for('admin_sitin_records'))
+
+    existing = conn.execute(
+        'SELECT id FROM sitin_records WHERE id_number = ? AND logout_time IS NULL',
+        (id_number,)
+    ).fetchone()
+
+    if existing:
+        conn.close()
+        flash(f'Student {id_number} is already sitting in! Log them out first.', 'error')
+        return redirect(url_for('admin_sitin_records'))
+
+    active_pc = conn.execute('''
+        SELECT id
+        FROM sitin_records
+        WHERE lab = ?
+          AND pc_number = ?
+          AND logout_time IS NULL
+        LIMIT 1
+    ''', (lab, pc_number_int)).fetchone()
+
+    if active_pc:
+        conn.close()
+        flash(f'PC {pc_number_int} in Lab {lab} is already in use.', 'error')
+        return redirect(url_for('admin_sitin_records'))
+
+    login_time = f"{sitin_date} {sitin_time}:00"
+
+    conn.execute('''
+        INSERT INTO sitin_records (id_number, purpose, lab, pc_number, login_time)
+        VALUES (?, ?, ?, ?, ?)
+    ''', (id_number, purpose, lab, pc_number_int, login_time))
+
+    # If the student had a pending reservation that matches this sit-in, mark it as Approved
+    try:
+        pending_res = conn.execute('''
+            SELECT id
+            FROM reservations
+            WHERE id_number = ?
+              AND lab = ?
+              AND date = ?
+              AND time_in = ?
+              AND pc_number = ?
+              AND status = 'Pending'
+            LIMIT 1
+        ''', (id_number, lab, sitin_date, sitin_time, pc_number_int)).fetchone()
+
+        if pending_res:
+            conn.execute('''
+                UPDATE reservations
+                SET status = 'Approved'
+                WHERE id = ?
+            ''', (pending_res['id'],))
+
+    except Exception:
+        pass
+
+    student = conn.execute(
+        'SELECT first_name, last_name FROM students WHERE id_number = ?',
+        (id_number,)
+    ).fetchone()
+
+    conn.commit()
+    conn.close()
+
+    if student:
+        add_notification(
+            id_number,
+            f"You have been logged in for sit-in by admin. Purpose: {purpose}, Lab: {lab}, PC {pc_number_int}, Date {sitin_date}, Time {sitin_time}."
+        )
+
+    flash(
+        f'Student {id_number} successfully sat-in for {sitin_date} {sitin_time} at Lab {lab}, PC {pc_number_int}.',
+        'success'
+    )
 
     return redirect(url_for('admin_sitin_records'))
 

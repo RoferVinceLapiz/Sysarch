@@ -2,7 +2,7 @@
      REUSABLE ADMIN MODALS
      Quick Search Modal + Sit-In Form Modal
      Put this file in: templates/admin_modals.html
-     Include before darkmode.js in every admin page:
+     Include before darkmode.js in every admin page
 ========================================================= -->
 
 <style>
@@ -18,14 +18,14 @@
     z-index: 100000;
     background: rgba(15, 15, 20, 0.72);
     backdrop-filter: blur(9px);
-    align-items: flex-start;
     justify-content: center;
-    padding: 40px 24px;
-    overflow-y: auto;
+    padding: 24px;
 }
 
-#sitInFormModal {
-    -webkit-overflow-scrolling: touch;
+/* SEARCH MODAL */
+.admin-search-overlay {
+    align-items: flex-start;
+    overflow-y: auto;
 }
 
 .admin-search-modal {
@@ -82,6 +82,26 @@
     padding: 24px 26px 28px;
     overflow-y: auto;
     background: #ffffff;
+    scrollbar-width: thin;
+    scrollbar-color: #fdb813 #ffffff;
+}
+
+.admin-search-body::-webkit-scrollbar,
+#studentsList::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+}
+
+.admin-search-body::-webkit-scrollbar-track,
+#studentsList::-webkit-scrollbar-track {
+    background: #ffffff;
+    border-radius: 999px;
+}
+
+.admin-search-body::-webkit-scrollbar-thumb,
+#studentsList::-webkit-scrollbar-thumb {
+    background: #fdb813;
+    border-radius: 999px;
 }
 
 .admin-search-label {
@@ -120,6 +140,9 @@
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 20px;
+    max-height: 470px;
+    overflow-y: auto;
+    padding-right: 8px;
 }
 
 .admin-student-card {
@@ -225,20 +248,64 @@
    SIT-IN FORM MODAL
 ========================================================= */
 
-.admin-sitin-form-card {
-    width: min(540px, 100%);
-    max-height: 90vh;
+#sitInFormModal {
+    align-items: center;
+    overflow: hidden;
+}
+
+#sitInFormModal .admin-sitin-form-card {
+    width: min(640px, 100%);
+    height: 82vh;
+    max-height: 82vh;
     overflow: hidden;
     border-radius: 22px;
-    background: #ffffff;
-    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.38);
+    background: #111827;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.40);
+    border: 1px solid rgba(253, 184, 19, 0.28);
     display: flex;
     flex-direction: column;
 }
 
+#sitInFormModal form {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.admin-sitin-form-header {
+    flex: 0 0 auto;
+}
+
 .admin-sitin-form-body {
-    padding: 26px 22px;
-    background: #ffffff;
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 24px 22px 28px;
+    background: #111827;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #fdb813 #111827;
+}
+
+.admin-sitin-form-body::-webkit-scrollbar {
+    width: 10px;
+}
+
+.admin-sitin-form-body::-webkit-scrollbar-track {
+    background: #111827;
+    border-radius: 999px;
+}
+
+.admin-sitin-form-body::-webkit-scrollbar-thumb {
+    background: #fdb813;
+    border-radius: 999px;
+    border: 2px solid #111827;
+}
+
+.admin-sitin-form-body::-webkit-scrollbar-thumb:hover {
+    background: #ffca2c;
 }
 
 .admin-sitin-form-group {
@@ -249,7 +316,7 @@
 .admin-sitin-form-row label {
     display: block;
     margin-bottom: 8px;
-    color: #111827;
+    color: #ffffff;
     font-size: 12px;
     font-weight: 950;
     text-transform: uppercase;
@@ -263,30 +330,25 @@
     margin-bottom: 16px;
 }
 
-.admin-sitin-form-card input,
-.admin-sitin-form-card select {
-    width: 100%;
-    min-height: 42px;
-    border-radius: 12px;
-    border: 1.6px solid #e5e7eb;
-    background: #f8fafc;
-    color: #111827;
-    padding: 10px 12px;
-    font-size: 13px;
-    font-weight: 850;
-    outline: none;
-}
 
 .admin-sitin-form-card input:focus,
 .admin-sitin-form-card select:focus {
-    border-color: #4b2c80;
-    box-shadow: 0 0 0 4px rgba(75, 44, 128, 0.12);
+    border-color: #fdb813;
+    box-shadow:
+        0 0 0 4px rgba(253, 184, 19, 0.18),
+        0 0 24px rgba(253, 184, 19, 0.16);
+}
+
+.admin-sitin-form-card option {
+    background: #020617;
+    color: #ffffff;
 }
 
 .admin-sitin-form-footer {
+    flex: 0 0 auto;
     padding: 14px 22px;
-    background: #f8fafc;
-    border-top: 1px solid #e5e7eb;
+    background: #111827;
+    border-top: 1px solid rgba(148, 163, 184, 0.28);
     display: flex;
     justify-content: flex-end;
     gap: 10px;
@@ -295,10 +357,13 @@
 .admin-modal-btn {
     border: none;
     border-radius: 999px;
-    padding: 9px 16px;
+    padding: 10px 18px;
     font-size: 13px;
     font-weight: 950;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .admin-modal-btn-close {
@@ -311,10 +376,169 @@
     color: #ffffff;
 }
 
-/* =========================================================
-   DARK MODE
-========================================================= */
+.admin-modal-btn-submit:hover {
+    background: linear-gradient(135deg, #fdb813, #f59e0b);
+    color: #2d1a4d;
+}
 
+/* PC GRID */
+.admin-sitin-form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.sitin-pc-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: #0f172a;
+    border: 1px solid rgba(253, 184, 19, 0.35);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.sitin-pc-legend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    color: #dbeafe;
+    font-size: 11px;
+}
+
+.sitin-pc-legend .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.sitin-pc-legend .dot.available {
+    background: #16a34a;
+}
+
+.sitin-pc-legend .dot.maintenance {
+    background: #dc2626;
+}
+
+.sitin-pc-legend .dot.selected {
+    background: #fdb813;
+}
+
+.sitin-pc-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+    padding: 10px;
+    border-radius: 18px;
+    background: #0f172a;
+    border: 1px solid rgba(253, 184, 19, 0.25);
+    overflow: visible;
+}
+
+.sitin-pc-card {
+    position: relative;
+    min-height: 54px;
+    border: 1.8px solid rgba(34, 197, 94, 0.55);
+    border-radius: 13px;
+    background: rgba(22, 163, 74, 0.22);
+    color: #ffffff;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    font-weight: 950;
+    padding: 8px 11px;
+    transition: all 0.22s ease;
+}
+
+.sitin-pc-card strong {
+    color: #ffffff;
+    font-size: 13px;
+    line-height: 1.1;
+}
+
+.sitin-pc-card small {
+    margin-top: 3px;
+    color: #bbf7d0;
+    font-size: 10px;
+    font-weight: 850;
+}
+
+.sitin-pc-card:hover {
+    transform: translateY(-2px);
+    border-color: #86efac;
+    box-shadow: 0 10px 20px rgba(22, 163, 74, 0.18);
+}
+
+.sitin-pc-card.selected {
+    background: linear-gradient(135deg, #4b2c80, #6b3fa0);
+    border-color: #fdb813;
+    box-shadow:
+        0 0 0 3px rgba(253, 184, 19, 0.18),
+        0 12px 26px rgba(75, 44, 128, 0.30);
+}
+
+.sitin-pc-card.selected small {
+    color: #fde68a;
+}
+
+.sitin-pc-card .pc-check {
+    display: none;
+    position: absolute;
+    top: 7px;
+    right: 9px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fdb813;
+    color: #2d1a4d;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 950;
+}
+
+.sitin-pc-card.selected .pc-check {
+    display: inline-flex;
+}
+
+.sitin-pc-card.maintenance {
+    background: rgba(220, 38, 38, 0.24);
+    border-color: #ef4444;
+    opacity: 0.95;
+    cursor: not-allowed;
+}
+
+.sitin-pc-card.maintenance strong {
+    color: #ffffff;
+}
+
+.sitin-pc-card.maintenance small {
+    color: #fecaca;
+}
+
+.sitin-pc-card.maintenance:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.sitin-pc-card:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.sitin-pc-card:disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* DARK MODE */
 body.dark-mode .admin-search-overlay,
 body.dark-mode #sitInFormModal {
     background: rgba(0, 0, 0, 0.78);
@@ -409,53 +633,105 @@ body.dark-mode .admin-select-student-btn:hover {
     -webkit-text-fill-color: #1e1038 !important;
 }
 
-body.dark-mode .admin-search-body::-webkit-scrollbar,
-body.dark-mode #studentsList::-webkit-scrollbar {
-    width: 9px !important;
-    height: 9px !important;
-}
-
-body.dark-mode .admin-search-body::-webkit-scrollbar-track,
-body.dark-mode #studentsList::-webkit-scrollbar-track {
-    background: #0f172a !important;
-    border-radius: 999px !important;
-}
-
-body.dark-mode .admin-search-body::-webkit-scrollbar-thumb,
-body.dark-mode #studentsList::-webkit-scrollbar-thumb {
-    background: #fdb813 !important;
-    border-radius: 999px !important;
-    border: 2px solid #0f172a !important;
-}
-
-@media (max-width: 900px) {
-    #studentsList {
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    }
-}
-
-@media (max-width: 520px) {
-    #studentsList {
-        grid-template-columns: 1fr !important;
-    }
-
-    .admin-sitin-form-row {
-        grid-template-columns: 1fr;
-    }
-}
-
 /* =========================================================
-   FINAL OVERRIDE - SIT-IN FORM DARK MODE INPUT FIX
-   Paste this at the VERY BOTTOM of admin_modals.html <style>
+   FINAL COLOR FIX: SIT-IN FORM LIGHT + DARK MODE
+   Paste at the VERY BOTTOM of admin_modals.html <style>
 ========================================================= */
 
+/* ---------- LIGHT MODE ---------- */
+body:not(.dark-mode) #sitInFormModal .admin-sitin-form-card {
+    background: #ffffff !important;
+    color: #111827 !important;
+    border: 1px solid rgba(75, 44, 128, 0.18) !important;
+}
+
+body:not(.dark-mode) #sitInFormModal .admin-sitin-form-body {
+    background: #ffffff !important;
+    color: #111827 !important;
+}
+
+body:not(.dark-mode) #sitInFormModal .admin-sitin-form-footer {
+    background: #f8fafc !important;
+    border-top: 1px solid #e5e7eb !important;
+}
+
+body:not(.dark-mode) #sitInFormModal label,
+body:not(.dark-mode) #sitInFormModal .admin-sitin-form-group label,
+body:not(.dark-mode) #sitInFormModal .admin-sitin-form-row label {
+    color: #111827 !important;
+    -webkit-text-fill-color: #111827 !important;
+    text-shadow: none !important;
+}
+
+body:not(.dark-mode) #sitInFormModal input,
+body:not(.dark-mode) #sitInFormModal select,
+body:not(.dark-mode) #sitInFormModal textarea {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    -webkit-text-fill-color: #111827 !important;
+    caret-color: #111827 !important;
+    border: 2px solid rgba(75, 44, 128, 0.28) !important;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06) !important;
+    opacity: 1 !important;
+}
+
+body:not(.dark-mode) #sitInFormModal input[readonly],
+body:not(.dark-mode) #sitInFormModal input:disabled,
+body:not(.dark-mode) #sitInFormModal select:disabled {
+    background: #f8fafc !important;
+    color: #111827 !important;
+    -webkit-text-fill-color: #111827 !important;
+    border-color: rgba(75, 44, 128, 0.25) !important;
+    opacity: 1 !important;
+}
+
+body:not(.dark-mode) #sitInFormModal input::placeholder,
+body:not(.dark-mode) #sitInFormModal textarea::placeholder {
+    color: #64748b !important;
+    -webkit-text-fill-color: #64748b !important;
+    opacity: 1 !important;
+}
+
+body:not(.dark-mode) #sitInFormModal select option {
+    background: #ffffff !important;
+    color: #111827 !important;
+}
+
+body:not(.dark-mode) #sitInFormModal input:focus,
+body:not(.dark-mode) #sitInFormModal select:focus,
+body:not(.dark-mode) #sitInFormModal textarea:focus {
+    border-color: #4b2c80 !important;
+    box-shadow:
+        0 0 0 4px rgba(75, 44, 128, 0.12),
+        0 12px 24px rgba(75, 44, 128, 0.10) !important;
+}
+
+/* light mode PC toolbar */
+body:not(.dark-mode) #sitInFormModal .sitin-pc-toolbar {
+    background: #f8f5ff !important;
+    border: 1px solid #ede9fe !important;
+    color: #4b2c80 !important;
+}
+
+body:not(.dark-mode) #sitInFormModal .sitin-pc-legend {
+    color: #475569 !important;
+}
+
+body:not(.dark-mode) #sitInFormModal .sitin-pc-grid {
+    background: #f8fafc !important;
+    border: 1px solid #e5e7eb !important;
+}
+
+/* ---------- DARK MODE ---------- */
 body.dark-mode #sitInFormModal .admin-sitin-form-card {
     background: #0f172a !important;
     color: #f8fafc !important;
+    border: 1px solid rgba(253, 184, 19, 0.28) !important;
 }
 
 body.dark-mode #sitInFormModal .admin-sitin-form-body {
-    background: #0f172a !important;
+    background: #111827 !important;
     color: #f8fafc !important;
 }
 
@@ -469,16 +745,12 @@ body.dark-mode #sitInFormModal .admin-sitin-form-group label,
 body.dark-mode #sitInFormModal .admin-sitin-form-row label {
     color: #ffffff !important;
     -webkit-text-fill-color: #ffffff !important;
-    font-weight: 950 !important;
+    text-shadow: none !important;
 }
 
-/* This is the important part */
 body.dark-mode #sitInFormModal input,
 body.dark-mode #sitInFormModal select,
-body.dark-mode #sitInFormModal textarea,
-body.dark-mode #sitInFormModal .admin-sitin-form-card input,
-body.dark-mode #sitInFormModal .admin-sitin-form-card select,
-body.dark-mode #sitInFormModal .admin-sitin-form-card textarea {
+body.dark-mode #sitInFormModal textarea {
     background: #020617 !important;
     background-color: #020617 !important;
     color: #ffffff !important;
@@ -491,7 +763,16 @@ body.dark-mode #sitInFormModal .admin-sitin-form-card textarea {
     opacity: 1 !important;
 }
 
-/* Placeholder text */
+body.dark-mode #sitInFormModal input[readonly],
+body.dark-mode #sitInFormModal input:disabled,
+body.dark-mode #sitInFormModal select:disabled {
+    background: #020617 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: 2px solid rgba(253, 184, 19, 0.55) !important;
+    opacity: 1 !important;
+}
+
 body.dark-mode #sitInFormModal input::placeholder,
 body.dark-mode #sitInFormModal textarea::placeholder {
     color: #94a3b8 !important;
@@ -499,88 +780,99 @@ body.dark-mode #sitInFormModal textarea::placeholder {
     opacity: 1 !important;
 }
 
-/* Disabled / readonly fields */
-body.dark-mode #sitInFormModal input[readonly],
-body.dark-mode #sitInFormModal input:disabled,
-body.dark-mode #sitInFormModal select:disabled,
-body.dark-mode #sitInFormModal textarea:disabled {
-    background: #020617 !important;
-    background-color: #020617 !important;
-    color: #ffffff !important;
-    -webkit-text-fill-color: #ffffff !important;
-    border: 2px solid rgba(253, 184, 19, 0.55) !important;
-    opacity: 1 !important;
-}
-
-/* Select dropdown option colors */
 body.dark-mode #sitInFormModal select option {
     background: #020617 !important;
     color: #ffffff !important;
 }
 
-/* Focus glow */
 body.dark-mode #sitInFormModal input:focus,
 body.dark-mode #sitInFormModal select:focus,
 body.dark-mode #sitInFormModal textarea:focus {
     border-color: #fdb813 !important;
-    outline: none !important;
     box-shadow:
         0 0 0 4px rgba(253, 184, 19, 0.18),
         0 0 24px rgba(253, 184, 19, 0.16) !important;
 }
 
-/* Fix Chrome autofill white background */
-body.dark-mode #sitInFormModal input:-webkit-autofill,
-body.dark-mode #sitInFormModal input:-webkit-autofill:hover,
-body.dark-mode #sitInFormModal input:-webkit-autofill:focus,
-body.dark-mode #sitInFormModal select:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 1000px #020617 inset !important;
-    -webkit-text-fill-color: #ffffff !important;
-    caret-color: #ffffff !important;
-}
-</style>
-
-<style>
-/* Ensure sit-in modal action buttons are always visible */
-#sitInFormModal .admin-sitin-form-footer .admin-modal-btn-submit {
-    display: inline-flex !important;
-    z-index: 99999;
+/* dark mode PC toolbar */
+body.dark-mode #sitInFormModal .sitin-pc-toolbar {
+    background: #0f172a !important;
+    border: 1px solid rgba(253, 184, 19, 0.35) !important;
+    color: #ffffff !important;
 }
 
-#sitInFormModal .admin-sitin-form-footer .admin-modal-btn {
-    display: inline-flex !important;
-}
-</style>
-
-<style>
-/* Make sit-in modal content scrollable and keep footer visible */
-#sitInFormModal .admin-sitin-form-card {
-    display: flex !important;
-    flex-direction: column !important;
-    max-height: 93vh !important;
-    width: min(540px, 100%) !important;
-    margin: 20px auto !important;
-    overflow: hidden !important;
+body.dark-mode #sitInFormModal .sitin-pc-legend {
+    color: #dbeafe !important;
 }
 
-#sitInFormModal .admin-sitin-form-body {
-    overflow-y: scroll !important;
-    -webkit-overflow-scrolling: touch !important;
-    flex: 1 1 auto !important;
-    min-height: 0 !important;
-    padding: 18px 20px 140px !important;
+body.dark-mode #sitInFormModal .sitin-pc-grid {
+    background: #0f172a !important;
+    border: 1px solid rgba(253, 184, 19, 0.25) !important;
 }
 
-#sitInFormModal .admin-sitin-form-footer {
-    position: sticky !important;
-    bottom: 0 !important;
-    padding: 14px 22px !important;
-    background: #f8fafc !important;
-    border-top: 1px solid #e5e7eb !important;
-    display: flex !important;
-    justify-content: flex-end !important;
-    gap: 10px !important;
-    flex-shrink: 0 !important;
+/* ---------- SCROLLBAR COLOR BOTH MODES ---------- */
+#sitInFormModal .admin-sitin-form-body::-webkit-scrollbar {
+    width: 10px !important;
+}
+
+#sitInFormModal .admin-sitin-form-body::-webkit-scrollbar-track {
+    background: #111827 !important;
+    border-radius: 999px !important;
+}
+
+#sitInFormModal .admin-sitin-form-body::-webkit-scrollbar-thumb {
+    background: #fdb813 !important;
+    border-radius: 999px !important;
+    border: 2px solid #111827 !important;
+}
+
+/* RESPONSIVE */
+@media (max-height: 780px) {
+    #sitInFormModal .admin-sitin-form-card {
+        height: 88vh;
+        max-height: 88vh;
+    }
+
+    .sitin-pc-card {
+        min-height: 48px;
+    }
+}
+
+@media (max-width: 900px) {
+    #studentsList {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+@media (max-width: 650px) {
+    #sitInFormModal .admin-sitin-form-card {
+        width: 100%;
+        height: 92vh;
+        max-height: 92vh;
+    }
+
+    .admin-sitin-form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .sitin-pc-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .sitin-pc-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    #studentsList {
+        grid-template-columns: 1fr !important;
+    }
+
+    .sitin-pc-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 </style>
 
@@ -632,7 +924,7 @@ body.dark-mode #sitInFormModal select:-webkit-autofill {
             </button>
         </div>
 
-        <form action="{{ url_for('admin_sitin') }}" method="POST">
+        <form action="{{ url_for('admin_sitin') }}" method="POST" id="adminSitInForm">
             <div class="admin-sitin-form-body">
                 <div class="admin-sitin-form-group">
                     <label>ID Number</label>
@@ -647,7 +939,6 @@ body.dark-mode #sitInFormModal select:-webkit-autofill {
                 <div class="admin-sitin-form-row">
                     <div>
                         <label>Purpose</label>
-
                         <select name="purpose" required>
                             <option value="" disabled selected>Select purpose</option>
                             <option value="C Programming">C Programming</option>
@@ -661,7 +952,6 @@ body.dark-mode #sitInFormModal select:-webkit-autofill {
 
                     <div>
                         <label>Lab</label>
-
                         <select name="lab" id="sitInLab" required>
                             <option value="" disabled selected>Select lab</option>
                             <option value="524">524</option>
@@ -677,76 +967,39 @@ body.dark-mode #sitInFormModal select:-webkit-autofill {
                 <div class="admin-sitin-form-row">
                     <div>
                         <label>Date</label>
-                        <input type="date" name="date" id="sitInDate" required>
+                        <input type="date" name="date" id="sitInDate" required readonly>
                     </div>
-
                     <div>
                         <label>Time</label>
-                        <input type="time" name="time" id="sitInTime" required>
+                        <input type="time" name="time" id="sitInTime" required readonly>
                     </div>
                 </div>
 
-                <div class="admin-sitin-form-row">
-                    <div>
-                        <label>PC</label>
-                        <select name="pc_number" id="sitInPC" required>
-                            <option value="" disabled selected>Select PC</option>
-                            <option value="1">PC 1</option>
-                            <option value="2">PC 2</option>
-                            <option value="3">PC 3</option>
-                            <option value="4">PC 4</option>
-                            <option value="5">PC 5</option>
-                            <option value="6">PC 6</option>
-                            <option value="7">PC 7</option>
-                            <option value="8">PC 8</option>
-                            <option value="9">PC 9</option>
-                            <option value="10">PC 10</option>
-                            <option value="11">PC 11</option>
-                            <option value="12">PC 12</option>
-                            <option value="13">PC 13</option>
-                            <option value="14">PC 14</option>
-                            <option value="15">PC 15</option>
-                            <option value="16">PC 16</option>
-                            <option value="17">PC 17</option>
-                            <option value="18">PC 18</option>
-                            <option value="19">PC 19</option>
-                            <option value="20">PC 20</option>
-                            <option value="21">PC 21</option>
-                            <option value="22">PC 22</option>
-                            <option value="23">PC 23</option>
-                            <option value="24">PC 24</option>
-                            <option value="25">PC 25</option>
-                            <option value="26">PC 26</option>
-                            <option value="27">PC 27</option>
-                            <option value="28">PC 28</option>
-                            <option value="29">PC 29</option>
-                            <option value="30">PC 30</option>
-                            <option value="31">PC 31</option>
-                            <option value="32">PC 32</option>
-                            <option value="33">PC 33</option>
-                            <option value="34">PC 34</option>
-                            <option value="35">PC 35</option>
-                            <option value="36">PC 36</option>
-                            <option value="37">PC 37</option>
-                            <option value="38">PC 38</option>
-                            <option value="39">PC 39</option>
-                            <option value="40">PC 40</option>
-                            <option value="41">PC 41</option>
-                            <option value="42">PC 42</option>
-                            <option value="43">PC 43</option>
-                            <option value="44">PC 44</option>
-                            <option value="45">PC 45</option>
-                            <option value="46">PC 46</option>
-                            <option value="47">PC 47</option>
-                            <option value="48">PC 48</option>
-                            <option value="49">PC 49</option>
-                            <option value="50">PC 50</option>
-                        </select>
+                <div class="admin-sitin-form-group full-width">
+                    <label>PC</label>
+
+                    <input type="hidden" name="pc_number" id="sitInPC">
+
+                    <div class="sitin-pc-toolbar">
+                        <span id="sitinPcStatusText">
+                            Select a lab first to load PC status.
+                        </span>
+
+                        <span class="sitin-pc-legend">
+                            <b class="dot available"></b> Available
+                            <b class="dot maintenance"></b> Maintenance
+                            <b class="dot selected"></b> Selected
+                        </span>
                     </div>
 
-                    <div>
-                        <label>Remaining Session</label>
-                        <input type="text" id="display_remaining" readonly>
+                    <div class="sitin-pc-grid" id="sitInPCGrid">
+                        {% for i in range(1, 51) %}
+                        <button type="button" class="sitin-pc-card" data-pc="{{ i }}" disabled>
+                            <span class="pc-check">✓</span>
+                            <strong>PC {{ i }}</strong>
+                            <small>Select lab</small>
+                        </button>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -766,6 +1019,7 @@ body.dark-mode #sitInFormModal select:-webkit-autofill {
 
 <script>
 window.adminAllStudents = window.adminAllStudents || [];
+let adminMaintenanceMap = {};
 
 function openSearchModal() {
     const modal = document.getElementById('searchModal');
@@ -792,6 +1046,15 @@ function adminCloseModal(modalId) {
 
     if (modal) {
         modal.style.display = 'none';
+    }
+
+    const searchModal = document.getElementById('searchModal');
+    const sitInModal = document.getElementById('sitInFormModal');
+
+    const searchOpen = searchModal && searchModal.style.display === 'flex';
+    const sitInOpen = sitInModal && sitInModal.style.display === 'flex';
+
+    if (!searchOpen && !sitInOpen) {
         document.body.style.overflow = '';
     }
 }
@@ -895,9 +1158,11 @@ function adminDisplayStudents(students) {
 
         const selectButton = studentCard.querySelector('.admin-select-student-btn');
 
-        selectButton.addEventListener('click', function() {
-            adminOpenSitInForm(idNumber, studentName, remaining);
-        });
+        if (selectButton) {
+            selectButton.addEventListener('click', function() {
+                adminOpenSitInForm(idNumber, studentName, remaining);
+            });
+        }
 
         studentsList.appendChild(studentCard);
     });
@@ -907,14 +1172,66 @@ function displayStudents(students) {
     adminDisplayStudents(students);
 }
 
+function getLocalDateString() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+}
+
+function getLocalTimeString() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    return `${hours}:${minutes}`;
+}
+
+function resetSitInPCGrid() {
+    const pcInput = document.getElementById('sitInPC');
+    const statusText = document.getElementById('sitinPcStatusText');
+
+    if (pcInput) {
+        pcInput.value = '';
+    }
+
+    document.querySelectorAll('#sitInPCGrid .sitin-pc-card').forEach(function(card) {
+        card.classList.remove('selected', 'maintenance');
+        card.disabled = true;
+
+        const smallText = card.querySelector('small');
+
+        if (smallText) {
+            smallText.textContent = 'Select lab';
+        }
+    });
+
+    if (statusText) {
+        statusText.textContent = 'Select a lab first to load PC status.';
+    }
+}
+
+function fillSitInLocalDateTime() {
+    const dateInput = document.getElementById('sitInDate');
+    const timeInput = document.getElementById('sitInTime');
+
+    if (dateInput) {
+        dateInput.value = getLocalDateString();
+        dateInput.min = getLocalDateString();
+    }
+
+    if (timeInput) {
+        timeInput.value = getLocalTimeString();
+    }
+}
+
 function adminOpenSitInForm(idNumber, studentName, remaining) {
     const idInput = document.getElementById('display_id');
     const nameInput = document.getElementById('display_name');
-    const remainingInput = document.getElementById('display_remaining');
-    const dateInput = document.getElementById('sitInDate');
-    const timeInput = document.getElementById('sitInTime');
-    const pcInput = document.getElementById('sitInPC');
-    const now = new Date();
+    const labSelect = document.getElementById('sitInLab');
+    const purposeSelect = document.querySelector('#sitInFormModal select[name="purpose"]');
 
     if (idInput) {
         idInput.value = idNumber;
@@ -924,52 +1241,163 @@ function adminOpenSitInForm(idNumber, studentName, remaining) {
         nameInput.value = studentName;
     }
 
-    if (remainingInput) {
-        remainingInput.value = remaining;
+    fillSitInLocalDateTime();
+
+    if (labSelect) {
+        labSelect.selectedIndex = 0;
     }
 
-    if (dateInput) {
-        dateInput.value = now.toISOString().slice(0, 10);
+    if (purposeSelect) {
+        purposeSelect.selectedIndex = 0;
     }
 
-    if (timeInput) {
-        timeInput.value = now.toTimeString().slice(0, 5);
-    }
-
-    if (pcInput) {
-        pcInput.selectedIndex = 0;
-    }
-
+    resetSitInPCGrid();
     adminCloseModal('searchModal');
 
     const sitInModal = document.getElementById('sitInFormModal');
 
     if (sitInModal) {
         sitInModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
     }
+
+    loadAdminMaintenanceStatus();
 }
 
 function openSitInForm(idNumber, studentName, remaining) {
     adminOpenSitInForm(idNumber, studentName, remaining);
 }
 
-document.addEventListener('click', function(event) {
-    const searchModal = document.getElementById('searchModal');
-    const sitInModal = document.getElementById('sitInFormModal');
+function loadAdminMaintenanceStatus() {
+    return fetch('/admin/lab-maintenance/status')
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            adminMaintenanceMap = data || {};
+            refreshSitInPCGrid();
+        })
+        .catch(function(error) {
+            console.error('Maintenance status error:', error);
+            adminMaintenanceMap = {};
+            refreshSitInPCGrid();
+        });
+}
 
-    if (searchModal && event.target === searchModal) {
-        adminCloseModal('searchModal');
+function refreshSitInPCGrid() {
+    const labSelect = document.getElementById('sitInLab');
+    const pcInput = document.getElementById('sitInPC');
+    const statusText = document.getElementById('sitinPcStatusText');
+    const pcCards = document.querySelectorAll('#sitInPCGrid .sitin-pc-card');
+
+    if (!labSelect || !pcInput || !statusText) {
+        return;
     }
 
-    if (sitInModal && event.target === sitInModal) {
-        adminCloseModal('sitInFormModal');
-    }
-});
+    const lab = String(labSelect.value || '').trim();
+    const maintenancePCs = (adminMaintenanceMap[lab] || []).map(Number);
 
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        adminCloseModal('searchModal');
-        adminCloseModal('sitInFormModal');
+    pcInput.value = '';
+
+    pcCards.forEach(function(card) {
+        const pcNumber = Number(card.dataset.pc);
+        const smallText = card.querySelector('small');
+
+        card.classList.remove('selected', 'maintenance');
+
+        if (!lab) {
+            card.disabled = true;
+
+            if (smallText) {
+                smallText.textContent = 'Select lab';
+            }
+
+            return;
+        }
+
+        if (maintenancePCs.includes(pcNumber)) {
+            card.classList.add('maintenance');
+            card.disabled = true;
+
+            if (smallText) {
+                smallText.textContent = 'Maintenance';
+            }
+        } else {
+            card.disabled = false;
+
+            if (smallText) {
+                smallText.textContent = 'Available';
+            }
+        }
+    });
+
+    if (!lab) {
+        statusText.textContent = 'Select a lab first to load PC status.';
+        return;
     }
+
+    statusText.textContent = `Lab ${lab}: ${maintenancePCs.length} PC(s) under maintenance.`;
+}
+
+function selectSitInPC(card) {
+    const pcInput = document.getElementById('sitInPC');
+
+    if (!pcInput || !card || card.disabled || card.classList.contains('maintenance')) {
+        return;
+    }
+
+    document.querySelectorAll('#sitInPCGrid .sitin-pc-card').forEach(function(item) {
+        item.classList.remove('selected');
+    });
+
+    card.classList.add('selected');
+    pcInput.value = card.dataset.pc;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const labSelect = document.getElementById('sitInLab');
+    const sitInForm = document.getElementById('adminSitInForm');
+    const sitInDateInput = document.getElementById('sitInDate');
+
+    if (sitInDateInput) {
+        sitInDateInput.min = getLocalDateString();
+    }
+
+    if (labSelect) {
+        labSelect.addEventListener('change', function() {
+            loadAdminMaintenanceStatus();
+        });
+    }
+
+    document.querySelectorAll('#sitInPCGrid .sitin-pc-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+            selectSitInPC(card);
+        });
+    });
+
+    if (sitInForm) {
+    sitInForm.addEventListener('submit', function(event) {
+        const pcInput = document.getElementById('sitInPC');
+        const dateInput = document.getElementById('sitInDate');
+        const timeInput = document.getElementById('sitInTime');
+
+        if (dateInput) {
+            dateInput.value = getLocalDateString();
+        }
+
+        if (timeInput) {
+            timeInput.value = getLocalTimeString();
+        }
+
+        if (!pcInput || !pcInput.value) {
+            event.preventDefault();
+            alert('Please select an available PC before confirming sit-in.');
+            return;
+        }
+    });
+}
+
+    resetSitInPCGrid();
+    loadAdminMaintenanceStatus();
 });
 </script>

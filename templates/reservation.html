@@ -1126,6 +1126,26 @@
             opacity: 1 !important;
         }
 
+        .student-reservation-page .pc-card.maintenance {
+            background: rgba(245, 158, 11, 0.22) !important;
+            border-color: #f59e0b !important;
+            color: #ffffff !important;
+        }
+
+        .student-reservation-page .pc-card.maintenance .pc-hint {
+            color: #fde68a !important;
+        }
+
+        body.dark-mode.student-reservation-page .pc-card.maintenance {
+            background: rgba(245, 158, 11, 0.24) !important;
+            border-color: #fdb813 !important;
+            color: #ffffff !important;
+        }
+
+        body.dark-mode.student-reservation-page .pc-card.maintenance .pc-hint {
+            color: #fde68a !important;
+        }
+
         /* ================= RESPONSIVE ================= */
 
         @media (max-width: 950px) {
@@ -1642,6 +1662,7 @@
 let currentStep = 1;
 const totalSteps = 4;
 let unavailablePCs = [];
+let maintenancePCs = [];
 const labApplications = {{ lab_applications | default({}) | tojson | safe }};
 
 const reservationModal = document.getElementById('reservationModal');
@@ -1668,18 +1689,81 @@ function escapeHtml(value) {
         .replaceAll("'", '&#039;');
 }
 
+function getTodayDateString() {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+
+    return `${yyyy}-${mm}-${dd}`;
+}
+
+function getCurrentTimeString() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    return `${hours}:${minutes}`;
+}
+
+function updateTimeMinimum() {
+    if (!dateInput || !timeInput) {
+        return;
+    }
+
+    const today = getTodayDateString();
+
+    if (dateInput.value === today) {
+        timeInput.min = getCurrentTimeString();
+
+        if (timeInput.value && timeInput.value < timeInput.min) {
+            timeInput.value = '';
+        }
+    } else {
+        timeInput.removeAttribute('min');
+    }
+}
+
+function isPastReservationDateTime() {
+    if (!dateInput || !timeInput || !dateInput.value || !timeInput.value) {
+        return false;
+    }
+
+    const selectedDateTime = new Date(`${dateInput.value}T${timeInput.value}`);
+    const now = new Date();
+
+    return selectedDateTime < now;
+}
+
 function openReservationModal() {
+    if (!reservationModal) {
+        return;
+    }
+
     reservationModal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 
     currentStep = 1;
+
+    if (dateInput) {
+        dateInput.min = getTodayDateString();
+
+        if (!dateInput.value) {
+            dateInput.value = getTodayDateString();
+        }
+    }
+
+    updateTimeMinimum();
     showStep(currentStep);
     resetSelectedPC();
     renderPCGrid();
 }
 
 function closeReservationModal() {
-    reservationModal.style.display = 'none';
+    if (reservationModal) {
+        reservationModal.style.display = 'none';
+    }
+
     document.body.style.overflow = '';
 }
 
@@ -1736,15 +1820,28 @@ function showStep(step) {
         }
     });
 
-    backStepBtn.style.visibility = step === 1 ? 'hidden' : 'visible';
+    if (backStepBtn) {
+        backStepBtn.style.visibility = step === 1 ? 'hidden' : 'visible';
+    }
 
     if (step === totalSteps) {
-        nextStepBtn.style.setProperty('display', 'none', 'important');
-        submitReservationBtn.style.setProperty('display', 'inline-flex', 'important');
+        if (nextStepBtn) {
+            nextStepBtn.style.setProperty('display', 'none', 'important');
+        }
+
+        if (submitReservationBtn) {
+            submitReservationBtn.style.setProperty('display', 'inline-flex', 'important');
+        }
+
         updateReservationDetailsTable();
     } else {
-        nextStepBtn.style.setProperty('display', 'inline-flex', 'important');
-        submitReservationBtn.style.setProperty('display', 'none', 'important');
+        if (nextStepBtn) {
+            nextStepBtn.style.setProperty('display', 'inline-flex', 'important');
+        }
+
+        if (submitReservationBtn) {
+            submitReservationBtn.style.setProperty('display', 'none', 'important');
+        }
     }
 }
 
@@ -1752,6 +1849,11 @@ function validateStep(step) {
     if (step === 1) {
         if (dateInput.value.trim() === '' || timeInput.value.trim() === '') {
             alert('Please select both date and time.');
+            return false;
+        }
+
+        if (isPastReservationDateTime()) {
+            alert('You cannot reserve using a past date or past time.');
             return false;
         }
     }
@@ -1778,6 +1880,11 @@ function validateStep(step) {
     if (step === 4) {
         if (selectedPcInput.value.trim() === '') {
             alert('Please select a PC number.');
+            return false;
+        }
+
+        if (isPastReservationDateTime()) {
+            alert('You cannot reserve using a past date or past time.');
             return false;
         }
     }
@@ -1852,7 +1959,9 @@ function updateLabApplicationsDisplay() {
 }
 
 function renderPCGrid() {
-    if (!pcGrid) return;
+    if (!pcGrid) {
+        return;
+    }
 
     pcGrid.innerHTML = '';
 
@@ -1862,9 +1971,14 @@ function renderPCGrid() {
         pcButton.className = 'pc-card';
         pcButton.dataset.pc = i;
 
+        const isMaintenance = maintenancePCs.includes(i);
         const isUnavailable = unavailablePCs.includes(i);
 
-        if (isUnavailable) {
+        if (isMaintenance) {
+            pcButton.classList.add('unavailable', 'maintenance');
+            pcButton.disabled = true;
+            pcButton.title = 'Maintenance';
+        } else if (isUnavailable) {
             pcButton.classList.add('unavailable');
             pcButton.disabled = true;
             pcButton.title = 'Currently in use or reserved';
@@ -1873,7 +1987,13 @@ function renderPCGrid() {
         pcButton.innerHTML = `
             <i class="fas fa-desktop"></i>
             <span>PC ${i}</span>
-            ${isUnavailable ? '<small class="pc-hint">In use</small>' : ''}
+            ${
+                isMaintenance
+                    ? '<small class="pc-hint">Maintenance</small>'
+                    : isUnavailable
+                        ? '<small class="pc-hint">Not Available</small>'
+                        : ''
+            }
         `;
 
         pcButton.addEventListener('click', function() {
@@ -1912,6 +2032,7 @@ function loadPCAvailability() {
     const timeIn = timeInput.value;
 
     unavailablePCs = [];
+    maintenancePCs = [];
 
     if (!lab || !date || !timeIn) {
         renderPCGrid();
@@ -1924,68 +2045,71 @@ function loadPCAvailability() {
         })
         .then(function(data) {
             unavailablePCs = (data.unavailable || []).map(Number);
+            maintenancePCs = (data.maintenance || []).map(Number);
             renderPCGrid();
         })
         .catch(function(error) {
             console.error('PC availability error:', error);
             unavailablePCs = [];
+            maintenancePCs = [];
             renderPCGrid();
         });
 }
 
-nextStepBtn.addEventListener('click', function() {
-    if (!validateStep(currentStep)) {
-        return;
-    }
+if (nextStepBtn) {
+    nextStepBtn.addEventListener('click', function() {
+        updateTimeMinimum();
 
-    if (currentStep < totalSteps) {
-        currentStep++;
-
-        if (currentStep === 4) {
-            loadPCAvailability();
+        if (!validateStep(currentStep)) {
+            return;
         }
 
-        showStep(currentStep);
-    }
-});
+        if (currentStep < totalSteps) {
+            currentStep++;
 
-backStepBtn.addEventListener('click', function() {
-    if (currentStep > 1) {
-        currentStep--;
-        showStep(currentStep);
-    }
-});
+            if (currentStep === 4) {
+                loadPCAvailability();
+            }
 
-submitReservationBtn.addEventListener('click', function() {
-    const reservationsEnabled = {{ 'true' if reservations_enabled else 'false' }};
-    const remainingSessions = {{ remaining | default(0) }};
-    
-    if (!reservationsEnabled) {
-        alert('Reservations are currently disabled by admin. Cannot submit reservation.');
-        return;
-    }
-    
-    if (remainingSessions <= 0) {
-        alert('You have no remaining sessions. Cannot submit reservation.');
-        return;
-    }
+            showStep(currentStep);
+        }
+    });
+}
 
-    if (!validateStep(4)) {
-        return;
-    }
+if (backStepBtn) {
+    backStepBtn.addEventListener('click', function() {
+        if (currentStep > 1) {
+            currentStep--;
+            showStep(currentStep);
+        }
+    });
+}
 
-    closeReservationModal();
-    document.getElementById('reservationSuccessModal').style.display = 'flex';
-});
+if (submitReservationBtn) {
+    submitReservationBtn.addEventListener('click', function() {
+        const reservationsEnabled = {{ 'true' if reservations_enabled else 'false' }};
+        const remainingSessions = {{ remaining | default(0) }};
 
-submitReservationBtn.addEventListener('click', function() {
-    if (!validateStep(4)) {
-        return;
-    }
+        updateTimeMinimum();
 
-    closeReservationModal();
-    document.getElementById('reservationSuccessModal').style.display = 'flex';
-});
+        if (!reservationsEnabled) {
+            alert('Reservations are currently disabled by admin. Cannot submit reservation.');
+            return;
+        }
+
+        if (remainingSessions <= 0) {
+            alert('You have no remaining sessions. Cannot submit reservation.');
+            return;
+        }
+
+        if (!validateStep(4)) {
+            return;
+        }
+
+        closeReservationModal();
+        document.getElementById('reservationSuccessModal').style.display = 'flex';
+    });
+}
 
 function toggleNotificationDropdown(event) {
     event.preventDefault();
@@ -1993,7 +2117,9 @@ function toggleNotificationDropdown(event) {
     const dropdown = document.getElementById('notificationDropdown');
     const notifCount = document.getElementById('notifCount');
 
-    if (!dropdown) return;
+    if (!dropdown) {
+        return;
+    }
 
     dropdown.classList.toggle('show');
 
@@ -2027,6 +2153,16 @@ document.addEventListener('click', function(event) {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
+    if (dateInput) {
+        dateInput.min = getTodayDateString();
+
+        if (!dateInput.value) {
+            dateInput.value = getTodayDateString();
+        }
+    }
+
+    updateTimeMinimum();
+
     if (labInput) {
         labInput.addEventListener('change', function() {
             updateLabApplicationsDisplay();
@@ -2038,6 +2174,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (dateInput) {
         dateInput.addEventListener('change', function() {
+            updateTimeMinimum();
             resetSelectedPC();
             loadPCAvailability();
             updateReservationDetailsTable();
@@ -2046,6 +2183,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (timeInput) {
         timeInput.addEventListener('change', function() {
+            updateTimeMinimum();
+
+            if (isPastReservationDateTime()) {
+                alert('You cannot reserve using a past time.');
+                timeInput.value = '';
+                return;
+            }
+
             resetSelectedPC();
             loadPCAvailability();
             updateReservationDetailsTable();
@@ -2056,6 +2201,7 @@ document.addEventListener('DOMContentLoaded', function() {
         purposeInput.addEventListener('change', updateReservationDetailsTable);
     }
 
+    showStep(1);
     renderPCGrid();
 });
 </script>

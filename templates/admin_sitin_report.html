@@ -883,104 +883,26 @@
             <table>
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Student</th>
-                        <th>Course / Level</th>
+                        <th>ID Number</th>
+                        <th>Name</th>
                         <th>Purpose</th>
-                        <th>Lab</th>
-                        <th>Time In</th>
-                        <th>Time Out</th>
-                        <th>Duration</th>
-                        <th>Evaluation</th>
-                        <th>Raw Points</th>
-                        <th>Admin Note</th>
+                        <th>Laboratory</th>
+                        <th>Login</th>
+                        <th>Logout</th>
+                        <th>Date</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    {% for r in report_records %}
+                    {% for row in report_records %}
                     <tr>
-                        <td>{{ loop.index }}</td>
-
-                        <td>
-                            <strong>{{ r.first_name }} {{ r.last_name }}</strong>
-                            <br>
-                            <small style="color:#6b7280; font-weight:800;">
-                                {{ r.id_number }}
-                            </small>
-                        </td>
-
-                        <td>
-                            <strong>{{ r.course }}</strong>
-                            <br>
-                            <small style="color:#6b7280; font-weight:800;">
-                                {{ r.course_level }}
-                            </small>
-                        </td>
-
-                        <td>
-                            <span class="badge badge-purpose">
-                                {{ r.purpose }}
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="badge badge-lab">
-                                <i class="fas fa-door-open"></i>
-                                Lab {{ r.lab }}
-                            </span>
-                        </td>
-
-                        <td>
-                            {{ r.login_time[:16] if r.login_time else 'N/A' }}
-                        </td>
-
-                        <td>
-                            {% if r.logout_time %}
-                                {{ r.logout_time[:16] }}
-                            {% else %}
-                                <span style="color:#dc2626; font-weight:900;">ACTIVE</span>
-                            {% endif %}
-                        </td>
-
-                        <td>
-                            {% if r.duration_minutes is not none %}
-                                {{ r.duration_minutes // 60 }} hr {{ r.duration_minutes % 60 }} min
-                            {% else %}
-                                Active
-                            {% endif %}
-                        </td>
-
-                        <td>
-                            <div class="criteria-list">
-                                {% if r.evaluation_cleanliness %}
-                                    <span class="criteria">Cleanliness</span>
-                                {% endif %}
-
-                                {% if r.evaluation_hours %}
-                                    <span class="criteria">1 Hour</span>
-                                {% endif %}
-
-                                {% if r.evaluation_task %}
-                                    <span class="criteria">Task</span>
-                                {% endif %}
-
-                                {% if not r.evaluation_cleanliness and not r.evaluation_hours and not r.evaluation_task %}
-                                    <span style="color:#9ca3af; font-weight:800;">None</span>
-                                {% endif %}
-                            </div>
-                        </td>
-
-                        <td>
-                            <span class="badge badge-points">
-                                <i class="fas fa-star"></i>
-                                {{ "%.2f"|format(r.evaluation_points or 0) }}
-                            </span>
-                        </td>
-
-                        <td>
-                            {{ r.evaluation_note or '—' }}
-                        </td>
+                        <td>{{ row.id_number }}</td>
+                        <td>{{ row.first_name }} {{ row.last_name }}</td>
+                        <td>{{ row.purpose }}</td>
+                        <td>Lab {{ row.lab }}</td>
+                        <td>{{ row.login_time[11:19] if row.login_time else '—' }}</td>
+                        <td>{{ row.logout_time[11:19] if row.logout_time else '—' }}</td>
+                        <td>{{ row.login_time[:10] if row.login_time else '—' }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
